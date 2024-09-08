@@ -20,6 +20,6 @@ public class Category {
     }
 
     public String toString() {
-        return "{Category:\"" + categoryName + "\";\"" + color.toString() + "\"}";
+        return "\"Category\":[\"" + categoryName + "\"," + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "]";
     }
 }

@@ -25,13 +25,14 @@ public class Item {
     public String toString() {
         StringBuilder strb = new StringBuilder();
         strb.append("{").append(category.toString()).append(",");
+        strb.append("\"Fields\":[");
         for (int i = 0; i < fields.size(); i++) {
             strb.append(fields.get(i).toString());
             if (i < fields.size() - 1) {
                 strb.append(",");
             }
         }
-        strb.append("}");
+        strb.append("]}");
         return strb.toString();
     }
 }

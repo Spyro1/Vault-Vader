@@ -12,6 +12,6 @@ public class IntField extends Field {
     public void setValue(int value) { this.value = value; }
 
     public String toString() {
-        return "{Intfield:\"" + super.fieldName + "\",\"" + value + "\"}";
+        return "{\"Intfield\":[\"" + super.fieldName + "\",\"" + value + "\"]}";
     }
 }

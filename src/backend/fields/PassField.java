@@ -21,6 +21,6 @@ public class PassField extends TextField {
         return "Decrypted Password";
     }
     public String toString() {
-        return "{PassField:\"" + super.fieldName + "\",\"" + super.text + "\"}";
+        return "{\"PassField\":[\"" + super.fieldName + "\",\"" + super.text + "\"]}";
     }
 }

@@ -12,6 +12,6 @@ public class TextField extends Field {
     public void setText(String text) { this.text = text; }
 
     public String toString() {
-        return "{TextField:\"" + super.fieldName + "\",\"" + text + "\"}";
+        return "{\"TextField\":[\"" + super.fieldName + "\",\"" + text + "\"]}";
     }
 }
