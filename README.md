@@ -6,8 +6,19 @@ This is a Password Manager application which is written in Java with Swing.
 
 ```mermaid
 classDiagram
+    class VaultVader{
+        + main()
+    }
+    class GUI{
+        + GUI()
+    }
     class Item{
         - fileds: List<Field>
+        - category: Category
+    }
+    class Category{
+        + categoryName : String
+        + color : Color
     }
     class Field{
         - fieldName : String
@@ -29,7 +40,10 @@ classDiagram
         - encryptText(text: String) String
         - decryptText(text: String) String
     }
+    VaultVader --> GUI 
+    
     Item *-- Field
+    Item *-- Category
    
     Field <|-- IntField
     Field <|-- TextField

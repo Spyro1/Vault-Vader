@@ -1,6 +1,6 @@
-package fields;
+package backend.fields;
 
-public class Field {
+public abstract class Field {
     protected String fieldName;
 
     public Field(String fieldName) {

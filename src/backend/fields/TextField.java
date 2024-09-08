@@ -1,4 +1,4 @@
-package fields;
+package backend.fields;
 
 public class TextField extends Field {
     protected String text;
@@ -10,4 +10,8 @@ public class TextField extends Field {
 
     public String getText() { return text; }
     public void setText(String text) { this.text = text; }
+
+    public String toString() {
+        return "{TextField:\"" + super.fieldName + "\",\"" + text + "\"}";
+    }
 }

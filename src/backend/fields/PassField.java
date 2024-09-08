@@ -1,4 +1,4 @@
-package fields;
+package backend.fields;
 
 public class PassField extends TextField {
 
@@ -19,5 +19,8 @@ public class PassField extends TextField {
     private String decryptText(String text) {
         // TODO: Write Decyrption method or use a library
         return "Decrypted Password";
+    }
+    public String toString() {
+        return "{PassField:\"" + super.fieldName + "\",\"" + super.text + "\"}";
     }
 }
