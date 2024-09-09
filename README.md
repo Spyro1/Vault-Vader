@@ -12,16 +12,28 @@ classDiagram
     class GUI{
         + GUI()
     }
+    Main --> GUI 
+    class User{
+        - name : String
+        - password : String
+    }
+    class ItemManager{
+        - items : List<Item>
+        + addItem(item: Item) void
+    }
     class Item{
         - icon : ImageIcon
         - title : String
         - fileds : List<Field>
         - category : Category
     }
+    ItemManager *-- Item
+    Item *-- Field
     class Category{
         + categoryName : String
         + color : Color
     }
+    Item *-- Category
     class Field{
         - fieldName : String
         + getFieldName() String
@@ -42,14 +54,11 @@ classDiagram
         - encryptText(text: String) String
         - decryptText(text: String) String
     }
-    
-    Main --> GUI 
-    
-    Item *-- Field
-    Item *-- Category
-   
     Field <|-- TextField
     Field <|-- IntField
     TextField <|-- PassField
+    
+    
+   
 
 ```
