@@ -1,5 +1,4 @@
-import backend.Item;
-import frontend.GUI;
+import frontend.*;
 
 import javax.swing.*;
 
@@ -18,9 +17,10 @@ public class Main extends JFrame {
     // The program starts here
     static public void main(String[] args){
 //        new Main();
-//        new GUI();
-        Item i = new Item();
-        System.out.println(i.toJSON().toJSONString());
-        System.out.println(i.toString());
+//        new MainUI();
+        new LoginUI();
+//        Item i = new Item();
+//        System.out.println(i.toJSON().toJSONString());
+//        System.out.println(i.toString());
     }
 }
