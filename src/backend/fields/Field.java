@@ -1,5 +1,7 @@
 package backend.fields;
 
+import org.json.simple.JSONObject;
+
 public abstract class Field {
     protected String fieldName;
 
@@ -8,4 +10,8 @@ public abstract class Field {
     }
 
     public String getFieldName() { return fieldName; }
+
+    public abstract String toString();
+
+    public abstract JSONObject toJSON();
 }

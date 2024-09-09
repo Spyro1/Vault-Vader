@@ -13,8 +13,10 @@ classDiagram
         + GUI()
     }
     class Item{
-        - fileds: List<Field>
-        - category: Category
+        - icon : ImageIcon
+        - title : String
+        - fileds : List<Field>
+        - category : Category
     }
     class Category{
         + categoryName : String

@@ -1,5 +1,7 @@
 package backend.fields;
 
+import org.json.simple.JSONObject;
+
 public class PassField extends TextField {
 
     public PassField(String fieldName, String secret) {
@@ -21,6 +23,13 @@ public class PassField extends TextField {
         return "Decrypted Password";
     }
     public String toString() {
-        return "{\"PassField\":[\"" + super.fieldName + "\",\"" + super.text + "\"]}";
+        return "{Type: PassField, FieldName: " + super.fieldName + ", Value: " + text + "}";
+    }
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("type", "PassField");
+        obj.put("fieldName", super.fieldName);
+        obj.put("value", super.text);
+        return obj;
     }
 }

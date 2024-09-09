@@ -1,5 +1,7 @@
 package backend.categories;
 
+import org.json.simple.JSONObject;
+
 import java.awt.*;
 
 public class Category {
@@ -20,6 +22,14 @@ public class Category {
     }
 
     public String toString() {
-        return "\"Category\":[\"" + categoryName + "\"," + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "]";
+        return "{CategoryName: " + categoryName + ", red: " + color.getRed() + ", green: " + color.getGreen() + ", blue: " + color.getBlue() + "}";
+    }
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("categoryName", categoryName);
+        obj.put("red", color.getRed());
+        obj.put("green", color.getGreen());
+        obj.put("blue", color.getBlue());
+        return obj;
     }
 }
