@@ -18,13 +18,13 @@ classDiagram
         - password : String
     }
     class ItemManager{
-        - items : List<Item>
+        - items : List~Item~
         + addItem(item: Item) void
     }
     class Item{
         - icon : ImageIcon
         - title : String
-        - fileds : List<Field>
+        - fileds : List~Field~
         - category : Category
     }
     ItemManager *-- Item
