@@ -9,6 +9,7 @@ import org.json.simple.*;
 import javax.swing.*;
 
 public class Item {
+    public int ID;
     private ImageIcon icon;
     private String title;
     private Category category = new Category();
