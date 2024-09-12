@@ -14,8 +14,7 @@ public class MainUI extends JFrame {
         // Create main frame
         setTitle("Vault Vader");
         setSize(width, height);
-        GridBagLayout gbl = new GridBagLayout();
-        setLayout(gbl);
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         ImageIcon lockIcon = new ImageIcon("assets/black/lock.png");
@@ -32,13 +31,41 @@ public class MainUI extends JFrame {
                 VaultVaderLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
                 VaultVaderLabel.setFont(new Font("Impact", Font.BOLD, 30));
 //                VaultVaderLabel.setBounds(0, 0, 260, 40);
-                VaultVaderLabel.setHorizontalAlignment(JLabel.CENTER);
-                VaultVaderLabel.setVerticalAlignment(JLabel.CENTER);
+//                VaultVaderLabel.setHorizontalAlignment(JLabel.CENTER);
+//                VaultVaderLabel.setVerticalAlignment(JLabel.CENTER);
                 titlePanel.add(VaultVaderLabel);
             }
          }
         headerPanel = new JPanel(); {
             headerPanel.setBackground(VV.mainColor);
+            headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
+            JPanel centerPanel = new JPanel();
+            centerPanel.setBorder(BorderFactory.createEmptyBorder(10,15,15,15));
+            centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+            centerPanel.setBackground(VV.mainColor);
+            headerPanel.add(centerPanel);
+//            JLabel searchLabel = new JLabel("Keresés", JLabel.LEFT); {
+//                searchLabel.setForeground(VV.mainTextColor);
+////                searchLabel.setVerticalAlignment(JLabel.CENTER);
+//            }
+            JTextField searchField = new JTextField(); {
+                searchField.setForeground(VV.mainTextColor);
+                searchField.setFont(new Font("Arial", Font.PLAIN, 20));
+                searchField.setOpaque(false);
+                searchField.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
+//                searchField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white), "Keresés ", 0, 0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
+            }
+            centerPanel.add(searchField);
+            JButton searchButton = new JButton("", new ImageIcon("assets/white/search.png")); {
+//                searchButton.setForeground(VV.mainTextColor);
+                searchButton.setBackground(VV.mainColor);
+//                searchButton.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+            }
+            centerPanel.add(searchButton);
+//            gbc.anchor = GridBagConstraints.LINE_START;
+//            centerPanel.add(searchLabel, gbc);
+//            gbc.anchor = GridBagConstraints.CENTER;
+//            centerPanel.add(searchField, gbc);
         }
         sidePanel = new JPanel(); {
             sidePanel.setBackground(VV.bgLightColor);
