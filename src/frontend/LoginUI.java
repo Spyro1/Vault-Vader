@@ -9,8 +9,17 @@ import java.awt.*;
 public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     static public void main(String[] args){
-//        new LoginUI(); // TO RUN
-        new MainUI(); // TESTING
+
+        try{
+
+            new LoginUI(); // TO RUN
+//            new MainUI(); // TESTING
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+//        finally {
+//            System.exit(0);
+//        }
     }
 
     private JLabel titleLabel;
