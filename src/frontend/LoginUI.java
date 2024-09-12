@@ -1,25 +1,34 @@
 package frontend;
 
+import backend.API;
+import backend.User;
+import org.json.simple.JSONObject;
+
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public class LoginUI extends JFrame {
+public class LoginUI extends JFrame /*implements ActionListener*/ {
+
+    static public void main(String[] args){
+        new LoginUI();
+    }
+
+    private JLabel titleLabel;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton loginButton;
+    private JButton registerButton;
 
     public LoginUI() {
-        // === Essential frame settings ===
-        setTitle("Vault Vader");
+        // === Essential frame setup ===
+        setTitle("VaultVader");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 400);
-        setVisible(true);
-//        setLayout(null);
-        // === Extra settings ===
         ImageIcon lockIcon = new ImageIcon("assets/black/lock.png");
         setIconImage(lockIcon.getImage()); // Set status bar icon
-
+        // === Component setup ===
         InitMinimalistLoginUI();
 
+        setVisible(true);
     }
     private void InitAdvancedLoginUI(){
         setLayout(new BorderLayout());
@@ -89,28 +98,59 @@ public class LoginUI extends JFrame {
         backPanel.add(loginButton);
     }
     private void InitMinimalistLoginUI(){
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        setBackground(VV.bgDarkColor);
 
-        JLabel titleLabel = new JLabel("Vault Vader", JLabel.CENTER); {
-//            titleLabel.setBounds(0,0,getWidth(),40);
-        }
-        add(titleLabel);
-        JTextField usernameField = new JTextField(); {
-//            usernameField.setBounds(0, 50, getWidth(), 40);
-            usernameField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Felhasználónév"), BorderFactory.createEmptyBorder(8,8,8,8)));
-        }
-        add(usernameField);
-        JPasswordField passwordField = new JPasswordField(); {
-//            passwordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Jelszó"), BorderFactory.createEmptyBorder(8,8,8,8)));
-//            passwordField.setBounds(0, 80, getWidth(), 40);
-            passwordField.setBorder(BorderFactory.createTitledBorder("Jelszó"));
-        }
-        add(passwordField);
-        JButton loginButton = new JButton("Belépés"); {
-//            loginButton.setBounds(0, 110, getWidth(), 40);
-        }
-        loginButton.addActionListener(e -> {});
-        add(loginButton);
+        // Title
+        titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBackground(Color.BLUE);
+        titleLabel.setForeground(VV.mainTextColor);
+        titleLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
+        // Input fields
+        usernameField = new JTextField();
+        usernameField.setBorder(BorderFactory.createTitledBorder(null, "Felhasználónév ", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
+        usernameField.setForeground(VV.mainTextColor);
+        usernameField.setOpaque(false);
+        passwordField = new JPasswordField();
+        passwordField.setBorder(BorderFactory.createTitledBorder(null, "Jelszó", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
+        passwordField.setForeground(VV.mainTextColor);
+        passwordField.setOpaque(false);
+        // Login Button
+        loginButton = new JButton("Bejelentkezés");
+        loginButton.addActionListener(e -> {
+            try {
+                System.out.println("Bejelentkezek!");
+                JSONObject userData = new JSONObject();
+                userData.put("username",  usernameField.getText());
+                userData.put("password",  passwordField.getText());
+                if (API.loginRequest(userData)){
+                    dispose();
+                }
+                else{
+                    throw new Exception("Helytelen felhasználónév vagy jelszó!");
+                }
 
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        });
+        // Register Button
+        registerButton = new JButton("Regisztráció");
+        registerButton.addActionListener(e -> {System.out.println("Regisztrálok!");});
+        // Create Panel for Components
+        JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15));
+        centerPanel.setBackground(VV.bgDarkColor);
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
+        centerPanel.add(titleLabel);
+        centerPanel.add(usernameField);
+        centerPanel.add(passwordField);
+        centerPanel.add(loginButton);
+        centerPanel.add(registerButton);
+
+        // Add Components to Frame
+        add(centerPanel, BorderLayout.CENTER);
     }
 }

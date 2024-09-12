@@ -2,17 +2,27 @@ package backend;
 
 import backend.categories.Category;
 import backend.fields.Field;
+import frontend.MainUI;
+import org.json.simple.JSONObject;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class API {
 
     // == Login / Register Methods ==
-    static public boolean loginRequest(String username, String password) {
-       return false;
+    static public boolean loginRequest(JSONObject userData) {
+        // TODO: Adatbázisban felhasználó ellenőrzés
+        if(UserManager.checkUser(new User(userData.get("username").toString(), userData.get("password").toString()))){
+            JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!");
+            new MainUI();
+            return true;
+        }
+        else
+            return false;
     }
-    static public boolean registerRequest(String username, String password) {
+    static public boolean registerRequest(JSONObject userData) {
         return false;
     }
     // == Item Methods ==
