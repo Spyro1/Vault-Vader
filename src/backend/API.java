@@ -19,11 +19,10 @@ public class API {
             new MainUI();
             return true;
         }
-        else
-            return false;
+        return false;
     }
     static public boolean registerRequest(JSONObject userData) {
-        return false;
+        return true;
     }
     // == Item Methods ==
     static public boolean addItem(int itemId){

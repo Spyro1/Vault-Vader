@@ -13,6 +13,10 @@ public class User {
     public String getName() {return name;}
     public String getDecryptedPassword() { return decryptText(password, name);}
 
+    public boolean checkPassword(String passwordToCheck) {
+        return password.equals(encryptText(passwordToCheck, name));
+    }
+
     private String encryptText(String text, String key) {
         StringBuilder result = new StringBuilder();
 

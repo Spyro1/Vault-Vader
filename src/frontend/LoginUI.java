@@ -1,7 +1,6 @@
 package frontend;
 
 import backend.API;
-import backend.User;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
@@ -10,7 +9,8 @@ import java.awt.*;
 public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     static public void main(String[] args){
-        new LoginUI();
+//        new LoginUI(); // TO RUN
+        new MainUI(); // TESTING
     }
 
     private JLabel titleLabel;
@@ -30,73 +30,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 
         setVisible(true);
     }
-    private void InitAdvancedLoginUI(){
-        setLayout(new BorderLayout());
-        // === Initialize Components ===
-        JPanel titlePanel = new JPanel(); {
-            titlePanel.setBackground(VV.mainColor);
-            titlePanel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
-            titlePanel.setBounds(0,0,this.getWidth(),40);
-        }
-        add(titlePanel, BorderLayout.NORTH);
 
-        JPanel backPanel= new JPanel(); {
-            backPanel.setBackground(VV.bgDarkColor);
-            backPanel.setLayout(new BoxLayout(backPanel, BoxLayout.Y_AXIS));
-        }
-        add(backPanel, BorderLayout.CENTER);
-
-        JLabel titleLabel = new JLabel("Vault Vader", JLabel.CENTER);
-        {
-            titleLabel.setForeground(VV.mainTextColor);
-            titleLabel.setFont(new Font("Impact", Font.PLAIN, 30));
-            titleLabel.setHorizontalAlignment(JLabel.CENTER);
-            titleLabel.setVerticalAlignment(JLabel.CENTER);
-        }
-        titlePanel.add(titleLabel);
-        JLabel usernameLabel = new JLabel("Felhasználónév", JLabel.CENTER); {
-            usernameLabel.setForeground(VV.secondaryTextColor);
-//            usernameLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-            usernameLabel.setBounds(100, 90, 200, 20);
-//            usernameLabel.setHorizontalAlignment(JLabel.CENTER);
-        }
-        backPanel.add(usernameLabel);
-        JTextField usernameField = new JTextField(); {
-            usernameField.setForeground(VV.mainTextColor);
-//            usernameField.setFont(new Font("Arial", Font.PLAIN, 20));
-//            usernameField.setHorizontalAlignment(JTextField.CENTER);
-//            usernameField.setBounds(100, 60, 200, 30);
-//            usernameField.setOpaque(false);
-//            usernameField.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
-        }
-        backPanel.add(usernameField);
-
-        JLabel passwordLabel = new JLabel("Jelszó", JLabel.CENTER); {
-            passwordLabel.setForeground(VV.secondaryTextColor);
-//            passwordLabel.setFont(new Font("Arial", Font.PLAIN, 15));
-//            passwordLabel.setBounds(100, 160, 200, 20);
-//            passwordLabel.setHorizontalAlignment(JLabel.CENTER);
-        }
-        backPanel.add(passwordLabel);
-        JPasswordField passwordField = new JPasswordField(); {
-            passwordField.setForeground(VV.mainTextColor);
-//            passwordField.setFont(new Font("Arial", Font.PLAIN, 20));
-//            passwordField.setHorizontalAlignment(JTextField.CENTER);
-//            passwordField.setBounds(100, 130, 200, 30);
-//            passwordField.setOpaque(false);
-//            passwordField.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
-        }
-        backPanel.add(passwordField);
-        JButton loginButton = new JButton("Bejelentkezés"); {
-            loginButton.setForeground(VV.mainTextColor);
-            loginButton.setBackground(VV.secondaryColor);
-//            loginButton.setFont(new Font("Arial", Font.PLAIN, 20));
-//            loginButton.setBounds(120, 200, 160, 30);
-//            loginButton.setHorizontalAlignment(JLabel.CENTER);
-//            loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        }
-        backPanel.add(loginButton);
-    }
     private void InitMinimalistLoginUI(){
         setLayout(new BorderLayout());
         setSize(400, 300);
@@ -122,24 +56,44 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         loginButton = new JButton("Bejelentkezés");
         loginButton.addActionListener(e -> {
             try {
-                System.out.println("Bejelentkezek!");
+                // Create JSON object from username and password
                 JSONObject userData = new JSONObject();
                 userData.put("username",  usernameField.getText());
                 userData.put("password",  passwordField.getText());
+                // Try login with user's date
                 if (API.loginRequest(userData)){
-                    dispose();
+                    dispose(); // Successful login -> Close window
                 }
                 else{
                     throw new Exception("Helytelen felhasználónév vagy jelszó!");
                 }
-
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         });
         // Register Button
         registerButton = new JButton("Regisztráció");
-        registerButton.addActionListener(e -> {System.out.println("Regisztrálok!");});
+        registerButton.addActionListener(e -> {
+            try {
+                // Create JSON object from username and password
+                JSONObject userData = new JSONObject();
+                userData.put("username",  usernameField.getText());
+                userData.put("password",  passwordField.getText());
+                // Ask for clarification
+                if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?") == JOptionPane.YES_OPTION){
+                    // Try register with user's date
+                    if (API.registerRequest(userData)){
+                        JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!"); // Successful register -> Show a success dialog box
+                    }
+                    else{
+                        throw new Exception("Nem sikerült létrehozni a felhasználót!");
+                    }
+
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        });
         // Create Panel for Components
         JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15));
         centerPanel.setBackground(VV.bgDarkColor);
