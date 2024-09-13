@@ -12,8 +12,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 
         try{
 
-//            new LoginUI(); // TO RUN
-            new MainUI(); // TESTING
+            new LoginUI(); // TO RUN
+//            new MainUI(); // TESTING
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, e);
         }

@@ -5,10 +5,10 @@ import java.awt.*;
 
 public class MainUI extends JFrame {
 
-    final int width = 1000, height = 600;
+    final int width = 1000, height = 600; // Default  size of the window
     final double headerWeightY = 0.01, headerWeightX = 0.1;
     final double contentWeightY = 1-headerWeightY;
-    JPanel titlePanel, headerPanel, sidePanel, sliderPanel, contentPanel;
+    JPanel titlePanel, headerPanel, sidePanel, sliderPanel, contentPanel, categoryPanel;
 
     public MainUI() {
         // Create main frame
@@ -40,14 +40,10 @@ public class MainUI extends JFrame {
             headerPanel.setBackground(VV.mainColor);
             headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
             JPanel centerPanel = new JPanel();
-            centerPanel.setBorder(BorderFactory.createEmptyBorder(10,15,15,15));
+            centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,10,15));
             centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
             centerPanel.setBackground(VV.mainColor);
             headerPanel.add(centerPanel);
-//            JLabel searchLabel = new JLabel("Keresés", JLabel.LEFT); {
-//                searchLabel.setForeground(VV.mainTextColor);
-////                searchLabel.setVerticalAlignment(JLabel.CENTER);
-//            }
             JTextField searchField = new JTextField(); {
                 searchField.setForeground(VV.mainTextColor);
                 searchField.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -57,18 +53,21 @@ public class MainUI extends JFrame {
             }
             centerPanel.add(searchField);
             JButton searchButton = new JButton("", new ImageIcon("assets/white/search.png")); {
-//                searchButton.setForeground(VV.mainTextColor);
                 searchButton.setBackground(VV.mainColor);
-//                searchButton.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+                searchButton.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
             }
-            centerPanel.add(searchButton);
-//            gbc.anchor = GridBagConstraints.LINE_START;
-//            centerPanel.add(searchLabel, gbc);
-//            gbc.anchor = GridBagConstraints.CENTER;
-//            centerPanel.add(searchField, gbc);
+            headerPanel.add(searchButton);
         }
         sidePanel = new JPanel(); {
             sidePanel.setBackground(VV.bgLightColor);
+            JLabel categoryLabel = new JLabel("Kategóriák"); {
+                categoryLabel.setForeground(VV.mainTextColor);
+            }
+            sidePanel.add(categoryLabel);
+            categoryPanel = new JPanel();{
+                categoryPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+            }
+            sidePanel.add(categoryPanel);
         }
         sliderPanel = new JPanel(); {
             sliderPanel.setBackground(VV.bgDarkColor);
@@ -82,7 +81,6 @@ public class MainUI extends JFrame {
         gbc.gridy = 0;
         gbc.weightx = headerWeightX;
         gbc.weighty = headerWeightY;
-        gbc.fill = GridBagConstraints.BOTH;
         add(titlePanel, gbc);
 
         // Panel 2: Spanning across the screen (top row)
