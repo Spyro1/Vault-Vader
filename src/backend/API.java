@@ -1,11 +1,13 @@
 package backend;
 
-import backend.categories.Category;
+import backend.category.Category;
 import backend.fields.Field;
+import backend.item.Item;
+import backend.user.User;
 import frontend.MainUI;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public class API {
     static public boolean loginRequest(JSONObject userData) {
         // TODO: Adatbázisban felhasználó ellenőrzés
         if(UserManager.checkUser(new User(userData.get("username").toString(), userData.get("password").toString()))){
-            JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!");
+//            JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!");
             new MainUI();
             return true;
         }
@@ -56,13 +58,13 @@ public class API {
     }
 
     // == get methods ==
-    static public ArrayList<Item> getItemList(){
+    static public JSONArray getItemList(){
         return null;
     }
-    static public ArrayList<Category> getCategoryList(){
+    static public JSONArray getCategoryList(){
         return null;
     }
-    static public ArrayList<Field> getFieldList(){
+    static public JSONArray getFieldList(){
         return null;
     }
 
