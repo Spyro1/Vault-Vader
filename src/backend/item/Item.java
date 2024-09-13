@@ -1,30 +1,35 @@
-package backend;
+package backend.item;
 
+import backend.JSONSerializable;
 import backend.fields.*;
-import backend.categories.*;
+import backend.category.*;
 
 import java.util.ArrayList;
 import org.json.simple.*;
 
 import javax.swing.*;
 
-public class Item {
+public class Item implements JSONSerializable {
     public int ID;
     private ImageIcon icon;
     private String title;
-    private Category category = new Category();
+    private Category category;
     private ArrayList<Field> fields = new ArrayList<>();
 
     public Item() {
         setupItem();
     }
     public Item(Category category) {
-        this.category = category;
         setupItem();
+        this.category = category;
     }
 
     private void setupItem(){
         title = "";
+        category = null;
+        fields.clear();
+    }
+    public void initDefaultFields() {
         fields.add(new TextField("Név", ""));
         fields.add(new PassField("Jelszó", ""));
     }
@@ -50,5 +55,30 @@ public class Item {
         }
         obj.put("fields", fieldsArray);
         return obj;
+    }
+
+    @Override
+    public Item fromJSON(JSONObject json) {
+        title = json.get("title").toString();
+        category = new Category(json);
+        fields.clear();
+        JSONArray fieldsArray = (JSONArray) json.get("fields");
+        for (int i = 0; i < fieldsArray.size(); i++) {
+            JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
+            String fieldType = jsonFieldData.get("type").toString();
+            switch (fieldType){
+                case "IntField":
+                    fields.add(new IntField().fromJSON(json));
+                    break;
+                case "TextField":
+                    fields.add(new TextField().fromJSON(json));
+                    break;
+                case "PassField":
+                    fields.add(new PassField().fromJSON(json));
+                    break;
+                default: break;
+            }
+        }
+        return this;
     }
 }

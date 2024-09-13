@@ -1,8 +1,11 @@
 package backend.fields;
 
+import backend.JSONSerializable;
 import org.json.simple.JSONObject;
 
-public abstract class Field {
+import java.io.Serializable;
+
+public abstract class Field implements JSONSerializable {
     // Constants
     public static final int INTFIELD = 0;
     public static final int TEXTFIELD = 1;
@@ -17,6 +20,4 @@ public abstract class Field {
     public String getFieldName() { return fieldName; }
 
     public abstract String toString();
-
-    public abstract JSONObject toJSON();
 }

@@ -6,17 +6,28 @@ This is a Password Manager application which is written in Java with Swing.
 
 ```mermaid
 classDiagram
-    class Main{
+    direction TB
+    class LoginUI{
         + main()
+        + LoginUI()
     }
-    class GUI{
-        + GUI()
+    class MainUI{
+        + MainUI()
     }
-    Main --> GUI 
+    class Controller{
+         <<singleton>>
+         + INSTANCE : Controller$
+        - userManager : UserManager
+    }
+%%    Controller *-- UserManager
     class User{
         - name : String
         - password : String
     }
+    class UserManager{
+        - users: List~User~
+    }
+    UserManager *-- User
     class ItemManager{
         - items : List~Item~
         + addItem(item: Item) void
@@ -33,7 +44,12 @@ classDiagram
         + categoryName : String
         + color : Color
     }
-    Item *-- Category
+    class CategoryManager{
+        - categories : List~Category~
+    }
+    CategoryManager *-- Category
+%%    Item o-- Category
+    Category --o Item
     class Field{
         - fieldName : String
         + getFieldName() String
@@ -58,6 +74,17 @@ classDiagram
     Field <|-- IntField
     TextField <|-- PassField
     
+    class API{
+        + loginRequest() bool$
+        + registerRequest() bool$
+        
+    }
+    Controller --> UserManager
+    Controller --> ItemManager
+    Controller --> CategoryManager
+    API --> Controller
+    LoginUI --> API
+    MainUI --> API
     
    
 

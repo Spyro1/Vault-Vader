@@ -1,6 +1,9 @@
-package backend;
+package backend.user;
 
-public class User {
+import backend.JSONSerializable;
+import org.json.simple.JSONObject;
+
+public class User implements JSONSerializable {
     String name = "";
     String password = "";
 
@@ -28,6 +31,18 @@ public class User {
     }
     private String decryptText(String text, String key) {
         return encryptText(text,key);
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        // TODO: Write toJSON in User
+        return null;
+    }
+
+    @Override
+    public User fromJSON(JSONObject json) {
+        // TODO: Write fromJSON in User
+        return this;
     }
 }
 

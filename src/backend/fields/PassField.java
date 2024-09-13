@@ -4,6 +4,9 @@ import org.json.simple.JSONObject;
 
 public class PassField extends TextField {
 
+    public PassField() {
+        super();
+    }
     public PassField(String fieldName, String secret) {
         super(fieldName, "");
         super.text = encryptText(secret, secret);
@@ -26,11 +29,16 @@ public class PassField extends TextField {
     public String toString() {
         return "{Type: PassField, FieldName: " + super.fieldName + ", Value: " + text + "}";
     }
+    @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("type", "PassField");
         obj.put("fieldName", super.fieldName);
         obj.put("value", super.text);
         return obj;
+    }
+    public PassField fromJSON(JSONObject json) {
+        // TODO: Write fromJSON in PassField
+        return this;
     }
 }
