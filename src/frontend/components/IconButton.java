@@ -1,7 +1,8 @@
-package frontend;
+package frontend.components;
+
+import frontend.VV;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class IconButton extends JButton {
     final int margin = 10;

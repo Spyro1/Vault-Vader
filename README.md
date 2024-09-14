@@ -89,3 +89,33 @@ classDiagram
    
 
 ```
+
+
+## Data storage
+
+JSON file name is the username ->  1 file per user
+
+```json
+{
+  "username": "username",
+  "password": "*x&%645&",
+  "categories": [
+        "Example category 1", 
+        "Example category 2",
+        "Example category 3"    
+  ],
+  "items": [
+    {
+      "title": "Item Title",
+      "category": "Category name",
+      "fields": [
+        {
+          "type" : "TextField / IntField / PassField",
+          "fieldName": "Field Name",
+          "value": "Value of the field"
+        }
+      ]
+    }
+  ]
+}
+```

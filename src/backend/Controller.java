@@ -8,73 +8,109 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Controller {
 
-    /** Singleton instance of the class */
+    /**
+     * Singleton instance of the class
+     */
     public static final Controller INSTANCE = new Controller();
 
-    /** Stores the current user's password items */
+    /**
+     * Stores the current user's password items
+     */
     private ArrayList<Item> items = new ArrayList<>();
 
-    /** Stores the current user's categories */
-    private ArrayList<Category> categories = new ArrayList<>();
+    /**
+     * Stores the current user's categories
+     */
+    private ArrayList<String> categories = new ArrayList<>();
+
+    /**
+     * The name of the user currently logged in to the app
+     */
+    private User loggedInUser;
 
 
-    private final String itemDataJSONFilePath = "data/items.json";
-    private final String categoryDataJSONFilePath = "data/categories.json";
-    private final String userDataJSONFilePath = "data/users.json";
+//    private final String itemDataJSONFilePath = "data/items.json";
+//    private final String categoryDataJSONFilePath = "data/categories.json";
+//    private final String userDataJSONFilePath = "data/users.json";
 
 
     private Controller() {
 
     }
 
-//    private void readUsersDataFile(){
-//        JSONObject usersData;
-//        try {
-//            usersData = (JSONObject) new JSONParser().parse(new FileReader(userDataJSONFilePath));
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-    private void readCategoriesDataFile(){
+    private void readUsersDataFromFile() throws IOException, ParseException {
+        JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader(loggedInUser.getName() + ".json"));
 
     }
-    private void readItemsDataFile(){
 
+    private void writeUserDateToFile() throws IOException {
+        JSONObject json = new JSONObject();
+//        // Build json
+        json.put("username", loggedInUser.getName());
+        json.put("password", loggedInUser.getPassword());
+        JSONArray categoryArray = new JSONArray();
+        for (String category : categories) {
+            categoryArray.add(category);
+        }
+        json.put("categories", categoryArray);
+        JSONArray itemArray = new JSONArray();
+        for (Item item : items) {
+            itemArray.add(item.toJSON());
+        }
+        json.put("items", itemArray);
+        // Write out to file
+        PrintWriter pw = new PrintWriter(new FileWriter(loggedInUser.getName() + ".json"));
+        pw.write(json.toJSONString());
+        pw.flush();
+        pw.close();
     }
-//    private void writeUsersDataFile(){
-//        JSONObject usersData = new JSONObject();
-//        JSONArray usersArray = new JSONArray();
-//        for(User user : users){
-//            usersArray.add(user.toJSON());
-//        }
-//        usersData.put("users", usersArray);
-//
-//    }
-    private void writeCategoriesDataFile(){
-
+    // == Cryption functions ==
+    private String encryptText(String text, String key) {
+        StringBuilder result = new StringBuilder(); // init string builder object
+        // Encrypt every character one by one
+        for (int i = 0; i < text.length(); i++){
+            char res = (char) (text.charAt(i) ^ key.charAt(i % key.length())); // Make an XOR bitwise from the password and the key
+            result.append(res); // Concatenate to the string
+        }
+        return result.toString();
     }
-    private void writeItemsDataFile(){
 
+    private String decryptText(String text, String key) {
+        return encryptText(text,key); // Encrypt and Decrypt is symmetric because of the XOR
     }
 
     // API called functions
-    public boolean checkUser(JSONObject userData) {
+    public boolean checkUser(JSONObject userData) throws Exception {
         String username = userData.get("username").toString();
         String password = userData.get("password").toString();
-        ArrayList<User> users = new ArrayList<>(); // new User(username,password)
-        JSONObject usersData;
-        try {
-            usersData = (JSONObject) new JSONParser().parse(new FileReader(userDataJSONFilePath));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+
+        JSONObject userDataFromFile;
+        try{
+            userDataFromFile = (JSONObject) new JSONParser().parse(new FileReader(username + ".json"));
+        } catch (Exception e){
+            throw new Exception("Nem található ilyen nevű felhasználó!\nKérem regisztráljon, vagy lépjen be más felhasználóval.");
+        }
+        String cryptedPassword = userDataFromFile.get("password").toString();
+        if (cryptedPassword.equals(encryptText(password, username))) {
+            loggedInUser = new User(username, cryptedPassword);
+            return true;
         }
         return false;
+    }
+    public boolean createUser(JSONObject userData) throws Exception {
+        try {
+            FileReader fr = new FileReader(userData.get("username").toString() + ".json"); // Try to search for username.json --> if does not exist, then an exception is thrown.
+            fr.close();
+            return false;
+        } catch (Exception e) {
+            loggedInUser = new User(userData.get("username").toString(), encryptText(userData.get("password").toString(), userData.get("username").toString()));
+            writeUserDateToFile();
+        }
+        return true;
     }
 }

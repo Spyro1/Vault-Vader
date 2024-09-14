@@ -37,8 +37,4 @@ public class PassField extends TextField {
         obj.put("value", super.text);
         return obj;
     }
-    public PassField fromJSON(JSONObject json) {
-        // TODO: Write fromJSON in PassField
-        return this;
-    }
 }

@@ -1,9 +1,12 @@
-package frontend;
+package frontend.ui;
 
 import backend.API;
+import frontend.components.MyTreeRenderer;
+import frontend.VV;
+import frontend.components.DarkTextField;
+import frontend.components.IconButton;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 

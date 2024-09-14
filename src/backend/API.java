@@ -1,21 +1,16 @@
 package backend;
 
 import backend.category.Category;
-import backend.fields.Field;
-import backend.item.Item;
-import backend.user.User;
-import frontend.MainUI;
+import frontend.ui.MainUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class API {
 
     // == Login / Register Methods ==
-    static public boolean loginRequest(JSONObject userData) {
-        // TODO: Adatbázisban felhasználó ellenőrzés
+    static public boolean loginRequest(JSONObject userData) throws Exception {
         if(Controller.INSTANCE.checkUser(userData)){
 //            JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!");
             new MainUI();
@@ -23,8 +18,8 @@ public class API {
         }
         return false;
     }
-    static public boolean registerRequest(JSONObject userData) {
-        return true;
+    static public boolean registerRequest(JSONObject userData) throws Exception {
+        return Controller.INSTANCE.createUser(userData);
     }
     // == Item Methods ==
     static public boolean addItem(int itemId){

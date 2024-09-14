@@ -1,4 +1,6 @@
-package frontend;
+package frontend.components;
+
+import frontend.VV;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,7 @@
-package frontend;
+package frontend.ui;
 
 import backend.API;
+import frontend.VV;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
@@ -12,8 +13,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 
         try{
 
-//            new LoginUI(); // TO RUN
-            new MainUI(); // TESTING
+            new LoginUI(); // TO RUN
+//            new MainUI(); // TESTING
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -14,7 +14,6 @@ public class IntField extends Field {
         this.value = value;
     }
 
-
     public int getValue() { return this.value; }
     public void setValue(int value) { this.value = value; }
 
@@ -32,7 +31,8 @@ public class IntField extends Field {
 
     @Override
     public IntField fromJSON(JSONObject json) {
-        // TODO: Write fromJSON iin IntField
+        fieldName = json.get("fieldName").toString();
+        value = Integer.parseInt(json.get("value").toString());
         return this;
     }
 }

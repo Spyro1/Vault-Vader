@@ -31,7 +31,8 @@ public class TextField extends Field {
 
     @Override
     public TextField fromJSON(JSONObject json) {
-        // TODO: Write fromJSON in TextField
+        fieldName = json.get("fieldName").toString();
+        text = json.get("value").toString();
         return this;
     }
 }
