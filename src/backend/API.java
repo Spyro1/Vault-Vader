@@ -16,7 +16,7 @@ public class API {
     // == Login / Register Methods ==
     static public boolean loginRequest(JSONObject userData) {
         // TODO: Adatbázisban felhasználó ellenőrzés
-        if(Controller.INSTANCE.checkUser(new User(userData.get("username").toString(), userData.get("password").toString()))){
+        if(Controller.INSTANCE.checkUser(userData)){
 //            JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!");
             new MainUI();
             return true;
