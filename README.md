@@ -7,85 +7,86 @@ This is a Password Manager application which is written in Java with Swing.
 ```mermaid
 classDiagram
     direction TB
-    class LoginUI{
-        + main()
-        + LoginUI()
+    namespace frontend {
+        
+        class LoginUI{
+            + main()
+            + LoginUI()
+        }
+        class MainUI{
+            + MainUI()
+        }
     }
-    class MainUI{
-        + MainUI()
+    namespace backend {
+            
+        class Controller{
+             <<singleton>>
+             + INSTANCE : Controller$
+             - items : List~Item~
+             - categories : List ~String~
+             - loggedInuser : User
+             - Controller()
+             + ReadUserDataFromFile() void
+             + writeUserDataToFile() void
+             + checkUser(userData: JSON) boolean
+             + createUser(userData: JSON) boolean
+             - encryptText(text: String, key: String) String
+             - decryptText(text: String, key: String) String
+        }
+        class User{
+            - name : String
+            - password : String
+        }
+        class Item{
+            - icon : ImageIcon
+            - title : String
+            - category : String
+            - fileds : List~Field~
+        }
+        class Field{
+            - fieldName : String
+            + getFieldName() String
+        }
+        class IntField{
+            - value : int
+            + getValue() int
+            + setValue() void
+        }
+        class TextField{
+            - text : String
+            + getText() String
+            + setText(text: String) void
+        }
+        class PassField{
+            + getDecryptedText() String
+            + setText(secret: String) void @Override
+            - encryptText(text: String) String
+            - decryptText(text: String) String
+        }
+        
     }
-    class Controller{
-         <<singleton>>
-         + INSTANCE : Controller$
-        - userManager : UserManager
+%%    namespace api{
+        
+    class API{
+        + loginRequest(userData: JSON) bool$
+        + registerRequest(userData: JSON) bool$
+        + getCategoryList() JSON$
     }
-%%    Controller *-- UserManager
-    class User{
-        - name : String
-        - password : String
-    }
-    class UserManager{
-        - users: List~User~
-    }
-    UserManager *-- User
-    class ItemManager{
-        - items : List~Item~
-        + addItem(item: Item) void
-    }
-    class Item{
-        - icon : ImageIcon
-        - title : String
-        - fileds : List~Field~
-        - category : Category
-    }
-    ItemManager *-- Item
+%%    }
     Item *-- Field
-    class Category{
-        + categoryName : String
-        + color : Color
-    }
-    class CategoryManager{
-        - categories : List~Category~
-    }
-    CategoryManager *-- Category
-%%    Item o-- Category
-    Category --o Item
-    class Field{
-        - fieldName : String
-        + getFieldName() String
-    }
-    class IntField{
-        - value : int
-        + getValue() int
-        + setValue() void
-    }
-    class TextField{
-        - text : String
-        + getText() String
-        + setText(text: String) void
-    }
-    class PassField{
-        + getDecryptedText() String
-        + setText(secret: String) void @Override
-        - encryptText(text: String) String
-        - decryptText(text: String) String
-    }
     Field <|-- TextField
     Field <|-- IntField
     TextField <|-- PassField
     
-    class API{
-        + loginRequest() bool$
-        + registerRequest() bool$
-        
-    }
-    Controller --> UserManager
-    Controller --> ItemManager
-    Controller --> CategoryManager
-    API --> Controller
-    LoginUI --> API
-    MainUI --> API
+    Controller *-- User
+    Controller *-- Item
     
+    
+    API --> Controller
+    API <-- LoginUI
+    API <-- MainUI
+%%    LoginUI --> API
+%%    MainUI --> API   
    
 
 ```
