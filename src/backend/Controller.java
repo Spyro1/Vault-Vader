@@ -34,11 +34,6 @@ public class Controller {
     private User loggedInUser;
 
 
-//    private final String itemDataJSONFilePath = "data/items.json";
-//    private final String categoryDataJSONFilePath = "data/categories.json";
-//    private final String userDataJSONFilePath = "data/users.json";
-
-
     private Controller() {
 
     }
@@ -64,7 +59,7 @@ public class Controller {
         }
         json.put("items", itemArray);
         // Write out to file
-        PrintWriter pw = new PrintWriter(new FileWriter(loggedInUser.getName() + ".json"));
+        PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
         pw.write(json.toJSONString());
         pw.flush();
         pw.close();
@@ -91,7 +86,7 @@ public class Controller {
 
         JSONObject userDataFromFile;
         try{
-            userDataFromFile = (JSONObject) new JSONParser().parse(new FileReader(username + ".json"));
+            userDataFromFile = (JSONObject) new JSONParser().parse(new FileReader("users/" + username + ".json"));
         } catch (Exception e){
             throw new Exception("Nem található ilyen nevű felhasználó!\nKérem regisztráljon, vagy lépjen be más felhasználóval.");
         }
@@ -104,7 +99,7 @@ public class Controller {
     }
     public boolean createUser(JSONObject userData) throws Exception {
         try {
-            FileReader fr = new FileReader(userData.get("username").toString() + ".json"); // Try to search for username.json --> if does not exist, then an exception is thrown.
+            FileReader fr = new FileReader("users/" + userData.get("username").toString() + ".json"); // Try to search for username.json --> if does not exist, then an exception is thrown.
             fr.close();
             return false;
         } catch (Exception e) {
