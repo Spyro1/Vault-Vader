@@ -136,4 +136,20 @@ public class Controller {
     public ArrayList<String> getCategoryList() {
         return categories;
     }
+
+    public boolean addNewCategory(String newCategory) {
+        if (!categories.contains(newCategory)) {
+            categories.add(newCategory);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeCategory(String categoryToRemove) {
+        return categories.remove(categoryToRemove);
+    }
+
+    public void saveAll() throws IOException {
+        writeUserDateToFile();
+    }
 }

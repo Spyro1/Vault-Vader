@@ -5,6 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class API {
@@ -71,14 +72,20 @@ public class API {
     }
     // == Category Methods ==
     static public boolean addNewCategory(JSONObject categoryData) {
+        if (!categoryData.get("category").toString().isEmpty()) {
+            return Controller.INSTANCE.addNewCategory(categoryData.get("category").toString());
+        }
         return false;
+    }
+    static public boolean removeCategory(JSONObject categoryData) {
+        if (!categoryData.get("category").toString().isEmpty()) {
+            return Controller.INSTANCE.removeCategory(categoryData.get("category").toString());
+        }
+        return  false;
     }
 //    static public boolean modifyCategory(int categoryId, String name, Color color){
 //        return false;
 //    }
-    static public boolean removeCategory(JSONObject categoryData) {
-        return false;
-    }
     // == Item Field Methods ==
     static public boolean addItemField(int itemId, int fieldId, int fieldType){
         return false;
@@ -107,5 +114,7 @@ public class API {
         return null;
     }
 
-
+    public static void saveAllChanges() throws IOException {
+        Controller.INSTANCE.saveAll();
+    }
 }
