@@ -2,6 +2,8 @@ package frontend.ui;
 
 import backend.API;
 import frontend.VV;
+import frontend.components.DarkTextField;
+import frontend.components.IconButton;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
@@ -23,8 +25,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
     private JLabel titleLabel;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JButton loginButton;
-    private JButton registerButton;
+    private IconButton loginButton;
+    private IconButton registerButton;
 
     public LoginUI() {
         // === Essential frame setup ===
@@ -56,55 +58,65 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             usernameField.setBorder(BorderFactory.createTitledBorder(null, "Felhasználónév ", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
             usernameField.setForeground(VV.mainTextColor);
             usernameField.setOpaque(false);
+            usernameField.setCaretColor(VV.mainTextColor);
+            usernameField.setFont(new Font("Arial", Font.PLAIN, 15));
         }
         passwordField = new JPasswordField(); {
             passwordField.setBorder(BorderFactory.createTitledBorder(null, "Jelszó", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
             passwordField.setForeground(VV.mainTextColor);
             passwordField.setOpaque(false);
+            passwordField.setCaretColor(VV.mainTextColor);
+            passwordField.setFont(new Font("Arial", Font.PLAIN, 15));
         }
         // Login Button
-        loginButton = new JButton("Bejelentkezés");
-        loginButton.addActionListener(e -> {
-            try {
-                // Create JSON object from username and password
-                JSONObject userData = new JSONObject();
-                userData.put("username",  usernameField.getText());
-                userData.put("password",  passwordField.getText());
-                // Try login with user's date
-                if (API.loginRequest(userData)){
-//                    JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!", "Bejelentkezés", JOptionPane.INFORMATION_MESSAGE);
-                    dispose(); // Successful login -> Close window
-                }
-                else{
-                    throw new Exception("Helytelen felhasználónév vagy jelszó!");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-        // Register Button
-        registerButton = new JButton("Regisztráció");
-        registerButton.addActionListener(e -> {
-            try {
-                // Create JSON object from username and password
-                JSONObject userData = new JSONObject();
-                userData.put("username",  usernameField.getText());
-                userData.put("password",  passwordField.getText());
-                // Ask for clarification
-                if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-                    // Try register with user's date
-                    if (API.registerRequest(userData)){
-                        JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!", "Regisztráció", JOptionPane.INFORMATION_MESSAGE); // Successful register -> Show a success dialog box
+        loginButton = new IconButton("Bejelentkezés"); {
+            loginButton.setBackground(VV.mainColor);
+            loginButton.setForeground(VV.mainTextColor);
+            loginButton.addActionListener(e -> {
+                try {
+                    // Create JSON object from username and password
+                    JSONObject userData = new JSONObject();
+                    userData.put("username",  usernameField.getText());
+                    userData.put("password",  passwordField.getText());
+                    // Try login with user's date
+                    if (API.loginRequest(userData)){
+    //                    JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!", "Bejelentkezés", JOptionPane.INFORMATION_MESSAGE);
+                        dispose(); // Successful login -> Close window
                     }
                     else{
-                        throw new Exception("Nem sikerült létrehozni a felhasználót!");
+                        throw new Exception("Helytelen felhasználónév vagy jelszó!");
                     }
-
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+            });
+        }
+        // Register Button
+        registerButton = new IconButton("Regisztráció"); {
+            registerButton.setBackground(VV.secondaryColor);
+            registerButton.setForeground(VV.mainTextColor);
+            registerButton.addActionListener(e -> {
+                try {
+                    // Create JSON object from username and password
+                    JSONObject userData = new JSONObject();
+                    userData.put("username",  usernameField.getText());
+                    userData.put("password",  passwordField.getText());
+                    // Ask for clarification
+                    if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                        // Try register with user's date
+                        if (API.registerRequest(userData)){
+                            JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!", "Regisztráció", JOptionPane.INFORMATION_MESSAGE); // Successful register -> Show a success dialog box
+                        }
+                        else{
+                            throw new Exception("Nem sikerült létrehozni a felhasználót!");
+                        }
+
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+        }
         // Create Panel for Components
         JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15)); {
             centerPanel.setBackground(VV.bgDarkColor);

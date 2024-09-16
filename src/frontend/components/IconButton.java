@@ -3,6 +3,7 @@ package frontend.components;
 import frontend.VV;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class IconButton extends JButton {
     final int margin = 10;
@@ -11,15 +12,24 @@ public class IconButton extends JButton {
         super();
         setBackground(VV.bgDarkColor);
         setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+        setFont(new Font("Arial", Font.PLAIN, 20));
     }
     public IconButton(Icon icon) {
         super(icon);
         setBackground(VV.bgDarkColor);
         setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+        setFont(new Font("Arial", Font.PLAIN, 20));
+    }
+    public IconButton(String text) {
+        super(text);
+        setBackground(VV.bgDarkColor);
+        setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+        setFont(new Font("Arial", Font.PLAIN, 20));
     }
     public IconButton(String text, Icon icon) {
         super(text, icon);
         setBackground(VV.bgDarkColor);
         setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+        setFont(new Font("Arial", Font.PLAIN, 20));
     }
 }

@@ -88,14 +88,14 @@ public class Controller {
         try{
             userDataFromFile = (JSONObject) new JSONParser().parse(new FileReader("users/" + username + ".json"));
         } catch (Exception e){
-            throw new Exception("Nem található ilyen nevű felhasználó!\nKérem regisztráljon, vagy lépjen be más felhasználóval.");
+            throw new Exception("Nem található ilyen nevű felhasználó!\nKérem regisztráljon, vagy lépjen be más felhasználóval."); // Throw exception if the user does not exists
         }
         String cryptedPassword = userDataFromFile.get("password").toString();
         if (cryptedPassword.equals(encryptText(password, username))) {
             loggedInUser = new User(username, cryptedPassword);
-            return true;
+            return true; // True, if the user exits and the password is correct
         }
-        return false;
+        return false; // False, if the user exists, but the password is incorrect
     }
     public boolean createUser(JSONObject userData) throws Exception {
         try {

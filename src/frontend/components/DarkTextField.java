@@ -12,6 +12,7 @@ public class DarkTextField extends JTextField {
         setBackground(VV.bgLightColor);
         setFont(new Font("Arial", Font.PLAIN, 20));
         setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
+        setCaretColor(VV.mainTextColor);
     }
     public DarkTextField(String text) {
         super(text);
