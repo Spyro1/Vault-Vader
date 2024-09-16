@@ -1,6 +1,8 @@
 # Vault-Vader
-This is a Password Manager application which is written in Java with Swing.
+> Created by Marton Szenes, alias Spyro  
+> Last update: 2024.09.06.
 
+This is a Password Manager application which is written in Java with Swing.
 
 # UML - diagram
 
@@ -120,3 +122,29 @@ JSON file name is the username ->  1 file per user
   ]
 }
 ```
+
+
+## API request sequences
+
+### Login Request 
+
+```mermaid
+sequenceDiagram
+    LoginUI ->> API: loginRequest(): send <br> user data for login
+    API ->> Controller: checkUser(): Ask Controller if user exists
+    Controller ->> API: Returns True / False indicating if the <br> password is correct, or Throws <br> exception if user does not exists
+    API ->>  LoginUI: Returns checkUser()'s value. If <br> it was True, then Calls MainUI 
+    
+```
+
+### Register Request
+
+```mermaid
+sequenceDiagram
+    LoginUI ->> API: registerRequest(): send user <br> data to register
+    API ->> Controller: createUser(): Ask Controller <br> to create the user
+    Controller ->> API: Returns True if the user has been <br> successfully created, or false if <br> this username already exists.
+    API ->> LoginUI: Returns createUser()'s value
+```
+
+### 
