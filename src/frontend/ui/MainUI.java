@@ -5,10 +5,14 @@ import frontend.components.MyTreeRenderer;
 import frontend.VV;
 import frontend.components.DarkTextField;
 import frontend.components.IconButton;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.ArrayList;
 
 public class MainUI extends JFrame {
 
@@ -16,9 +20,8 @@ public class MainUI extends JFrame {
     final int margin = 10;
     final double headerWeightY = 0.01, headerWeightX = 0.1;
     final double contentWeightY = 1-headerWeightY;
-    JPanel titlePanel, headerPanel, sidePanel, sliderPanel, contentPanel; //, categoryPanel;
+    JPanel titlePanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
     public MainUI() {
-
         // Create main frame
         setTitle("Vault Vader");
         setSize(width, height);
@@ -27,11 +30,10 @@ public class MainUI extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         ImageIcon lockIcon = new ImageIcon("assets/black/lock.png");
         setIconImage(lockIcon.getImage()); // Set status bar icon
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-
+        // TITLE PANEL for displaying the app name
         titlePanel = new JPanel(new BorderLayout()); {
             JPanel titleCenterPanel = new JPanel(new BorderLayout()); {
                 titleCenterPanel.setBackground(VV.bgDarkColor);
@@ -45,19 +47,22 @@ public class MainUI extends JFrame {
             }
             titlePanel.add(titleCenterPanel);
          }
+        // HEADER PANEL for the search bar
         headerPanel = new JPanel(); {
             headerPanel.setBackground(VV.bgDarkColor);
             headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
             JPanel centerPanel = new JPanel(new BorderLayout()); {
                 centerPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin,margin,margin));
                 centerPanel.setBackground(VV.bgDarkColor);
-                DarkTextField searchField = new DarkTextField();
+                DarkTextField searchField = new DarkTextField("","Keresés");
                 centerPanel.add(searchField);
             }
             headerPanel.add(centerPanel);
             IconButton searchButton = new IconButton("", new ImageIcon("assets/white/search.png"));
+            searchButton.grabFocus();
             headerPanel.add(searchButton);
         }
+        // SIDE PANEL for filtering for categories
         sidePanel = new JPanel(new BorderLayout()); {
             sidePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
             sidePanel.setBackground(VV.bgLightColor);
@@ -65,6 +70,7 @@ public class MainUI extends JFrame {
                 categoryLabelPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin*3, margin, margin*3));
                 categoryLabelPanel.setOpaque(false);
                 JLabel categoryLabel = new JLabel("Kategóriák"); {
+                    categoryLabel.setForeground(VV.mainTextColor);
                     categoryLabel.setForeground(VV.mainTextColor);
                     categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     categoryLabel.setForeground(VV.mainTextColor);
@@ -74,15 +80,18 @@ public class MainUI extends JFrame {
                 categoryLabelPanel.add(categoryLabel);
             }
             sidePanel.add(categoryLabelPanel, BorderLayout.NORTH);
-            DefaultMutableTreeNode baseCategory = new DefaultMutableTreeNode("Kategóriák");
-            baseCategory.add(new DefaultMutableTreeNode(API.getCategoryList())); // GET data from API
+            // Add base category and sub categories
+            DefaultMutableTreeNode baseCategory = new DefaultMutableTreeNode("Minden bejegyzés");
+            ArrayList<String> categories = API.getCategoryList(); // GET data from API
+            for (String category : categories) {
+                baseCategory.add(new DefaultMutableTreeNode(category));
+            }
             JTree categoryTree = new JTree(baseCategory);  {
                 categoryTree.setOpaque(false);
                 categoryTree.setFont(new Font("Arial", Font.PLAIN, 15));
                 categoryTree.setForeground(VV.mainTextColor);
                 categoryTree.setCellRenderer(new MyTreeRenderer());
-                categoryTree.setRootVisible(false);
-
+//                categoryTree.setRootVisible(false);
             }
             JScrollPane scrollPane = new JScrollPane(categoryTree); {
                 scrollPane.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
@@ -90,29 +99,69 @@ public class MainUI extends JFrame {
                 scrollPane.setBackground(VV.bgLightColor);
                 scrollPane.getViewport().setOpaque(false);
             }
-            sidePanel.add(scrollPane);
+            sidePanel.add(scrollPane, BorderLayout.CENTER);
+            JPanel categoryEditorToolPanel = new JPanel(); {
+                categoryEditorToolPanel.setLayout(new BorderLayout());
+                categoryEditorToolPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+//                categoryEditorToolPanel.setOpaque(false);
+                categoryEditorToolPanel.setBackground(VV.bgDarkColor);
+                DarkTextField categoryField = new DarkTextField("","Kategória"); {
+                    categoryField.setFont(new Font("Arial", Font.PLAIN, 15));
+                }
+                IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
+                    addCategoryButton.setOpaque(false);
+                    addCategoryButton.setBackground(VV.bgLightColor);
+                    addCategoryButton.addActionListener(event -> {
+                        try {
+                            JSONObject json = new JSONObject();
+                            json.put("caregory", categoryField.getText());
+                            API.addNewCategory(json);
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
+                }
+                IconButton removeCategoryButton = new IconButton("", new ImageIcon("assets/white/minus.png")); {
+                    removeCategoryButton.setOpaque(false);
+                    removeCategoryButton.setBackground(VV.bgLightColor);
+                    removeCategoryButton.addActionListener(event -> {
+                        try {
+                            JSONObject json = new JSONObject();
+                            json.put("caregory", categoryField.getText());
+                            API.removeCategory(json);
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
+                }
+                categoryEditorToolPanel.add(addCategoryButton, BorderLayout.WEST);
+                categoryEditorToolPanel.add(categoryField, BorderLayout.CENTER);
+                categoryEditorToolPanel.add(removeCategoryButton, BorderLayout.EAST);
+            }
+            sidePanel.add(categoryEditorToolPanel, BorderLayout.SOUTH);
         }
+        // SLIDER PANEL for displaying every
         sliderPanel = new JPanel(); {
             sliderPanel.setBackground(VV.bgDarkColor);
         }
-        contentPanel = new JPanel(); {
-            contentPanel.setBackground(VV.bgDarkColor);
-            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            JPanel marginPanel = new JPanel(); {
-                marginPanel.setLayout(new BoxLayout(marginPanel, BoxLayout.Y_AXIS));
-                marginPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
-                marginPanel.setOpaque(false);
-                JPanel firstRow = new JPanel(new BorderLayout()); {
-                    firstRow.setOpaque(false);
-                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
-                    firstRow.add(iconButton, BorderLayout.WEST);
-                    DarkTextField titleField = new DarkTextField();
-                    firstRow.add(titleField, BorderLayout.CENTER);
-                }
-                marginPanel.add(firstRow);
-
+        // EDITOR PANEL for editing items
+        contentBackPanel = new JPanel(); {
+            contentBackPanel.setBackground(VV.bgDarkColor);
+            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
+            editorPanel = new JPanel(); {
+                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
+                editorPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+                editorPanel.setOpaque(false);
+//                JPanel titleRow = new JPanel(new BorderLayout()); {
+//                    titleRow.setOpaque(false);
+//                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
+//                    titleRow.add(iconButton, BorderLayout.WEST);
+//                    DarkTextField titleField = new DarkTextField();
+//                    titleRow.add(titleField, BorderLayout.CENTER);
+//                }
+//                editorPanel.add(titleRow);
             }
-            contentPanel.add(marginPanel);
+            contentBackPanel.add(editorPanel);
         }
 
         // title panel: Top-right corner
@@ -149,7 +198,7 @@ public class MainUI extends JFrame {
         gbc.gridy = 1;
         gbc.weightx = 0.6;
         gbc.weighty = contentWeightY;
-        add(contentPanel, gbc);
+        add(contentBackPanel, gbc);
         // Set window visible
         setVisible(true);
     }

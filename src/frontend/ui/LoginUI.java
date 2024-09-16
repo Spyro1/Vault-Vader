@@ -7,14 +7,13 @@ import frontend.components.IconButton;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     static public void main(String[] args){
-
         try{
-
             new LoginUI(); // TO RUN
 //            new MainUI(); // TESTING
         } catch (Exception e){
@@ -55,23 +54,26 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         // Input fields
         usernameField = new JTextField(); {
-            usernameField.setBorder(BorderFactory.createTitledBorder(null, "Felhasználónév ", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
+            usernameField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Felhasználónév ", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
             usernameField.setForeground(VV.mainTextColor);
-            usernameField.setOpaque(false);
             usernameField.setCaretColor(VV.mainTextColor);
+            usernameField.setBackground(VV.bgLightColor);
             usernameField.setFont(new Font("Arial", Font.PLAIN, 15));
+//            usernameField.setOpaque(false);
         }
         passwordField = new JPasswordField(); {
-            passwordField.setBorder(BorderFactory.createTitledBorder(null, "Jelszó", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
+            passwordField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Jelszó", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
             passwordField.setForeground(VV.mainTextColor);
-            passwordField.setOpaque(false);
             passwordField.setCaretColor(VV.mainTextColor);
+            passwordField.setBackground(VV.bgLightColor);
             passwordField.setFont(new Font("Arial", Font.PLAIN, 15));
+//            passwordField.setOpaque(false);
         }
         // Login Button
         loginButton = new IconButton("Bejelentkezés"); {
             loginButton.setBackground(VV.mainColor);
             loginButton.setForeground(VV.mainTextColor);
+//            loginButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin * 3, VV.margin, VV.margin * 3));
             loginButton.addActionListener(e -> {
                 try {
                     // Create JSON object from username and password
@@ -95,6 +97,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         registerButton = new IconButton("Regisztráció"); {
             registerButton.setBackground(VV.secondaryColor);
             registerButton.setForeground(VV.mainTextColor);
+            registerButton.setFont(new Font("Arial", Font.PLAIN, 16));
+//            registerButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin * 4, VV.margin, VV.margin * 4));
             registerButton.addActionListener(e -> {
                 try {
                     // Create JSON object from username and password

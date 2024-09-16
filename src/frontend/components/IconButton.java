@@ -6,30 +6,28 @@ import javax.swing.*;
 import java.awt.*;
 
 public class IconButton extends JButton {
-    final int margin = 10;
+
 
     public IconButton() {
         super();
-        setBackground(VV.bgDarkColor);
-        setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
-        setFont(new Font("Arial", Font.PLAIN, 20));
+        setup();
     }
     public IconButton(Icon icon) {
         super(icon);
-        setBackground(VV.bgDarkColor);
-        setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
-        setFont(new Font("Arial", Font.PLAIN, 20));
+        setup();
     }
     public IconButton(String text) {
         super(text);
-        setBackground(VV.bgDarkColor);
-        setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
-        setFont(new Font("Arial", Font.PLAIN, 20));
+        setup();
     }
     public IconButton(String text, Icon icon) {
         super(text, icon);
+        setup();
+    }
+    private void setup(){
+//        setOpaque(false);
         setBackground(VV.bgDarkColor);
-        setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+        setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
         setFont(new Font("Arial", Font.PLAIN, 20));
     }
 }

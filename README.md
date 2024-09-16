@@ -28,16 +28,19 @@ classDiagram
              - categories : List ~String~
              - loggedInuser : User
              - Controller()
-             + ReadUserDataFromFile() void
-             + writeUserDataToFile() void
+             + loadUser() void
              + checkUser(userData: JSON) boolean
              + createUser(userData: JSON) boolean
+             - readUserDataFromFile() void
+             - writeUserDataToFile() void
              - encryptText(text: String, key: String) String
              - decryptText(text: String, key: String) String
         }
         class User{
             - name : String
             - password : String
+            + getName() String
+            + getPassword() : String
         }
         class Item{
             - icon : ImageIcon
@@ -133,8 +136,9 @@ sequenceDiagram
     LoginUI ->> API: loginRequest(): send <br> user data for login
     API ->> Controller: checkUser(): Ask Controller if user exists
     Controller ->> API: Returns True / False indicating if the <br> password is correct, or Throws <br> exception if user does not exists
+    API -->> Controller: loadUser(): Ask Controller <br> to load user's credentials
+%%    Controller ->> API
     API ->>  LoginUI: Returns checkUser()'s value. If <br> it was True, then Calls MainUI 
-    
 ```
 
 ### Register Request

@@ -1,44 +1,82 @@
 package backend;
 
-import backend.category.Category;
 import frontend.ui.MainUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class API {
 
     // == Login / Register Methods ==
+
+    /**
+     * Create a login request to the controller object with the given user info.
+     * @JOSNkeys "username", "password"
+     * @param userData JSON object containing "username" and "password" keys.
+     * @return True: if username and password is correct, False: if the password is incorrect.
+     * @throws Exception Thrown, if the username does not exist.
+     */
     static public boolean loginRequest(JSONObject userData) throws Exception {
         if(Controller.INSTANCE.checkUser(userData)){
 //            JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!");
+            Controller.INSTANCE.loadUser(); // loads the logged in user's data from file
             new MainUI();
             return true;
         }
         return false;
     }
+
+    /**
+     * Create a register request to the controller object with the given user info.
+     * @JSONkeys "username", "password"
+     * @param userData JSON object containing "username" and "password" keys.
+     * @return True: if successfully registered, False: if username already exist.
+     * @throws Exception Thrown, if there was any problem with the files.
+     */
     static public boolean registerRequest(JSONObject userData) throws Exception {
         return Controller.INSTANCE.createUser(userData);
     }
     // == Item Methods ==
-    static public boolean addItem(int itemId){
+
+    /**
+     *
+     * @JSONkeys "title", "category", "fields": []
+     * @param itemData
+     * @return
+     */
+    static public boolean addNewItem(JSONObject itemData) {
         return false;
     }
-    static public boolean modifyItem(int itemId, String title, Category category){
+
+    /**
+     *
+     * @JSONkeys
+     * @param itemData
+     * @return
+     */
+    static public boolean saveItem(JSONObject itemData) {
         return false;
     }
-    static public boolean removeItem(int itemId){
+
+    /**
+     *
+     * @JSONkeys
+     * @param itemData
+     * @return
+     */
+    static public boolean removeItem(JSONObject itemData) {
         return false;
     }
     // == Category Methods ==
-    static public boolean addCategory(int categoryId, String name, Color color){
+    static public boolean addNewCategory(JSONObject categoryData) {
         return false;
     }
-    static public boolean modifyCategory(int categoryId, String name, Color color){
-        return false;
-    }
-    static public boolean removeCategory(int categoryId){
+//    static public boolean modifyCategory(int categoryId, String name, Color color){
+//        return false;
+//    }
+    static public boolean removeCategory(JSONObject categoryData) {
         return false;
     }
     // == Item Field Methods ==
@@ -56,8 +94,14 @@ public class API {
     static public JSONArray getItemList(){
         return null;
     }
-    static public JSONArray getCategoryList(){
-        return null;
+    static public ArrayList<String> getCategoryList(){
+//        JSONObject json = new JSONObject();
+//        JSONArray jsonArray = new JSONArray();
+//        jsonArray.addAll(Controller.INSTANCE.getCategoryList());
+//        json.put("categories", jsonArray);
+//        return  json;
+        System.out.println(Controller.INSTANCE.getCategoryList().toString());
+        return Controller.INSTANCE.getCategoryList();
     }
     static public JSONArray getFieldList(){
         return null;

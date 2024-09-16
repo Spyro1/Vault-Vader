@@ -13,13 +13,13 @@ public class Item implements JSONSerializable {
     public int ID;
     private ImageIcon icon;
     private String title;
-    private Category category;
+    private String category;
     private ArrayList<Field> fields = new ArrayList<>();
 
     public Item() {
         setupItem();
     }
-    public Item(Category category) {
+    public Item(String category) {
         setupItem();
         this.category = category;
     }
@@ -28,6 +28,7 @@ public class Item implements JSONSerializable {
         title = "";
         category = null;
         fields.clear();
+        initDefaultFields();
     }
     public void initDefaultFields() {
         fields.add(new TextField("Név", ""));
@@ -48,7 +49,7 @@ public class Item implements JSONSerializable {
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("title", title);
-        obj.put("category", category.toJSON());
+        obj.put("category", category);
         JSONArray fieldsArray = new JSONArray();
         for (Field field : fields) {
             fieldsArray.add(field.toJSON());
@@ -60,7 +61,7 @@ public class Item implements JSONSerializable {
     @Override
     public Item fromJSON(JSONObject json) {
         title = json.get("title").toString();
-        category = new Category(json);
+        category = json.get("category").toString();
         fields.clear();
         JSONArray fieldsArray = (JSONArray) json.get("fields");
         for (int i = 0; i < fieldsArray.size(); i++) {

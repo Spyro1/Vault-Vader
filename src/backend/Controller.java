@@ -2,14 +2,15 @@ package backend;
 
 import backend.item.Item;
 import backend.user.User;
-import backend.category.Category;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Controller {
 
@@ -34,15 +35,20 @@ public class Controller {
     private User loggedInUser;
 
 
-    private Controller() {
+    private Controller() {}
 
-    }
-
+    // === Read / Write user data functions ===
     private void readUsersDataFromFile() throws IOException, ParseException {
-        JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader(loggedInUser.getName() + ".json"));
-
+        JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
+        JSONArray categoryArray = (JSONArray) usersData.get("categories");
+        for (int i = 0; i < categoryArray.size(); i++) {
+            categories.add(categoryArray.get(i).toString());
+        }
+        JSONArray itemArray = (JSONArray) usersData.get("items");
+        for (Object itemObj : itemArray) {
+            items.add(new Item().fromJSON((JSONObject) itemObj));
+        }
     }
-
     private void writeUserDateToFile() throws IOException {
         JSONObject json = new JSONObject();
 //        // Build json
@@ -64,6 +70,7 @@ public class Controller {
         pw.flush();
         pw.close();
     }
+
     // == Cryption functions ==
     private String encryptText(String text, String key) {
         StringBuilder result = new StringBuilder(); // init string builder object
@@ -74,12 +81,22 @@ public class Controller {
         }
         return result.toString();
     }
-
     private String decryptText(String text, String key) {
         return encryptText(text,key); // Encrypt and Decrypt is symmetric because of the XOR
     }
 
-    // API called functions
+
+    // === API called public functions ===
+
+    public void loadUser(){
+        if (loggedInUser != null) {
+            try {
+                readUsersDataFromFile();
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
     public boolean checkUser(JSONObject userData) throws Exception {
         String username = userData.get("username").toString();
         String password = userData.get("password").toString();
@@ -107,5 +124,16 @@ public class Controller {
             writeUserDateToFile();
         }
         return true;
+    }
+
+    public boolean saveItem(JSONObject itemData) throws Exception {
+        return false;
+    }
+    public boolean removeItem(JSONObject itemData) throws Exception {
+        return false;
+    }
+
+    public ArrayList<String> getCategoryList() {
+        return categories;
     }
 }
