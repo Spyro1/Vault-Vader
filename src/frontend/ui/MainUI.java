@@ -1,17 +1,13 @@
 package frontend.ui;
 
 import backend.API;
-import frontend.components.MyTreeRenderer;
 import frontend.VV;
-import frontend.components.DarkTextField;
-import frontend.components.IconButton;
+import frontend.components.*;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 
 public class MainUI extends JFrame {
@@ -21,6 +17,9 @@ public class MainUI extends JFrame {
     final double headerWeightY = 0.01, headerWeightX = 0.1;
     final double contentWeightY = 1-headerWeightY;
     JPanel titlePanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
+    JTree categoryTree;
+    DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
+
     public MainUI() {
         // Create main frame
         setTitle("Vault Vader");
@@ -81,18 +80,19 @@ public class MainUI extends JFrame {
             }
             sidePanel.add(categoryLabelPanel, BorderLayout.NORTH);
             // Add base category and sub categories
-            DefaultMutableTreeNode baseCategory = new DefaultMutableTreeNode("Minden bejegyzés");
-            ArrayList<String> categories = API.getCategoryList(); // GET data from API
-            for (String category : categories) {
-                baseCategory.add(new DefaultMutableTreeNode(category));
-            }
-            JTree categoryTree = new JTree(baseCategory);  {
+//            DefaultMutableTreeNode baseCategory = new DefaultMutableTreeNode("Minden bejegyzés");
+//            ArrayList<String> categories = API.getCategoryList(); // GET data from API
+//            for (String category : categories) {
+//                baseCategory.add(new DefaultMutableTreeNode(category));
+//            }
+            categoryTree = new JTree(allItemCategory); {
                 categoryTree.setOpaque(false);
                 categoryTree.setFont(new Font("Arial", Font.PLAIN, 15));
                 categoryTree.setForeground(VV.mainTextColor);
                 categoryTree.setCellRenderer(new MyTreeRenderer());
 //                categoryTree.setRootVisible(false);
             }
+            refresh();
             JScrollPane scrollPane = new JScrollPane(categoryTree); {
                 scrollPane.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
                 scrollPane.setOpaque(false);
@@ -201,6 +201,16 @@ public class MainUI extends JFrame {
         add(contentBackPanel, gbc);
         // Set window visible
         setVisible(true);
+    }
+
+    public void refresh(){
+        // Refresh category tree data
+        allItemCategory.removeAllChildren();
+        ArrayList<String> categories = API.getCategoryList(); // GET data from API
+        for (String category : categories) {
+            allItemCategory.add(new DefaultMutableTreeNode(category));
+        }
+        categoryTree.expandRow(0);
     }
 
 //    public void addObject(Component component, Container yourcontainer, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
