@@ -1,12 +1,12 @@
 package frontend.ui;
 
 import backend.API;
+import backend.item.Item;
 import frontend.VV;
 import frontend.components.*;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
@@ -19,9 +19,10 @@ public class MainUI extends JFrame {
     final int width = 1000, height = 600; // Default  size of the window
     final int margin = 10;
     final double headerWeightY = 0.01, contentWeightY = 1- headerWeightY,
-                 firsColWeight = 0.1, secondColWeight = 0.3, thirdColWeight = 0.6;
+                 firsColWeight = 0.1, secondColWeight = 0.5, thirdColWeight = 0.5;
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
     JTree categoryTree;
+    JList<Item> itemJList;
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
 
     public MainUI() {
@@ -186,25 +187,26 @@ public class MainUI extends JFrame {
         // SLIDER PANEL for displaying every
         sliderPanel = new JPanel(new BorderLayout()); {
             sliderPanel.setBackground(VV.bgDarkColor);
-            JScrollPane itemListPanel = new JScrollPane(); {
-                itemListPanel.setBackground(VV.bgDarkColor);
-                itemListPanel.setBorder(BorderFactory.createMatteBorder(0, margin, margin, margin, VV.bgDarkColor));
-                JList<JButton> itemList = new JList<>(); {
-                    itemList.setOpaque(false);
-                    itemList.add(new JButton("VAlami"));
-                }
-                itemListPanel.add(itemList);
+            itemJList = createItemJList(API.getItemList(null)); {
+                itemJList.setCellRenderer(new ItemRenderer());
+                itemJList.setBackground(VV.bgLightColor);
             }
-            sliderPanel.add(itemListPanel, BorderLayout.CENTER);
+            JScrollPane itemListScrollPane = new JScrollPane(itemJList); {
+                itemListScrollPane.setBackground(VV.bgDarkColor);
+                itemListScrollPane.setBorder(BorderFactory.createMatteBorder(0, margin, margin, margin, VV.bgDarkColor));
+                itemListScrollPane.getViewport().setOpaque(false);
+            }
+            sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
         }
         // EDITOR PANEL for editing items
-        contentBackPanel = new JPanel(); {
+        contentBackPanel = new JPanel(new BorderLayout()); {
             contentBackPanel.setBackground(VV.bgDarkColor);
-            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
+//            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
             editorPanel = new JPanel(); {
-                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
-                editorPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
-                editorPanel.setOpaque(false);
+//                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
+                editorPanel.setBorder(BorderFactory.createMatteBorder(0, margin, margin, margin, VV.bgDarkColor));
+                editorPanel.setBackground(VV.bgLightColor);
+//               editorPanel.setOpaque(false);
 //                JPanel titleRow = new JPanel(new BorderLayout()); {
 //                    titleRow.setOpaque(false);
 //                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
@@ -214,7 +216,7 @@ public class MainUI extends JFrame {
 //                }
 //                editorPanel.add(titleRow);
             }
-            contentBackPanel.add(editorPanel);
+            contentBackPanel.add(editorPanel, BorderLayout.CENTER);
         }
 
         /* Setup GridBagLayout properties and add panels */ {
@@ -260,6 +262,18 @@ public class MainUI extends JFrame {
 
         // Set window visible
         setVisible(true);
+    }
+
+    private JList<Item> createItemJList(ArrayList<Item> itemList) {
+        // Create list model
+        DefaultListModel<Item> model = new DefaultListModel<>();
+        // Add items to model
+        if (itemList != null) {
+            for (Item i : itemList)
+                model.addElement(i);
+        }
+        JList<Item> itemJList = new JList<Item>(model);
+        return itemJList;
     }
 
     public void refresh(){

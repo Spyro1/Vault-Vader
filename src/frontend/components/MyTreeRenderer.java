@@ -30,7 +30,7 @@ public class MyTreeRenderer extends DefaultTreeCellRenderer {
         }
         @Override
         public Color getBackgroundSelectionColor() {
-            return VV.secondaryTextColor;
+            return VV.mainTextColor;
         }
 
         @Override

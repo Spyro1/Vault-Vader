@@ -1,5 +1,6 @@
 package backend;
 
+import backend.item.Item;
 import frontend.ui.MainUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -98,7 +99,14 @@ public class API {
     }
 
     // == get methods ==
-    static public JSONArray getItemList(){
+    static public ArrayList<Item> getItemList(JSONObject filter){
+        if (filter == null){
+            ArrayList<Item> itemList = Controller.INSTANCE.getItemList();
+            return itemList;
+        }
+//        else {
+//        TODO: Lesz itt valami filteres cucc
+//        }
         return null;
     }
     static public ArrayList<String> getCategoryList(){

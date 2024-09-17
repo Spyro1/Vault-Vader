@@ -10,7 +10,7 @@ import org.json.simple.*;
 import javax.swing.*;
 
 public class Item implements JSONSerializable {
-    public int ID;
+//    public int ID;
     private ImageIcon icon;
     private String title;
     private String category;
@@ -19,6 +19,7 @@ public class Item implements JSONSerializable {
     public Item() {
         setupItem();
     }
+
     public Item(String category) {
         setupItem();
         this.category = category;
@@ -28,16 +29,29 @@ public class Item implements JSONSerializable {
         title = "";
         category = null;
         fields.clear();
-        initDefaultFields();
-    }
-    public void initDefaultFields() {
+//        initDefaultFields();
         fields.add(new TextField("Név", ""));
         fields.add(new PassField("Jelszó", ""));
     }
+//    public void initDefaultFields() {
+//    }
 
+    public ImageIcon getIcon() { return icon; }
+    public String getTitle() { return title; }
+    public String getCategory() { return category; }
+    public ArrayList<Field> getFields() { return fields; }
+
+    public void setIcon(ImageIcon icon) { this.icon = icon; }
+    public void setTitle(String title) { this.title = title; }
+    public void setCategory(String category) { this.category = category; }
+    public void setFields(ArrayList<Field> fields) { this.fields = fields; }
+
+    @Override
     public String toString() {
-        return String.format("%s\n[%s]", title, category);
+        return String.format("%s [%s]", title, category);
     }
+
+    @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
         obj.put("title", title);

@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,16 +60,24 @@ public class Controller {
             categoryArray.add(category);
         }
         json.put("categories", categoryArray);
-        JSONArray itemArray = new JSONArray();
-        for (Item item : items) {
-            itemArray.add(item.toJSON());
-        }
-        json.put("items", itemArray);
+//        JSONArray itemArray = new JSONArray();
+//        for (Item item : items) {
+//            itemArray.add(item.toJSON());
+//        }
+        json.put("items", collectionToJSON(items));
         // Write out to file
         PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
         pw.write(json.toJSONString());
         pw.flush();
         pw.close();
+    }
+
+    public JSONArray collectionToJSON(ArrayList<? extends JSONSerializable>  collection){
+        JSONArray itemArray = new JSONArray();
+        for (Object o : collection) {
+            itemArray.add(((JSONSerializable)o).toJSON());
+        }
+        return itemArray;
     }
 
     // == Cryption functions ==
@@ -151,5 +160,9 @@ public class Controller {
 
     public void saveAll() throws IOException {
         writeUserDateToFile();
+    }
+
+    public ArrayList<Item> getItemList() {
+        return items;
     }
 }
