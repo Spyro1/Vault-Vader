@@ -3,26 +3,30 @@ package frontend.components;
 import frontend.VV;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 public class DarkTextField extends JTextField {
+
+    private String placeholder = "";
     public DarkTextField() {
         super();
-        setup("");
+        setup();
     }
     public DarkTextField(String text, String placeholder) {
         super(text);
-        setup(placeholder);
+        this.placeholder = placeholder;
+        setup();
 
     }
-    public void setup(String placeholder){
+    private void setup(){
         setForeground(VV.mainTextColor);
         setBackground(VV.bgLightColor);
         setFont(new Font("Arial", Font.PLAIN, 20));
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
         setCaretColor(VV.mainTextColor);
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
 //        setForeground(VV.secondaryTextColor);
 //        setText(placeholder);
 
@@ -42,5 +46,11 @@ public class DarkTextField extends JTextField {
 //                }
 //            }
 //        });
+    }
+    public void setUnderline(boolean underline) {
+        if (underline)
+            setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, VV.mainTextColor), BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor)));
+        else
+            setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
     }
 }

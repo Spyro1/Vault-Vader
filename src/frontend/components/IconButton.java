@@ -7,7 +7,6 @@ import java.awt.*;
 
 public class IconButton extends JButton {
 
-
     public IconButton() {
         super();
         setup();
@@ -27,7 +26,8 @@ public class IconButton extends JButton {
     private void setup(){
 //        setOpaque(false);
         setBackground(VV.bgDarkColor);
-        setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
+        setForeground(VV.mainTextColor);
+        setBorder(BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2));
         setFont(new Font("Arial", Font.PLAIN, 20));
     }
 }

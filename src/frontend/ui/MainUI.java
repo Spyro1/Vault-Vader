@@ -53,7 +53,7 @@ public class MainUI extends JFrame {
         titlePanel = new JPanel(new BorderLayout()); {
             JPanel titleCenterPanel = new JPanel(new BorderLayout()); {
                 titleCenterPanel.setBackground(VV.bgDarkColor);
-                titleCenterPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+                titleCenterPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin), BorderFactory.createEmptyBorder(margin, margin, margin, margin)));
                 JLabel VaultVaderLabel = new JLabel("Vault Vader", JLabel.CENTER); {
                     VaultVaderLabel.setForeground(VV.mainTextColor);
                     VaultVaderLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
@@ -69,9 +69,12 @@ public class MainUI extends JFrame {
             JPanel centerPanel = new JPanel(new BorderLayout()); {
                 centerPanel.setBackground(VV.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(margin, margin, margin, 0, VV.bgDarkColor), BorderFactory.createEmptyBorder(margin, margin, margin, margin)));
-                DarkTextField searchField = new DarkTextField("","Keresés");
+                DarkTextField searchField = new DarkTextField("","Keresés"); {
+                    searchField.setUnderline(true);
+                }
                 IconButton searchButton = new IconButton("", new ImageIcon("assets/white/search.png")); {
                     searchButton.setToolTipText("Keresés");
+                    searchButton.setOpaque(false);
                 }
                 centerPanel.add(searchField, BorderLayout.CENTER);
                 centerPanel.add(searchButton, BorderLayout.EAST);
@@ -81,19 +84,23 @@ public class MainUI extends JFrame {
         // HEADER PANEL for the tool buttons
         headerPanel = new JPanel(new BorderLayout()); {
             headerPanel.setBackground(VV.bgDarkColor);
-            JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); {
+            JPanel centerPanel = new JPanel(); {
+                centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
                 centerPanel.setBackground(VV.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createMatteBorder(margin, 0, margin, margin, VV.bgDarkColor));
-                IconButton saveButton = new IconButton("", new ImageIcon("assets/white/save.png")); {
+                IconButton saveButton = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
                     saveButton.setToolTipText("Mentés");
+                    saveButton.setOpaque(false);
                 }
                 centerPanel.add(saveButton);
-                IconButton addNewItemButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
+                IconButton addNewItemButton = new IconButton("Új bejegyzés", new ImageIcon("assets/white/plus.png")); {
                     addNewItemButton.setToolTipText("Új bejegyzés");
+                    addNewItemButton.setOpaque(false);
                 }
                 centerPanel.add(addNewItemButton);
-                IconButton logOutButton = new IconButton("", new ImageIcon("assets/white/logout.png")); {
+                IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon("assets/white/logout.png")); {
                     logOutButton.setToolTipText("Kijelentkezés");
+                    logOutButton.setOpaque(false);
                 }
                 centerPanel.add(logOutButton);
             }
@@ -177,8 +184,18 @@ public class MainUI extends JFrame {
             sidePanel.add(categoryEditorToolPanel, BorderLayout.SOUTH);
         }
         // SLIDER PANEL for displaying every
-        sliderPanel = new JPanel(); {
+        sliderPanel = new JPanel(new BorderLayout()); {
             sliderPanel.setBackground(VV.bgDarkColor);
+            JScrollPane itemListPanel = new JScrollPane(); {
+                itemListPanel.setBackground(VV.bgDarkColor);
+                itemListPanel.setBorder(BorderFactory.createMatteBorder(0, margin, margin, margin, VV.bgDarkColor));
+                JList<JButton> itemList = new JList<>(); {
+                    itemList.setOpaque(false);
+                    itemList.add(new JButton("VAlami"));
+                }
+                itemListPanel.add(itemList);
+            }
+            sliderPanel.add(itemListPanel, BorderLayout.CENTER);
         }
         // EDITOR PANEL for editing items
         contentBackPanel = new JPanel(); {

@@ -36,15 +36,7 @@ public class Item implements JSONSerializable {
     }
 
     public String toString() {
-        StringBuilder str = new StringBuilder(String.format("{Title: %s, Category: %s, Fields: [", title, category.toString()));
-        for (int i = 0; i < fields.size(); i++) {
-            str.append(fields.get(i).toString());
-            if (i < fields.size() - 1) {
-                str.append(", ");
-            }
-        }
-        str.append("]}");
-        return str.toString();
+        return String.format("%s\n[%s]", title, category);
     }
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();

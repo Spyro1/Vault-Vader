@@ -26,7 +26,7 @@ public class Category implements JSONSerializable {
     }
 
     public String toString() {
-        return "{CategoryName: " + categoryName + ", red: " + color.getRed() + ", green: " + color.getGreen() + ", blue: " + color.getBlue() + "}";
+        return categoryName;
     }
 
     @Override

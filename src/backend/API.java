@@ -102,12 +102,7 @@ public class API {
         return null;
     }
     static public ArrayList<String> getCategoryList(){
-//        JSONObject json = new JSONObject();
-//        JSONArray jsonArray = new JSONArray();
-//        jsonArray.addAll(Controller.INSTANCE.getCategoryList());
-//        json.put("categories", jsonArray);
-//        return  json;
-        System.out.println(Controller.INSTANCE.getCategoryList().toString());
+//        System.out.println(Controller.INSTANCE.getCategoryList().toString());
         return Controller.INSTANCE.getCategoryList();
     }
     static public JSONArray getFieldList(){
