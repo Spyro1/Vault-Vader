@@ -1,8 +1,16 @@
 # Vault-Vader
 > Created by Marton Szenes, alias Spyro  
-> Last update: 2024.09.06.
+> Last update: 2024.09.18.
 
 This is a Password Manager application which is written in Java with Swing.
+
+# Images
+
+![Login form](docs/imgs/login.png)
+: Login screen
+
+![Main window](docs/imgs/main.png)
+: Main screen
 
 # UML - diagram
 

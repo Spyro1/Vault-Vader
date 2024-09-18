@@ -1,21 +1,9 @@
 {
 "password":"\u0007\u0004\u001E\u0010\u0013¾",
 "categories":[
-"Bankok",
-"Egyéb"],
+"Email",
+"Kollégium"],
 "items":[
-{
-"icon":"assets\/white\/picture.png",
-"title":"Gmail jelszó",
-"category":"Email",
-"fields":[
-]},
-{
-"icon":"assets\/white\/picture.png",
-"title":"SCH Account",
-"category":"Egyéb",
-"fields":[
-]},
 {
 "icon":"assets\/white\/picture.png",
 "title":"Gmail jelszó",

@@ -32,7 +32,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     public LoginUI() {
         // === Essential frame setup ===
-        setTitle("VaultVader");
+        setTitle("Vault Vader");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ImageIcon lockIcon = new ImageIcon("assets/black/lock.png");
         setIconImage(lockIcon.getImage()); // Set status bar icon
@@ -99,11 +99,11 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
                     public void itemStateChanged(ItemEvent e) {
                         if (e.getStateChange() == ItemEvent.SELECTED) {
                             passwordField.setEchoChar((char) 0);
-                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye.png"));
                             showPasswordBox.setToolTipText("Jelszó elrejtése");
                         } else {
                             passwordField.setEchoChar(defChar);
-                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye.png"));
+                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
                             showPasswordBox.setToolTipText("Jelszó megjelenítése");
                         }
                     }

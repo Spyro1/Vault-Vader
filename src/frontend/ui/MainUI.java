@@ -19,7 +19,7 @@ public class MainUI extends JFrame {
     final int width = 1000, height = 600; // Default  size of the window
     final int margin = 10;
     final double headerWeightY = 0.01, contentWeightY = 1- headerWeightY,
-                 firsColWeight = 0.1, secondColWeight = 0.5, thirdColWeight = 0.5;
+                 firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
     JTree categoryTree;
     JList<Item> itemJList;
@@ -69,11 +69,12 @@ public class MainUI extends JFrame {
             searchPanel.setBackground(VV.bgDarkColor);
             JPanel centerPanel = new JPanel(new BorderLayout()); {
                 centerPanel.setBackground(VV.bgLightColor);
-                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(margin, margin, margin, 0, VV.bgDarkColor), BorderFactory.createEmptyBorder(margin, margin, margin, margin)));
+                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, 0, VV.bgDarkColor), BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin)));
                 DarkTextField searchField = new DarkTextField("","Keresés"); {
                     searchField.setUnderline(true);
                 }
                 IconButton searchButton = new IconButton("", new ImageIcon("assets/white/search.png")); {
+                    searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, VV.mainTextColor), BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2)));
                     searchButton.setToolTipText("Keresés");
                     searchButton.setOpaque(false);
                 }
@@ -201,7 +202,7 @@ public class MainUI extends JFrame {
             }
             JScrollPane itemListScrollPane = new JScrollPane(itemJList); {
                 itemListScrollPane.setBackground(VV.bgDarkColor);
-                itemListScrollPane.setBorder(BorderFactory.createMatteBorder(0, margin, margin, margin, VV.bgDarkColor));
+                itemListScrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, margin, 0, VV.bgDarkColor));
                 itemListScrollPane.getViewport().setOpaque(false);
             }
             sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
