@@ -4,7 +4,6 @@ import backend.API;
 import backend.item.Item;
 import frontend.VV;
 import frontend.components.*;
-import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 public class MainUI extends JFrame {
 
     final int width = 1000, height = 600; // Default  size of the window
-    final int margin = 10;
+//    final int margin = 10;
     final double headerWeightY = 0.01, contentWeightY = 1- headerWeightY,
                  firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
@@ -54,7 +53,7 @@ public class MainUI extends JFrame {
         titlePanel = new JPanel(new BorderLayout()); {
             JPanel titleCenterPanel = new JPanel(new BorderLayout()); {
                 titleCenterPanel.setBackground(VV.bgDarkColor);
-                titleCenterPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin), BorderFactory.createEmptyBorder(margin, margin, margin, margin)));
+                titleCenterPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin), BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin)));
                 JLabel VaultVaderLabel = new JLabel("Vault Vader", JLabel.CENTER); {
                     VaultVaderLabel.setForeground(VV.mainTextColor);
                     VaultVaderLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
@@ -95,15 +94,10 @@ public class MainUI extends JFrame {
                     saveButton.setOpaque(false);
                 }
                 centerPanel.add(saveButton);
-                IconButton addNewItemButton = new IconButton("Új bejegyzés", new ImageIcon("assets/white/plus.png")); {
-                    addNewItemButton.setToolTipText("Új bejegyzés");
-                    addNewItemButton.setOpaque(false);
-                }
-                centerPanel.add(addNewItemButton);
                 IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon("assets/white/logout.png")); {
                     logOutButton.setToolTipText("Kijelentkezés");
                     logOutButton.setOpaque(false);
-                    logOutButton.addActionListener(a -> {
+                    logOutButton.addActionListener(_ -> {
                         try {
                             API.logoutRequest();
                         } catch (Exception ex) {
@@ -121,7 +115,7 @@ public class MainUI extends JFrame {
             sidePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
             sidePanel.setBackground(VV.bgLightColor);
             JPanel categoryLabelPanel = new JPanel(new BorderLayout()); {
-                categoryLabelPanel.setBorder(BorderFactory.createMatteBorder(0, margin,0, margin, VV.bgDarkColor));
+                categoryLabelPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin,0, VV.margin, VV.bgDarkColor));
                 categoryLabelPanel.setOpaque(false);
                 JLabel categoryLabel = new JLabel("Kategóriák"); {
                     categoryLabel.setForeground(VV.mainTextColor);
@@ -129,7 +123,7 @@ public class MainUI extends JFrame {
                     categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     categoryLabel.setForeground(VV.mainTextColor);
                     categoryLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-                    categoryLabel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin), BorderFactory.createMatteBorder(0,0,2,0, Color.white)));
+                    categoryLabel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin), BorderFactory.createMatteBorder(0,0,2,0, Color.white)));
                 }
                 categoryLabelPanel.add(categoryLabel);
             }
@@ -143,55 +137,55 @@ public class MainUI extends JFrame {
             }
             refresh();
             JScrollPane scrollPane = new JScrollPane(categoryTree); {
-                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, margin,0, margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, margin, margin, margin)));
+                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin, VV.margin, VV.margin)));
                 scrollPane.setOpaque(false);
                 scrollPane.setBackground(VV.bgLightColor);
                 scrollPane.getViewport().setOpaque(false);
             }
             sidePanel.add(scrollPane, BorderLayout.CENTER);
-            JPanel categoryEditorToolPanel = new JPanel(); {
-                categoryEditorToolPanel.setLayout(new BorderLayout());
-                categoryEditorToolPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
-//                categoryEditorToolPanel.setOpaque(false);
-                categoryEditorToolPanel.setBackground(VV.bgDarkColor);
-                DarkTextField categoryField = new DarkTextField("","Kategória"); {
-                    categoryField.setFont(new Font("Arial", Font.PLAIN, 15));
-                }
-                IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
-                    addCategoryButton.setOpaque(false);
-                    addCategoryButton.setBackground(VV.bgLightColor);
-                    addCategoryButton.addActionListener(event -> {
-                        try {
-                            JSONObject json = new JSONObject();
-                            json.put("category", categoryField.getText());
-                            if (API.addNewCategory(json)) {
-                                refresh();
-                            }
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    });
-                }
-                IconButton removeCategoryButton = new IconButton("", new ImageIcon("assets/white/minus.png")); {
-                    removeCategoryButton.setOpaque(false);
-                    removeCategoryButton.setBackground(VV.bgLightColor);
-                    removeCategoryButton.addActionListener(event -> {
-                        try {
-                            JSONObject json = new JSONObject();
-                            json.put("category", categoryField.getText());
-                            if (API.removeCategory(json)) {
-                                refresh(); // Refresh category tree
-                            }
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    });
-                }
-                categoryEditorToolPanel.add(addCategoryButton, BorderLayout.WEST);
-                categoryEditorToolPanel.add(categoryField, BorderLayout.CENTER);
-                categoryEditorToolPanel.add(removeCategoryButton, BorderLayout.EAST);
-            }
-            sidePanel.add(categoryEditorToolPanel, BorderLayout.SOUTH);
+//            JPanel categoryEditorToolPanel = new JPanel(); {
+//                categoryEditorToolPanel.setLayout(new BorderLayout());
+//                categoryEditorToolPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
+////                categoryEditorToolPanel.setOpaque(false);
+//                categoryEditorToolPanel.setBackground(VV.bgDarkColor);
+//                DarkTextField categoryField = new DarkTextField("","Kategória"); {
+//                    categoryField.setFont(new Font("Arial", Font.PLAIN, 15));
+//                }
+//                IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
+//                    addCategoryButton.setOpaque(false);
+//                    addCategoryButton.setBackground(VV.bgLightColor);
+//                    addCategoryButton.addActionListener(event -> {
+//                        try {
+//                            JSONObject json = new JSONObject();
+//                            json.put("category", categoryField.getText());
+//                            if (API.addNewCategory(json)) {
+//                                refresh();
+//                            }
+//                        } catch (Exception e) {
+//                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+//                        }
+//                    });
+//                }
+//                IconButton removeCategoryButton = new IconButton("", new ImageIcon("assets/white/minus.png")); {
+//                    removeCategoryButton.setOpaque(false);
+//                    removeCategoryButton.setBackground(VV.bgLightColor);
+//                    removeCategoryButton.addActionListener(event -> {
+//                        try {
+//                            JSONObject json = new JSONObject();
+//                            json.put("category", categoryField.getText());
+//                            if (API.removeCategory(json)) {
+//                                refresh(); // Refresh category tree
+//                            }
+//                        } catch (Exception e) {
+//                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+//                        }
+//                    });
+//                }
+//                categoryEditorToolPanel.add(addCategoryButton, BorderLayout.WEST);
+//                categoryEditorToolPanel.add(categoryField, BorderLayout.CENTER);
+//                categoryEditorToolPanel.add(removeCategoryButton, BorderLayout.EAST);
+//            }
+//            sidePanel.add(categoryEditorToolPanel, BorderLayout.SOUTH);
         }
         // SLIDER PANEL for displaying every
         sliderPanel = new JPanel(new BorderLayout()); {
@@ -202,32 +196,40 @@ public class MainUI extends JFrame {
             }
             JScrollPane itemListScrollPane = new JScrollPane(itemJList); {
                 itemListScrollPane.setBackground(VV.bgDarkColor);
-                itemListScrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, margin, 0, VV.bgDarkColor));
+                itemListScrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, VV.bgDarkColor));
                 itemListScrollPane.getViewport().setOpaque(false);
             }
             sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
+            IconButton addNewItemButton = new IconButton("Új bejegyzés", new ImageIcon("assets/white/plus.png")); {
+                addNewItemButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, VV.margin, 0, VV.bgDarkColor), BorderFactory.createEmptyBorder(VV.margin,0,VV.margin,0)));
+                addNewItemButton.setBackground(VV.bgLightColor);
+                addNewItemButton.setToolTipText("Új bejegyzés");
+//                addNewItemButton.setOpaque(false);
+            }
+            sliderPanel.add(addNewItemButton, BorderLayout.SOUTH);
         }
         // EDITOR PANEL for editing items
         contentBackPanel = new JPanel(new BorderLayout()); {
             contentBackPanel.setBackground(VV.bgDarkColor);
 //            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
-            editorPanel = new JPanel(); {
+            editorPanel = new JPanel(new BorderLayout()); {
 //                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
-                editorPanel.setBorder(BorderFactory.createMatteBorder(0, margin, margin, margin, VV.bgDarkColor));
+                editorPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
                 editorPanel.setBackground(VV.bgLightColor);
 //               editorPanel.setOpaque(false);
-//                JPanel titleRow = new JPanel(new BorderLayout()); {
-//                    titleRow.setOpaque(false);
-//                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
-//                    titleRow.add(iconButton, BorderLayout.WEST);
-//                    DarkTextField titleField = new DarkTextField();
-//                    titleRow.add(titleField, BorderLayout.CENTER);
-//                }
-//                editorPanel.add(titleRow);
+                JPanel titleRow = new JPanel(new BorderLayout()); {
+                    titleRow.setOpaque(false);
+                    titleRow.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
+                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
+                    titleRow.add(iconButton, BorderLayout.WEST);
+                    DarkTextField titleField = new DarkTextField("Felső", "Felső mező");
+                    titleField.setUnderline(true);
+                    titleRow.add(titleField, BorderLayout.CENTER);
+                }
+                editorPanel.add(titleRow, BorderLayout.NORTH);
             }
             contentBackPanel.add(editorPanel, BorderLayout.CENTER);
         }
-
         /* Setup GridBagLayout properties and add panels */ {
 
             // title panel: Top-right corner
@@ -281,8 +283,7 @@ public class MainUI extends JFrame {
             for (Item i : itemList)
                 model.addElement(i);
         }
-        JList<Item> itemJList = new JList<Item>(model);
-        return itemJList;
+        return new JList<Item>(model);
     }
 
     public void refresh(){
