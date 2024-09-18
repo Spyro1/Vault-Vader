@@ -6,11 +6,11 @@ This is a Password Manager application which is written in Java with Swing.
 
 # Images
 
-![Login form](docs/imgs/login.png)
-: Login screen
+> ![Login form](docs/imgs/login.png)  
+> *Login screen*
 
-![Main window](docs/imgs/main.png)
-: Main screen
+> ![Main window](docs/imgs/main.png)  
+> *Main screen*
 
 # UML - diagram
 
