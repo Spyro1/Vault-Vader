@@ -8,7 +8,10 @@ import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class LoginUI extends JFrame /*implements ActionListener*/ {
 
@@ -45,6 +48,12 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         setLocationRelativeTo(null);
         setBackground(VV.bgDarkColor);
 
+
+        // Create Panel for Components
+        JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15)); {
+            centerPanel.setBackground(VV.bgDarkColor);
+            centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
+        }
         // Title
         titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER); {
             titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -52,6 +61,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             titleLabel.setForeground(VV.mainTextColor);
             titleLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
         }
+        centerPanel.add(titleLabel);
         // Input fields
         usernameField = new JTextField(); {
             usernameField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Felhasználónév ", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
@@ -61,14 +71,45 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             usernameField.setFont(new Font("Arial", Font.PLAIN, 15));
 //            usernameField.setOpaque(false);
         }
-        passwordField = new JPasswordField(); {
-            passwordField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Jelszó", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
-            passwordField.setForeground(VV.mainTextColor);
-            passwordField.setCaretColor(VV.mainTextColor);
-            passwordField.setBackground(VV.bgLightColor);
-            passwordField.setFont(new Font("Arial", Font.PLAIN, 15));
-//            passwordField.setOpaque(false);
+        centerPanel.add(usernameField);
+        JPanel passwordPanel = new JPanel(new BorderLayout()); {
+            passwordField = new JPasswordField(); {
+                passwordField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Jelszó", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
+                passwordField.setForeground(VV.mainTextColor);
+                passwordField.setCaretColor(VV.mainTextColor);
+                passwordField.setBackground(VV.bgLightColor);
+                passwordField.setFont(new Font("Arial", Font.PLAIN, 15));
+            }
+            passwordPanel.add(passwordField, BorderLayout.CENTER);
+            JToggleButton showPasswordBox = new JToggleButton(); {
+//                showPasswordBox.setOpaque(true);
+                showPasswordBox.setBackground(VV.bgLightColor);
+                showPasswordBox.setUI(new MetalToggleButtonUI() {
+                    @Override
+                    protected Color getSelectColor() {
+                        return VV.secondaryTextColor;
+                    }
+                });
+                showPasswordBox.setToolTipText("Jelszó megjelenítése");
+                showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+                showPasswordBox.setBorder(null);
+                char defChar = passwordField.getEchoChar();
+                showPasswordBox.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if (e.getStateChange() == ItemEvent.SELECTED) {
+                            passwordField.setEchoChar((char) 0);
+                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+                        } else {
+                            passwordField.setEchoChar(defChar);
+                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye.png"));
+                        }
+                    }
+                });
+            }
+            passwordPanel.add(showPasswordBox, BorderLayout.EAST);
         }
+        centerPanel.add(passwordPanel);
         // Login Button
         loginButton = new IconButton("Bejelentkezés"); {
             loginButton.setIcon(new ImageIcon("assets/white/login.png"));
@@ -94,6 +135,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
                 }
             });
         }
+        centerPanel.add(loginButton);
         // Register Button
         registerButton = new IconButton("Regisztráció"); {
             registerButton.setIcon(new ImageIcon("assets/white/user.png"));
@@ -123,15 +165,6 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
                 }
             });
         }
-        // Create Panel for Components
-        JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15)); {
-            centerPanel.setBackground(VV.bgDarkColor);
-            centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
-        }
-        centerPanel.add(titleLabel);
-        centerPanel.add(usernameField);
-        centerPanel.add(passwordField);
-        centerPanel.add(loginButton);
         centerPanel.add(registerButton);
 
         // Add Components to Frame
