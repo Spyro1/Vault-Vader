@@ -71,6 +71,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         // Login Button
         loginButton = new IconButton("Bejelentkezés"); {
+            loginButton.setIcon(new ImageIcon("assets/white/login.png"));
             loginButton.setBackground(VV.mainColor);
             loginButton.setForeground(VV.mainTextColor);
 //            loginButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin * 3, VV.margin, VV.margin * 3));
@@ -95,6 +96,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         // Register Button
         registerButton = new IconButton("Regisztráció"); {
+            registerButton.setIcon(new ImageIcon("assets/white/user.png"));
             registerButton.setBackground(VV.secondaryColor);
             registerButton.setForeground(VV.mainTextColor);
             registerButton.setFont(new Font("Arial", Font.PLAIN, 16));

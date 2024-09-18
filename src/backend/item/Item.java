@@ -28,6 +28,7 @@ public class Item implements JSONSerializable {
     private void setupItem(){
         title = "";
         category = null;
+        icon = new ImageIcon("assets/white/picture.png", "assets/white/picture.png");
         fields.clear();
 //        initDefaultFields();
         fields.add(new TextField("Név", ""));
@@ -54,6 +55,7 @@ public class Item implements JSONSerializable {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
+        obj.put("icon", icon.getDescription());
         obj.put("title", title);
         obj.put("category", category);
         JSONArray fieldsArray = new JSONArray();
@@ -66,24 +68,27 @@ public class Item implements JSONSerializable {
 
     @Override
     public Item fromJSON(JSONObject json) {
-        title = json.get("title").toString();
-        category = json.get("category").toString();
+        if (json.get("icon") != null) icon = new ImageIcon(json.get("icon").toString());
+        if (json.get("title") != null) title = json.get("title").toString();
+        if (json.get("category") != null) category = json.get("category").toString();
         fields.clear();
-        JSONArray fieldsArray = (JSONArray) json.get("fields");
-        for (int i = 0; i < fieldsArray.size(); i++) {
-            JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
-            String fieldType = jsonFieldData.get("type").toString();
-            switch (fieldType){
-                case "IntField":
-                    fields.add(new IntField().fromJSON(json));
-                    break;
-                case "TextField":
-                    fields.add(new TextField().fromJSON(json));
-                    break;
-                case "PassField":
-                    fields.add(new PassField().fromJSON(json));
-                    break;
-                default: break;
+        if (json.get("fields") != null) {
+            JSONArray fieldsArray = (JSONArray) json.get("fields");
+            for (int i = 0; i < fieldsArray.size(); i++) {
+                JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
+                String fieldType = jsonFieldData.get("type").toString();
+                switch (fieldType){
+                    case "IntField":
+                        fields.add(new IntField().fromJSON(json));
+                        break;
+                    case "TextField":
+                        fields.add(new TextField().fromJSON(json));
+                        break;
+                    case "PassField":
+                        fields.add(new PassField().fromJSON(json));
+                        break;
+                    default: break;
+                }
             }
         }
         return this;

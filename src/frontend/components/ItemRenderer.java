@@ -21,13 +21,16 @@ public class ItemRenderer extends JPanel implements ListCellRenderer<Item> {
             innerPanel.setLayout(new BorderLayout());
             innerPanel.setOpaque(false);
             JPanel textPanel = new JPanel(new BorderLayout()); {
-                textPanel.setBorder(BorderFactory.createEmptyBorder(0,5,0, 5));
+                textPanel.setBorder(BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2));
                 textPanel.setOpaque(false);
                 titleLabel.setFont(new Font("Arial", Font.BOLD, 15));
+//                titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
                 categoryLabel.setFont(new Font("Arial", Font.PLAIN, 10));
                 textPanel.add(titleLabel, BorderLayout.CENTER);
                 textPanel.add(categoryLabel, BorderLayout.SOUTH);
             }
+            icon.setBackground(VV.bgDarkColor);
+            icon.setBorder(BorderFactory.createLineBorder(VV.bgDarkColor, VV.margin));
             innerPanel.add(icon, BorderLayout.WEST);
             innerPanel.add(textPanel, BorderLayout.CENTER);
         }
