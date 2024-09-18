@@ -1,6 +1,7 @@
 package backend;
 
 import backend.item.Item;
+import frontend.ui.LoginUI;
 import frontend.ui.MainUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,6 +40,11 @@ public class API {
      */
     static public boolean registerRequest(JSONObject userData) throws Exception {
         return Controller.INSTANCE.createUser(userData);
+    }
+
+    public static void logoutRequest() throws IOException {
+        saveAllChanges();
+        new LoginUI();
     }
     // == Item Methods ==
 
@@ -120,4 +126,6 @@ public class API {
     public static void saveAllChanges() throws IOException {
         Controller.INSTANCE.saveAll();
     }
+
+
 }

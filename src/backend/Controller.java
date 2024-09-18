@@ -40,6 +40,8 @@ public class Controller {
 
     // === Read / Write user data functions ===
     private void readUsersDataFromFile() throws IOException, ParseException {
+        categories.clear();
+        items.clear();
         JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
         JSONArray categoryArray = (JSONArray) usersData.get("categories");
         for (int i = 0; i < categoryArray.size(); i++) {
@@ -67,7 +69,7 @@ public class Controller {
         json.put("items", collectionToJSON(items));
         // Write out to file
         PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
-        pw.write(json.toJSONString());
+        pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
         pw.flush();
         pw.close();
     }

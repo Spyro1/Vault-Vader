@@ -88,7 +88,7 @@ public class MainUI extends JFrame {
             JPanel centerPanel = new JPanel(); {
                 centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
                 centerPanel.setBackground(VV.bgLightColor);
-                centerPanel.setBorder(BorderFactory.createMatteBorder(margin, 0, margin, margin, VV.bgDarkColor));
+                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, VV.margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin,0,VV.margin)));
                 IconButton saveButton = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
                     saveButton.setToolTipText("Mentés");
                     saveButton.setOpaque(false);
@@ -102,6 +102,14 @@ public class MainUI extends JFrame {
                 IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon("assets/white/logout.png")); {
                     logOutButton.setToolTipText("Kijelentkezés");
                     logOutButton.setOpaque(false);
+                    logOutButton.addActionListener(a -> {
+                        try {
+                            API.logoutRequest();
+                        } catch (Exception ex) {
+                            System.out.println(ex.toString());
+                        }
+                        this.dispose();
+                    });
                 }
                 centerPanel.add(logOutButton);
             }
