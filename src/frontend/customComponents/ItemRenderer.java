@@ -1,4 +1,4 @@
-package frontend.components;
+package frontend.customComponents;
 
 import backend.item.Item;
 import frontend.VV;

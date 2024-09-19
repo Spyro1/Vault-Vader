@@ -1,11 +1,9 @@
-package frontend.components;
+package frontend.customComponents;
 
 import frontend.VV;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class IconButton extends JButton {
 

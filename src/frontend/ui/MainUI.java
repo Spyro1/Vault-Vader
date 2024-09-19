@@ -3,7 +3,7 @@ package frontend.ui;
 import backend.API;
 import backend.item.Item;
 import frontend.VV;
-import frontend.components.*;
+import frontend.customComponents.*;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -69,9 +69,7 @@ public class MainUI extends JFrame {
             JPanel centerPanel = new JPanel(new BorderLayout()); {
                 centerPanel.setBackground(VV.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, 0, VV.bgDarkColor), BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin)));
-                DarkTextField searchField = new DarkTextField("","Keresés"); {
-                    searchField.setUnderline(true);
-                }
+                DarkTextField searchField = new DarkTextField("","Keresés", true);
                 IconButton searchButton = new IconButton("", new ImageIcon("assets/white/search.png")); {
                     searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, VV.mainTextColor), BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2)));
                     searchButton.setToolTipText("Keresés");
@@ -88,12 +86,14 @@ public class MainUI extends JFrame {
             JPanel centerPanel = new JPanel(); {
                 centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
                 centerPanel.setBackground(VV.bgLightColor);
+                centerPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+                centerPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, VV.margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin,0,VV.margin)));
-                IconButton saveButton = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
-                    saveButton.setToolTipText("Mentés");
-                    saveButton.setOpaque(false);
-                }
-                centerPanel.add(saveButton);
+//                IconButton saveButton = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
+//                    saveButton.setToolTipText("Mentés");
+//                    saveButton.setOpaque(false);
+//                }
+//                centerPanel.add(saveButton);
                 IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon("assets/white/logout.png")); {
                     logOutButton.setToolTipText("Kijelentkezés");
                     logOutButton.setOpaque(false);
@@ -212,21 +212,30 @@ public class MainUI extends JFrame {
         contentBackPanel = new JPanel(new BorderLayout()); {
             contentBackPanel.setBackground(VV.bgDarkColor);
 //            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
-            editorPanel = new JPanel(new BorderLayout()); {
-//                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
+            editorPanel = new JPanel(); {
+                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
                 editorPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
                 editorPanel.setBackground(VV.bgLightColor);
 //               editorPanel.setOpaque(false);
-                JPanel titleRow = new JPanel(new BorderLayout()); {
-                    titleRow.setOpaque(false);
-                    titleRow.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
-                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
-                    titleRow.add(iconButton, BorderLayout.WEST);
-                    DarkTextField titleField = new DarkTextField("Felső", "Felső mező");
-                    titleField.setUnderline(true);
-                    titleRow.add(titleField, BorderLayout.CENTER);
-                }
-                editorPanel.add(titleRow, BorderLayout.NORTH);
+//                JPanel titleRow = new JPanel(new BorderLayout()); {
+//                    titleRow.setOpaque(false);
+//                    titleRow.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
+//                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
+//                    titleRow.add(iconButton, BorderLayout.WEST);
+//                    DarkTextField titleField = new DarkTextField("", "Bejegyzés címe");
+//                    titleField.setUnderline(true);
+//                    titleRow.add(titleField, BorderLayout.CENTER);
+//                }
+//                editorPanel.add(titleRow);
+                // PLACEHOLDER FIELDS
+                FieldPanel titleFieldPanel = new FieldPanel("Cím");
+                editorPanel.add(titleFieldPanel);
+                FieldPanel usernameFieldPanel = new FieldPanel("Felhasználónév");
+                editorPanel.add(usernameFieldPanel);
+                FieldPanel passwordFieldPanel = new FieldPanel("Jelszó");
+                editorPanel.add(passwordFieldPanel);
+                FieldPanel descriptionFieldPanel = new FieldPanel("Megjegyzés");
+                editorPanel.add(descriptionFieldPanel);
             }
             contentBackPanel.add(editorPanel, BorderLayout.CENTER);
         }

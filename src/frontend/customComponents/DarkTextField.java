@@ -1,12 +1,9 @@
-package frontend.components;
+package frontend.customComponents;
 
 import frontend.VV;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 public class DarkTextField extends JTextField {
 
@@ -19,7 +16,12 @@ public class DarkTextField extends JTextField {
         super(text);
         this.placeholder = placeholder;
         setup();
-
+    }
+    public DarkTextField(String text, String placeholder, boolean underline) {
+        super(text);
+        this.placeholder = placeholder;
+        setup();
+        setUnderline(underline);
     }
     private void setup(){
         setForeground(VV.mainTextColor);

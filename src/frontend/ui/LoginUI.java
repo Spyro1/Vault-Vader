@@ -2,12 +2,10 @@ package frontend.ui;
 
 import backend.API;
 import frontend.VV;
-import frontend.components.DarkTextField;
-import frontend.components.IconButton;
+import frontend.customComponents.IconButton;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
 import java.awt.event.ItemEvent;
