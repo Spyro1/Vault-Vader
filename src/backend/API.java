@@ -84,6 +84,16 @@ public class API {
         }
         return false;
     }
+
+    /**
+     *
+     * @JSONkeys "category", "oldCategory"
+     * @param categoryData
+     * @return
+     */
+    static public boolean modifyCategory(JSONObject categoryData) {
+        return true;
+    }
     static public boolean removeCategory(JSONObject categoryData) {
         if (!categoryData.get("category").toString().isEmpty()) {
             return Controller.INSTANCE.removeCategory(categoryData.get("category").toString());

@@ -4,10 +4,13 @@ import backend.API;
 import backend.item.Item;
 import frontend.VV;
 import frontend.customComponents.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -82,6 +85,7 @@ public class MainUI extends JFrame {
         }
         // HEADER PANEL for the tool buttons
         headerPanel = new JPanel(new BorderLayout()); {
+            headerPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
             headerPanel.setBackground(VV.bgDarkColor);
             JPanel centerPanel = new JPanel(); {
                 centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
@@ -112,7 +116,6 @@ public class MainUI extends JFrame {
         }
         // SIDE PANEL for filtering for categories
         sidePanel = new JPanel(new BorderLayout()); {
-            sidePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
             sidePanel.setBackground(VV.bgLightColor);
             JPanel categoryLabelPanel = new JPanel(new BorderLayout()); {
                 categoryLabelPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin,0, VV.margin, VV.bgDarkColor));
@@ -137,55 +140,82 @@ public class MainUI extends JFrame {
             }
             refresh();
             JScrollPane scrollPane = new JScrollPane(categoryTree); {
-                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin, VV.margin, VV.margin)));
+                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, VV.margin, 0, VV. margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin, VV.margin, VV.margin)));
                 scrollPane.setOpaque(false);
                 scrollPane.setBackground(VV.bgLightColor);
                 scrollPane.getViewport().setOpaque(false);
             }
             sidePanel.add(scrollPane, BorderLayout.CENTER);
-//            JPanel categoryEditorToolPanel = new JPanel(); {
-//                categoryEditorToolPanel.setLayout(new BorderLayout());
-//                categoryEditorToolPanel.setBorder(BorderFactory.createEmptyBorder(margin, margin, margin, margin));
-////                categoryEditorToolPanel.setOpaque(false);
+
+            JPanel categoryEditorToolPanel = new JPanel(); {
+//                categoryEditorToolPanel.setLayout(new BoxLayout(categoryEditorToolPanel, BoxLayout.Y_AXIS));
+                categoryEditorToolPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+                categoryEditorToolPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                categoryEditorToolPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
+                categoryEditorToolPanel.setOpaque(false);
 //                categoryEditorToolPanel.setBackground(VV.bgDarkColor);
 //                DarkTextField categoryField = new DarkTextField("","Kategória"); {
 //                    categoryField.setFont(new Font("Arial", Font.PLAIN, 15));
 //                }
-//                IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
-//                    addCategoryButton.setOpaque(false);
-//                    addCategoryButton.setBackground(VV.bgLightColor);
-//                    addCategoryButton.addActionListener(event -> {
-//                        try {
-//                            JSONObject json = new JSONObject();
-//                            json.put("category", categoryField.getText());
-//                            if (API.addNewCategory(json)) {
-//                                refresh();
-//                            }
-//                        } catch (Exception e) {
-//                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-//                        }
-//                    });
-//                }
-//                IconButton removeCategoryButton = new IconButton("", new ImageIcon("assets/white/minus.png")); {
-//                    removeCategoryButton.setOpaque(false);
-//                    removeCategoryButton.setBackground(VV.bgLightColor);
-//                    removeCategoryButton.addActionListener(event -> {
-//                        try {
-//                            JSONObject json = new JSONObject();
-//                            json.put("category", categoryField.getText());
-//                            if (API.removeCategory(json)) {
-//                                refresh(); // Refresh category tree
-//                            }
-//                        } catch (Exception e) {
-//                            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-//                        }
-//                    });
-//                }
-//                categoryEditorToolPanel.add(addCategoryButton, BorderLayout.WEST);
-//                categoryEditorToolPanel.add(categoryField, BorderLayout.CENTER);
-//                categoryEditorToolPanel.add(removeCategoryButton, BorderLayout.EAST);
-//            }
-//            sidePanel.add(categoryEditorToolPanel, BorderLayout.SOUTH);
+                IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
+                    addCategoryButton.setToolTipText("Új kategória");
+                    addCategoryButton.addActionListener(event -> {
+                        try {
+                            // TODO: null visszatérési érték lekezelése
+                            String categoryName = JOptionPane.showInputDialog(this,"Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
+                            JSONObject json = new JSONObject();
+                            json.put("category", categoryName);
+                            if (API.addNewCategory(json))
+                                System.out.println("Sikeres kategória hozzáadás");
+                            else
+                                System.out.println("Nem sikerült a kategória hozzáadás");
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+                        refresh();
+                    });
+                }
+                IconButton editCategoryButton = new IconButton("", new ImageIcon("assets/white/setting.png")); {
+                    editCategoryButton.setToolTipText("Kategoria szerkesztése");
+                    editCategoryButton.addActionListener(event -> {
+                        try {
+                            // TODO: null visszatérési érték lekezelése
+                            TreePath tp = categoryTree.getSelectionPath();
+                            String oldCategory = tp.getLastPathComponent().toString();
+                            String categoryName = (String) JOptionPane.showInputDialog(this,"Szerkessze a kategória nevét!", "Kategória szerkesztése", JOptionPane.QUESTION_MESSAGE, null, null, tp.getLastPathComponent().toString());
+                            JSONObject json = new JSONObject();
+                            json.put("category", categoryName);
+                            json.put("oldCategory", oldCategory);
+                            if (API.modifyCategory(json))
+                                System.out.println("Sikeresk kategória szerkesztés");
+                            else
+                                System.out.println("Nem sikerült a kategóriát szerkeszteni");
+                        } catch (Exception e){
+                            System.out.println(e);
+                        }
+                        refresh();
+                    });
+                }
+                IconButton removeCategoryButton = new IconButton("", new ImageIcon("assets/white/trash.png")); {
+                    removeCategoryButton.setToolTipText("Kategória törlése");
+                    removeCategoryButton.addActionListener(event -> {
+                        // TODO: null visszatérési érték lekezelése
+                        TreePath tp = categoryTree.getSelectionPath();
+                        String oldCategory = tp.getLastPathComponent().toString();
+                        JSONObject json = new JSONObject();
+                        json.put("category", oldCategory);
+                        if (API.removeCategory(json))
+                            System.out.println("Sikeres törlés");
+                        else
+                            System.out.println("Nem sikerült a törlés");
+                        refresh();
+                    });
+                }
+                categoryEditorToolPanel.add(addCategoryButton, BorderLayout.WEST);
+                categoryEditorToolPanel.add(editCategoryButton, BorderLayout.CENTER);
+                categoryEditorToolPanel.add(removeCategoryButton, BorderLayout.EAST);
+            }
+            sidePanel.add(categoryEditorToolPanel, BorderLayout.SOUTH);
         }
         // SLIDER PANEL for displaying every
         sliderPanel = new JPanel(new BorderLayout()); {
