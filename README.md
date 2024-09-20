@@ -25,6 +25,8 @@ classDiagram
         }
         class MainUI{
             + MainUI()
+            - refresh() void
+            - createItemJList(itemList: List~Item~) List~JList~
         }
     }
     namespace backend {
@@ -33,12 +35,17 @@ classDiagram
              <<singleton>>
              + INSTANCE : Controller$
              - items : List~Item~
-             - categories : List ~String~
+             - categories : List~String~
              - loggedInuser : User
              - Controller()
              + loadUser() void
              + checkUser(userData: JSON) boolean
              + createUser(userData: JSON) boolean
+             + getCategoryList() List~String~
+             + addNewCategory(newCategory: String) bool
+             + removeCategory(categoryName: String) bool
+             + getItemList() List~Item~
+             + saveAll() void
              - readUserDataFromFile() void
              - writeUserDataToFile() void
              - encryptText(text: String, key: String) String
@@ -60,22 +67,22 @@ classDiagram
             - fieldName : String
             + getFieldName() String
         }
-        class IntField{
-            - value : int
-            + getValue() int
-            + setValue() void
-        }
-        class TextField{
-            - text : String
-            + getText() String
-            + setText(text: String) void
-        }
-        class PassField{
-            + getDecryptedText() String
-            + setText(secret: String) void @Override
-            - encryptText(text: String) String
-            - decryptText(text: String) String
-        }
+%%        class IntField{
+%%            - value : int
+%%            + getValue() int
+%%            + setValue() void
+%%        }
+%%        class TextField{
+%%            - text : String
+%%            + getText() String
+%%            + setText(text: String) void
+%%        }
+%%        class PassField{
+%%            + getDecryptedText() String
+%%            + setText(secret: String) void @Override
+%%            - encryptText(text: String) String
+%%            - decryptText(text: String) String
+%%        }
         
     }
 %%    namespace api{
@@ -83,17 +90,20 @@ classDiagram
     class API{
         + loginRequest(userData: JSON) bool$
         + registerRequest(userData: JSON) bool$
-        + getCategoryList() JSON$
+        + logoutRequest() void$
+        + getItemList(filter: JSON) List~Item~$ 
+        + getCategoryList() List~String~ JSON$
+        + saveAllChanges() void$
     }
 %%    }
+    
+    Controller o-- User
+    Controller o-- Item
+    
+%%    TextField <|-- PassField
     Item *-- Field
-    Field <|-- TextField
-    Field <|-- IntField
-    TextField <|-- PassField
-    
-    Controller *-- User
-    Controller *-- Item
-    
+%%    Field <|-- TextField
+%%    Field <|-- IntField
     
     API --> Controller
     API <-- LoginUI
@@ -158,5 +168,3 @@ sequenceDiagram
     Controller ->> API: Returns True if the user has been <br> successfully created, or false if <br> this username already exists.
     API ->> LoginUI: Returns createUser()'s value
 ```
-
-### 

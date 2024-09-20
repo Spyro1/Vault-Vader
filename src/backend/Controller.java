@@ -62,11 +62,11 @@ public class Controller {
             categoryArray.add(category);
         }
         json.put("categories", categoryArray);
-//        JSONArray itemArray = new JSONArray();
-//        for (Item item : items) {
-//            itemArray.add(item.toJSON());
-//        }
-        json.put("items", collectionToJSON(items));
+        JSONArray itemArray = new JSONArray();
+        for (Item item : items) {
+            itemArray.add(item.toJSON());
+        }
+        json.put("items", itemArray);
         // Write out to file
         PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
         pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
@@ -74,13 +74,13 @@ public class Controller {
         pw.close();
     }
 
-    public JSONArray collectionToJSON(ArrayList<? extends JSONSerializable>  collection){
+    /*public JSONArray collectionToJSON(ArrayList<? extends JSONSerializable>  collection){
         JSONArray itemArray = new JSONArray();
         for (Object o : collection) {
             itemArray.add(((JSONSerializable)o).toJSON());
         }
         return itemArray;
-    }
+    }*/
 
     // == Cryption functions ==
     private String encryptText(String text, String key) {
@@ -137,12 +137,12 @@ public class Controller {
         return true;
     }
 
-    public boolean saveItem(JSONObject itemData) throws Exception {
-        return false;
-    }
-    public boolean removeItem(JSONObject itemData) throws Exception {
-        return false;
-    }
+//    public boolean saveItem(JSONObject itemData) throws Exception {
+//        return false;
+//    }
+//    public boolean removeItem(JSONObject itemData) throws Exception {
+//        return false;
+//    }
 
     public ArrayList<String> getCategoryList() {
         return categories;
