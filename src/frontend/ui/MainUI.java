@@ -161,7 +161,6 @@ public class MainUI extends JFrame {
                     addCategoryButton.setToolTipText("Új kategória");
                     addCategoryButton.addActionListener(event -> {
                         try {
-                            // TODO: null visszatérési érték lekezelése
                             String categoryName = JOptionPane.showInputDialog(this,"Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
                             JSONObject json = new JSONObject();
                             json.put("category", categoryName);
@@ -179,36 +178,42 @@ public class MainUI extends JFrame {
                     editCategoryButton.setToolTipText("Kategoria szerkesztése");
                     editCategoryButton.addActionListener(event -> {
                         try {
-                            // TODO: null visszatérési érték lekezelése
                             TreePath tp = categoryTree.getSelectionPath();
-                            String oldCategory = tp.getLastPathComponent().toString();
-                            String categoryName = (String) JOptionPane.showInputDialog(this,"Szerkessze a kategória nevét!", "Kategória szerkesztése", JOptionPane.QUESTION_MESSAGE, null, null, tp.getLastPathComponent().toString());
-                            JSONObject json = new JSONObject();
-                            json.put("category", categoryName);
-                            json.put("oldCategory", oldCategory);
-                            if (API.modifyCategory(json))
-                                System.out.println("Sikeresk kategória szerkesztés");
-                            else
-                                System.out.println("Nem sikerült a kategóriát szerkeszteni");
+                            if (tp != null) {
+                                String oldCategory = tp.getLastPathComponent().toString();
+                                String categoryName = (String) JOptionPane.showInputDialog(this, "Szerkessze a kategória nevét!", "Kategória szerkesztése", JOptionPane.QUESTION_MESSAGE, null, null, tp.getLastPathComponent().toString());
+                                JSONObject json = new JSONObject();
+                                json.put("category", categoryName);
+                                json.put("oldCategory", oldCategory);
+                                if (API.modifyCategory(json))
+                                    System.out.println("Sikeresk kategória szerkesztés");
+                                else
+                                    System.out.println("Nem sikerült a kategóriát szerkeszteni");
+                                refresh();
+                            }
                         } catch (Exception e){
                             System.out.println(e);
                         }
-                        refresh();
                     });
                 }
                 IconButton removeCategoryButton = new IconButton("", new ImageIcon("assets/white/trash.png")); {
                     removeCategoryButton.setToolTipText("Kategória törlése");
                     removeCategoryButton.addActionListener(event -> {
-                        // TODO: null visszatérési érték lekezelése
-                        TreePath tp = categoryTree.getSelectionPath();
-                        String oldCategory = tp.getLastPathComponent().toString();
-                        JSONObject json = new JSONObject();
-                        json.put("category", oldCategory);
-                        if (API.removeCategory(json))
-                            System.out.println("Sikeres törlés");
-                        else
-                            System.out.println("Nem sikerült a törlés");
-                        refresh();
+                        try {
+                            TreePath tp = categoryTree.getSelectionPath();
+                            if (tp != null) {
+                                String oldCategory = tp.getLastPathComponent().toString();
+                                JSONObject json = new JSONObject();
+                                json.put("category", oldCategory);
+                                if (API.removeCategory(json))
+                                    System.out.println("Sikeres törlés");
+                                else
+                                    System.out.println("Nem sikerült a törlés");
+                                refresh();
+                            }
+                        } catch (Exception e){
+                            System.out.println(e);
+                        }
                     });
                 }
                 categoryEditorToolPanel.add(addCategoryButton, BorderLayout.WEST);
