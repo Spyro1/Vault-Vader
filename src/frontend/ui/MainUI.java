@@ -162,12 +162,14 @@ public class MainUI extends JFrame {
                     addCategoryButton.addActionListener(event -> {
                         try {
                             String categoryName = JOptionPane.showInputDialog(this,"Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
-                            JSONObject json = new JSONObject();
-                            json.put("category", categoryName);
-                            if (API.addNewCategory(json))
-                                System.out.println("Sikeres kategória hozzáadás");
-                            else
-                                System.out.println("Nem sikerült a kategória hozzáadás");
+                            if (categoryName != null) {
+                                JSONObject json = new JSONObject();
+                                json.put("category", categoryName);
+                                if (API.addNewCategory(json))
+                                    System.out.println("Sikeres kategória hozzáadás");
+                                else
+                                    System.out.println("Nem sikerült a kategória hozzáadás");
+                            }
                         } catch (Exception e) {
                             System.out.println(e);
                         }
