@@ -10,7 +10,8 @@ import org.json.simple.*;
 import javax.swing.*;
 
 public class Item implements JSONSerializable {
-//    public int ID;
+    private static int idCounter = 0;
+    public int ID;
     private ImageIcon icon;
     private String title;
     private String category;
@@ -26,6 +27,7 @@ public class Item implements JSONSerializable {
     }
 
     private void setupItem(){
+        ID = idCounter++;
         title = "";
         category = null;
         icon = new ImageIcon("assets/white/picture.png", "assets/white/picture.png");
@@ -55,6 +57,7 @@ public class Item implements JSONSerializable {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
+        obj.put("id", ID);
         obj.put("icon", icon.getDescription());
         obj.put("title", title);
         obj.put("category", category);
@@ -68,6 +71,7 @@ public class Item implements JSONSerializable {
 
     @Override
     public Item fromJSON(JSONObject json) {
+        if (json.get("id") != null) ID = Integer.parseInt(json.get("id").toString());
         if (json.get("icon") != null) icon = new ImageIcon(json.get("icon").toString());
         if (json.get("title") != null) title = json.get("title").toString();
         if (json.get("category") != null) category = json.get("category").toString();

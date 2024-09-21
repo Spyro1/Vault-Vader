@@ -103,6 +103,7 @@ public class API {
      * @return True: if the modification was successful, False: otherwise
      */
     static public boolean modifyCategory(JSONObject categoryData) {
+        // TODO: Write modify category API
         return true;
     }
 
@@ -153,4 +154,6 @@ public class API {
     }
 
 
+//    public static void displayItem(JSONObject json) {
+//    }
 }

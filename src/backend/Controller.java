@@ -132,17 +132,16 @@ public class Controller {
             return false;
         } catch (Exception e) {
             loggedInUser = new User(userData.get("username").toString(), encryptText(userData.get("password").toString(), userData.get("username").toString()));
+            // Setup default values
+            categories.clear();
+            items.clear();
+            categories.add("Email");
+            categories.add("Pénzügyek");
+            categories.add("Egyéb");
             writeUserDateToFile();
         }
         return true;
     }
-
-//    public boolean saveItem(JSONObject itemData) throws Exception {
-//        return false;
-//    }
-//    public boolean removeItem(JSONObject itemData) throws Exception {
-//        return false;
-//    }
 
     public ArrayList<String> getCategoryList() {
         return categories;

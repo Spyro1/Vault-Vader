@@ -7,12 +7,14 @@
 "items":[
 {
 "icon":"assets\/white\/picture.png",
+"id":0,
 "title":"Gmail jelszó",
 "category":"Email",
 "fields":[
 ]},
 {
 "icon":"assets\/white\/picture.png",
+"id":1,
 "title":"SCH Account",
 "category":"Egyéb",
 "fields":[

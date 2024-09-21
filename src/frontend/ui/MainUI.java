@@ -25,6 +25,7 @@ public class MainUI extends JFrame {
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
     JTree categoryTree;
     JList<Item> itemJList;
+    int selectedItemIndex = -1, nextSelectedItem = -2;
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
 
     public MainUI() {
@@ -148,15 +149,10 @@ public class MainUI extends JFrame {
             sidePanel.add(scrollPane, BorderLayout.CENTER);
 
             JPanel categoryEditorToolPanel = new JPanel(); {
-//                categoryEditorToolPanel.setLayout(new BoxLayout(categoryEditorToolPanel, BoxLayout.Y_AXIS));
                 categoryEditorToolPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
                 categoryEditorToolPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 categoryEditorToolPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
                 categoryEditorToolPanel.setOpaque(false);
-//                categoryEditorToolPanel.setBackground(VV.bgDarkColor);
-//                DarkTextField categoryField = new DarkTextField("","Kategória"); {
-//                    categoryField.setFont(new Font("Arial", Font.PLAIN, 15));
-//                }
                 IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
                     addCategoryButton.setToolTipText("Új kategória");
                     addCategoryButton.addActionListener(event -> {
@@ -230,6 +226,25 @@ public class MainUI extends JFrame {
             itemJList = createItemJList(API.getItemList(null)); {
                 itemJList.setCellRenderer(new ItemRenderer());
                 itemJList.setBackground(VV.bgLightColor);
+                itemJList.addListSelectionListener(event -> {
+                    try {
+                        int idx = itemJList.getSelectedIndex();
+                        if (nextSelectedItem == idx && nextSelectedItem == idx) {
+                            itemJList.removeSelectionInterval(0,idx);
+                        } else {
+                            displayItem(selectedItemIndex);
+                            nextSelectedItem = selectedItemIndex;
+                            selectedItemIndex = idx;
+                        }
+//                        Item selectedItem = (Item) itemJList.getSelectedValue();
+//                        JSONObject json = selectedItem.toJSON();
+                        System.out.println(selectedItemIndex);
+
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                });
+
             }
             JScrollPane itemListScrollPane = new JScrollPane(itemJList); {
                 itemListScrollPane.setBackground(VV.bgDarkColor);
@@ -273,6 +288,7 @@ public class MainUI extends JFrame {
                 editorPanel.add(passwordFieldPanel);
                 FieldPanel descriptionFieldPanel = new FieldPanel("Megjegyzés");
                 editorPanel.add(descriptionFieldPanel);
+                editorPanel.setVisible(false);
             }
             contentBackPanel.add(editorPanel, BorderLayout.CENTER);
         }
@@ -332,7 +348,7 @@ public class MainUI extends JFrame {
         return new JList<Item>(model);
     }
 
-    public void refresh(){
+    private void refresh(){
         // Refresh category tree data
         allItemCategory.removeAllChildren();
         ArrayList<String> categories = API.getCategoryList(); // GET data from API
@@ -346,6 +362,9 @@ public class MainUI extends JFrame {
         model.reload();
     }
 
+    private void displayItem(int itemIndex) {
+        editorPanel.setVisible(true);
+    }
 
 //    public void addObject(Component component, Container yourcontainer, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
 //        gbc.gridx = gridx;
