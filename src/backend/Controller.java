@@ -8,10 +8,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Controller {
 
@@ -83,7 +81,7 @@ public class Controller {
     }*/
 
     // == Cryption functions ==
-    private String encryptText(String text, String key) {
+    public static String encryptText(String text, String key) {
         StringBuilder result = new StringBuilder(); // init string builder object
         // Encrypt every character one by one
         for (int i = 0; i < text.length(); i++){
@@ -92,10 +90,6 @@ public class Controller {
         }
         return result.toString();
     }
-    private String decryptText(String text, String key) {
-        return encryptText(text,key); // Encrypt and Decrypt is symmetric because of the XOR
-    }
-
 
     // === API called public functions ===
 
@@ -110,7 +104,7 @@ public class Controller {
     }
     public boolean checkUser(JSONObject userData) throws Exception {
         String username = userData.get("username").toString();
-        String password = userData.get("password").toString();
+        String password = userData.get("password").toString(); // Encrypted password
 
         JSONObject userDataFromFile;
         try{
@@ -118,9 +112,9 @@ public class Controller {
         } catch (Exception e){
             throw new Exception("Nem található ilyen nevű felhasználó!\nKérem regisztráljon, vagy lépjen be más felhasználóval."); // Throw exception if the user does not exists
         }
-        String cryptedPassword = userDataFromFile.get("password").toString();
-        if (cryptedPassword.equals(encryptText(password, username))) {
-            loggedInUser = new User(username, cryptedPassword);
+        String encryptedPassword = userDataFromFile.get("password").toString();
+        if (encryptedPassword.equals(password)) {
+            loggedInUser = new User(username, encryptedPassword);
             return true; // True, if the user exits and the password is correct
         }
         return false; // False, if the user exists, but the password is incorrect
@@ -131,7 +125,7 @@ public class Controller {
             fr.close();
             return false;
         } catch (Exception e) {
-            loggedInUser = new User(userData.get("username").toString(), encryptText(userData.get("password").toString(), userData.get("username").toString()));
+            loggedInUser = new User(userData.get("username").toString(), userData.get("password").toString());
             // Setup default values
             categories.clear();
             items.clear();

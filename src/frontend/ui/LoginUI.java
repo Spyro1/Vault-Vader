@@ -1,6 +1,7 @@
 package frontend.ui;
 
 import backend.API;
+import backend.Controller;
 import frontend.VV;
 import frontend.customComponents.IconButton;
 import org.json.simple.JSONObject;
@@ -9,7 +10,6 @@ import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class LoginUI extends JFrame /*implements ActionListener*/ {
 
@@ -22,11 +22,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
     }
 
-    private JLabel titleLabel;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private IconButton loginButton;
-    private IconButton registerButton;
 
     public LoginUI() {
         // === Essential frame setup ===
@@ -53,7 +50,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
         }
         // Title
-        titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER); {
+        JLabel titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER);
+        {
             titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
             titleLabel.setBackground(Color.BLUE);
             titleLabel.setForeground(VV.mainTextColor);
@@ -92,18 +90,15 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
                 showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
                 showPasswordBox.setBorder(null);
                 char defChar = passwordField.getEchoChar();
-                showPasswordBox.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if (e.getStateChange() == ItemEvent.SELECTED) {
-                            passwordField.setEchoChar((char) 0);
-                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye.png"));
-                            showPasswordBox.setToolTipText("Jelszó elrejtése");
-                        } else {
-                            passwordField.setEchoChar(defChar);
-                            showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
-                            showPasswordBox.setToolTipText("Jelszó megjelenítése");
-                        }
+                showPasswordBox.addItemListener(e -> {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        passwordField.setEchoChar((char) 0);
+                        showPasswordBox.setIcon(new ImageIcon("assets/white/eye.png"));
+                        showPasswordBox.setToolTipText("Jelszó elrejtése");
+                    } else {
+                        passwordField.setEchoChar(defChar);
+                        showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+                        showPasswordBox.setToolTipText("Jelszó megjelenítése");
                     }
                 });
             }
@@ -111,21 +106,17 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         centerPanel.add(passwordPanel);
         // Login Button
-        loginButton = new IconButton("Bejelentkezés"); {
+        IconButton loginButton = new IconButton("Bejelentkezés");
+        {
             loginButton.setIcon(new ImageIcon("assets/white/login.png"));
             loginButton.setBackground(VV.mainColor);
             loginButton.setForeground(VV.mainTextColor);
 
 //            loginButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin * 3, VV.margin, VV.margin * 3));
-            loginButton.addActionListener(e -> {
+            loginButton.addActionListener(_ -> {
                 try {
                     // Create JSON object from username and password
-                    JSONObject userData = new JSONObject();
-                    userData.put("username",  usernameField.getText());
-                    userData.put("password",  passwordField.getText());
-                    if (usernameField.getText().isEmpty() || passwordField.getPassword().length == 0) {
-                        throw new Exception("Nincs minden szükséges mező kitöltve!");
-                    }
+                    JSONObject userData = userFiledsToJSON();
                     // Try login with user's date
                     if (API.loginRequest(userData)){
     //                    JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!", "Bejelentkezés", JOptionPane.INFORMATION_MESSAGE);
@@ -141,23 +132,20 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         centerPanel.add(loginButton);
         // Register Button
-        registerButton = new IconButton("Regisztráció"); {
+        IconButton registerButton = new IconButton("Regisztráció");
+        {
             registerButton.setIcon(new ImageIcon("assets/white/user.png"));
             registerButton.setBackground(VV.secondaryColor);
             registerButton.setForeground(VV.mainTextColor);
             registerButton.setFont(new Font("Arial", Font.PLAIN, 16));
 //            registerButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin * 4, VV.margin, VV.margin * 4));
-            registerButton.addActionListener(e -> {
+            registerButton.addActionListener(_ -> {
                 try {
                     // Create JSON object from username and password
-                    JSONObject userData = new JSONObject();
-                    userData.put("username",  usernameField.getText());
-                    userData.put("password",  passwordField.getText());
-                    if (usernameField.getText().isEmpty() || passwordField.getPassword().length == 0) {
-                        throw new Exception("Nincs minden szükséges mező kitöltve!");
-                    }
+                    JSONObject userData = userFiledsToJSON();
+//                    JSONObject userData;
                     // Ask for clarification
-                    if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
                         // Try register with user's date
                         if (API.registerRequest(userData)){
                             JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!", "Regisztráció", JOptionPane.INFORMATION_MESSAGE); // Successful register -> Show a success dialog box
@@ -178,5 +166,15 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         add(centerPanel, BorderLayout.CENTER);
 
         getRootPane().setDefaultButton(loginButton);
+    }
+
+    private JSONObject userFiledsToJSON() throws Exception {
+        JSONObject userData = new JSONObject();
+        userData.put("username",  usernameField.getText());
+        userData.put("password", Controller.encryptText(passwordField.getText(), usernameField.getText()));
+        if (usernameField.getText().isEmpty() || passwordField.getPassword().length == 0) {
+            throw new Exception("Nincs minden szükséges mező kitöltve!");
+        }
+        return userData;
     }
 }

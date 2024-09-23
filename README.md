@@ -48,8 +48,8 @@ classDiagram
              + saveAll() void
              - readUserDataFromFile() void
              - writeUserDataToFile() void
-             - encryptText(text: String, key: String) String
-             - decryptText(text: String, key: String) String
+             - encryptText(text: String, key: String) String$
+%%             - decryptText(text: String, key: String) String
         }
         class User{
             - name : String
