@@ -1,11 +1,10 @@
 package frontend.ui;
 
 import backend.API;
-import backend.Controller;
 import frontend.VV;
 import frontend.customComponents.IconButton;
-import org.json.simple.JSONObject;
 
+import org.json.simple.JSONObject;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
@@ -32,12 +31,12 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         ImageIcon lockIcon = new ImageIcon("assets/black/lock.png");
         setIconImage(lockIcon.getImage()); // Set status bar icon
         // === Component setup ===
-        InitMinimalistLoginUI();
+        initMinimalistLoginUI();
 
         setVisible(true);
     }
 
-    private void InitMinimalistLoginUI(){
+    private void initMinimalistLoginUI(){
         setLayout(new BorderLayout());
         setSize(400, 300);
         setLocationRelativeTo(null);
@@ -170,8 +169,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     private JSONObject userFiledsToJSON() throws Exception {
         JSONObject userData = new JSONObject();
-        userData.put("username",  usernameField.getText());
-        userData.put("password", Controller.encryptText(passwordField.getText(), usernameField.getText()));
+        userData.put(API.USERNAME_KEY,  usernameField.getText());
+        userData.put(API.PASSWORD_KEY, API.encryptData(passwordField.getText(), usernameField.getText()));
         if (usernameField.getText().isEmpty() || passwordField.getPassword().length == 0) {
             throw new Exception("Nincs minden szükséges mező kitöltve!");
         }

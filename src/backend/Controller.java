@@ -21,7 +21,7 @@ public class Controller {
     public static final Controller INSTANCE = new Controller();
 
     /** Stores the current user's password items */
-    private Collection<Item> items = new LinkedList<>();
+    private LinkedList<Item> items = new LinkedList<>();
 
     /** Stores the current user's categories */
     private ArrayList<String> categories = new ArrayList<>(); // new HashSet<>();
@@ -139,6 +139,10 @@ public class Controller {
 
     public void saveAll() throws IOException {
         writeUserDateToFile();
+    }
+
+    public Item getItem(int index){
+        return items.get(index);
     }
 
     public Collection<Item> getItemList() {

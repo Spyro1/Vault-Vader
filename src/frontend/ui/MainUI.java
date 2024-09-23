@@ -13,7 +13,6 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class MainUI extends JFrame {
@@ -24,7 +23,7 @@ public class MainUI extends JFrame {
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
     JTree categoryTree;
     JList<Item> itemJList;
-    int selectedItemIndex = -1, nextSelectedItem = -2;
+    int singlifyer = 0, selectedItemIndex = -1;
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
 
     public MainUI() {
@@ -93,11 +92,6 @@ public class MainUI extends JFrame {
                 centerPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
                 centerPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, VV.margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin,0,VV.margin)));
-//                IconButton saveButton = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
-//                    saveButton.setToolTipText("Mentés");
-//                    saveButton.setOpaque(false);
-//                }
-//                centerPanel.add(saveButton);
                 IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon("assets/white/logout.png")); {
                     logOutButton.setToolTipText("Kijelentkezés");
                     logOutButton.setOpaque(false);
@@ -157,7 +151,7 @@ public class MainUI extends JFrame {
                             String categoryName = JOptionPane.showInputDialog(this,"Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
                             if (categoryName != null) {
                                 JSONObject json = new JSONObject();
-                                json.put("category", categoryName);
+                                json.put(API.CATEGORY_KEY, categoryName);
                                 if (API.addNewCategory(json))
                                     System.out.println("Sikeres kategória hozzáadás");
                                 else
@@ -178,13 +172,14 @@ public class MainUI extends JFrame {
                                 String oldCategory = tp.getLastPathComponent().toString();
                                 String categoryName = (String) JOptionPane.showInputDialog(this, "Szerkessze a kategória nevét!", "Kategória szerkesztése", JOptionPane.QUESTION_MESSAGE, null, null, tp.getLastPathComponent().toString());
                                 JSONObject json = new JSONObject();
-                                json.put("newCategory", categoryName);
-                                json.put("oldCategory", oldCategory);
-                                if (API.modifyCategory(json))
-                                    System.out.println("Sikeresk kategória szerkesztés");
-                                else
-                                    System.out.println("Nem sikerült a kategóriát szerkeszteni");
-                                refresh();
+                                json.put(API.NEW_CATEGORY_KEY, categoryName);
+                                json.put(API.OLD_CATEGORY_KEY, oldCategory);
+                                if (categoryName != null && oldCategory != null && API.modifyCategory(json)) {
+                                    System.out.println("Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
+                                    refresh();
+                                } else {
+                                    System.out.println("Nem sikerült a kategóriát szerkeszteni"); // JUST FOR DEBUG
+                                }
                             }
                         } catch (Exception e){
                             System.out.println(e);
@@ -199,7 +194,7 @@ public class MainUI extends JFrame {
                             if (tp != null) {
                                 String oldCategory = tp.getLastPathComponent().toString();
                                 JSONObject json = new JSONObject();
-                                json.put("category", oldCategory);
+                                json.put(API.CATEGORY_KEY, oldCategory);
                                 if (API.removeCategory(json))
                                     System.out.println("Sikeres törlés");
                                 else
@@ -228,15 +223,15 @@ public class MainUI extends JFrame {
                     try {
                         // TODO: Selection and unselection to fix!
                         int idx = itemJList.getSelectedIndex();
-                        if (nextSelectedItem == idx && nextSelectedItem == idx) {
+                        if (singlifyer == 0 && selectedItemIndex == idx) {
                             itemJList.removeSelectionInterval(0,idx);
-                        } else {
-                            displayItem(selectedItemIndex);
-                            nextSelectedItem = selectedItemIndex;
+                            editorPanel.setVisible(false);
+                        } else if (singlifyer == 0) {
+                            displayItem(idx);
                             selectedItemIndex = idx;
+                            System.out.println(selectedItemIndex);
                         }
-                        System.out.println(selectedItemIndex);
-
+//                        singlifyer = (singlifyer + 1) % 2;
                     } catch (Exception e) {
                         System.out.println(e);
                     }
@@ -275,16 +270,16 @@ public class MainUI extends JFrame {
 //                editorPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
                 editorPanel.setBackground(VV.bgLightColor);
 //               editorPanel.setOpaque(false);
-//                JPanel titleRow = new JPanel(new BorderLayout()); {
-//                    titleRow.setOpaque(false);
-//                    titleRow.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
-//                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
-//                    titleRow.add(iconButton, BorderLayout.WEST);
-//                    DarkTextField titleField = new DarkTextField("", "Bejegyzés címe");
-//                    titleField.setUnderline(true);
-//                    titleRow.add(titleField, BorderLayout.CENTER);
-//                }
-//                editorPanel.add(titleRow);
+                JPanel titleRow = new JPanel(new BorderLayout()); {
+                    titleRow.setOpaque(false);
+                    titleRow.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
+                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
+                    titleRow.add(iconButton, BorderLayout.WEST);
+                    DarkTextField titleField = new DarkTextField("", "Bejegyzés címe");
+                    titleField.setUnderline(true);
+                    titleRow.add(titleField, BorderLayout.CENTER);
+                }
+                editorPanel.add(titleRow);
                 // PLACEHOLDER FIELDS
                 FieldPanel titleFieldPanel = new FieldPanel("Cím");
 //                titleFieldPanel.setPreferredSize(new Dimension(200, 80));
@@ -305,6 +300,7 @@ public class MainUI extends JFrame {
             }
             JScrollPane editorContentScroller = new JScrollPane(editorPanel); {
 //                editorContentScroller.setLayout(new BorderLayout());
+                editorContentScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 editorContentScroller.setBackground(VV.bgLightColor);
                 editorContentScroller.setBorder(BorderFactory.createEmptyBorder());
                 editorContentScroller.getViewport().setOpaque(false);
@@ -393,6 +389,7 @@ public class MainUI extends JFrame {
     }
 
     private void displayItem(int itemIndex) {
+        API.getItemData(itemIndex);
         editorPanel.setVisible(true);
     }
 

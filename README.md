@@ -22,11 +22,14 @@ classDiagram
         class LoginUI{
             + main()
             + LoginUI()
+            - initMinimalistLoginUI() void
+            - userFiledsToJSON() JSON 
         }
         class MainUI{
             + MainUI()
             - refresh() void
             - createItemJList(itemList: List~Item~) List~JList~
+            - displayItem(index: int) void
         }
     }
     namespace backend {
@@ -35,20 +38,22 @@ classDiagram
              <<singleton>>
              + INSTANCE : Controller$
              - items : List~Item~
-             - categories : Set~String~
+             - categories : List~String~
              - loggedInuser : User
              - Controller()
+             + encryptText(text: String, key: String) String$
              + loadUser() void
              + checkUser(userData: JSON) boolean
              + createUser(userData: JSON) boolean
              + getCategoryList() List~String~
              + addNewCategory(newCategory: String) bool
+             + modifyCategory(oldCategory: String, newCategory: String) bool
              + removeCategory(categoryName: String) bool
-             + getItemList() List~Item~
              + saveAll() void
+             + getItem(index: int) Item
+             + getItemList() List~Item~
              - readUserDataFromFile() void
              - writeUserDataToFile() void
-             - encryptText(text: String, key: String) String$
 %%             - decryptText(text: String, key: String) String
         }
         class User{
@@ -91,8 +96,16 @@ classDiagram
         + loginRequest(userData: JSON) bool$
         + registerRequest(userData: JSON) bool$
         + logoutRequest() void$
+        + addNewItem(itemData: JSON) bool$
+        + saveItem(itemDate: JOSN) bool$
+        + removeItem(itemData: JSON) bool$
+        + addNewCategory(categoryData: JSON) bool$
+        + modifyCategory(categoryData: JSON) bool$
+        + removeCategory(categoryData: JSON) bool$
+        + getItemData(intemIndex: int) Item$
         + getItemList(filter: JSON) List~Item~$ 
         + getCategoryList() List~String~ JSON$
+        + encryptData(data: String, key: String) String$
         + saveAllChanges() void$
     }
 %%    }

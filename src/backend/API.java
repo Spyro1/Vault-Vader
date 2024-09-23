@@ -3,6 +3,7 @@ package backend;
 import backend.item.Item;
 import frontend.ui.LoginUI;
 import frontend.ui.MainUI;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -10,6 +11,13 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class API {
+
+    public static final String
+            USERNAME_KEY = "username",
+            PASSWORD_KEY = "password",
+            CATEGORY_KEY = "category",
+            NEW_CATEGORY_KEY = "newCategory",
+            OLD_CATEGORY_KEY = "oldCategory";
 
     // == Login / Register Methods ==
 
@@ -21,8 +29,7 @@ public class API {
      * @throws Exception Thrown, if the username does not exist.
      */
     static public boolean loginRequest(JSONObject userData) throws Exception {
-        if(Controller.INSTANCE.checkUser(userData)){
-//            JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!");
+        if(userData.containsKey(USERNAME_KEY) && userData.containsKey(PASSWORD_KEY) && Controller.INSTANCE.checkUser(userData)){
             Controller.INSTANCE.loadUser(); // loads the logged-in user's data from file
             new MainUI();
             return true;
@@ -87,13 +94,13 @@ public class API {
 
     /**
      *
-     * @JSONkeys
+     * @JSONkeys "category"
      * @param categoryData JSON object containing the necessary fields given in JSONkeys section
      * @return
      */
     static public boolean addNewCategory(JSONObject categoryData) {
-        if (!categoryData.get("category").toString().isEmpty()) {
-            return Controller.INSTANCE.addNewCategory(categoryData.get("category").toString());
+        if (categoryData.containsKey(CATEGORY_KEY) && !categoryData.get(CATEGORY_KEY).toString().isBlank()) {
+            return Controller.INSTANCE.addNewCategory(categoryData.get(CATEGORY_KEY).toString());
         }
         return false;
     }
@@ -105,13 +112,10 @@ public class API {
      * @return True: if the modification was successful, False: otherwise
      */
     static public boolean modifyCategory(JSONObject categoryData) {
-        // TODO: Write modify category API
-        if (!categoryData.get("newCategory").toString().isEmpty() && !categoryData.get("oldCategory").toString().isEmpty()) {
-            String oldCategory = categoryData.get("oldCategory").toString();
-            String newCategory = categoryData.get("newCategory").toString();
-            return Controller.INSTANCE.modifyCategory(oldCategory, newCategory);
+        if (categoryData.containsKey(NEW_CATEGORY_KEY) && categoryData.containsKey(OLD_CATEGORY_KEY) && !categoryData.get(NEW_CATEGORY_KEY).toString().isBlank() && !categoryData.get(OLD_CATEGORY_KEY).toString().isBlank()) {
+            return Controller.INSTANCE.modifyCategory(categoryData.get(OLD_CATEGORY_KEY).toString(), categoryData.get(NEW_CATEGORY_KEY).toString());
         }
-        return true;
+        return false;
     }
 
     /**
@@ -121,21 +125,21 @@ public class API {
      * @return True: if the removal is successful, False: if the field was empty or otherwise
      */
     static public boolean removeCategory(JSONObject categoryData) {
-        if (!categoryData.get("category").toString().isEmpty()) {
-            return Controller.INSTANCE.removeCategory(categoryData.get("category").toString());
+        if (categoryData.get(CATEGORY_KEY) != null && !categoryData.get(CATEGORY_KEY).toString().isBlank()) {
+            return Controller.INSTANCE.removeCategory(categoryData.get(CATEGORY_KEY).toString());
         }
         return  false;
     }
     // == Item Field Methods ==
-    static public boolean addItemField(int itemId, int fieldId, int fieldType){
-        return false;
-    }
-    static public boolean modifyItemField(int itemId, int fieldId, String name){
-        return false;
-    }
-    static public boolean removeItemField(int itemId, int fieldId){
-        return false;
-    }
+//    static public boolean addItemField(int itemId, int fieldId, int fieldType){
+//        return false;
+//    }
+//    static public boolean modifyItemField(int itemId, int fieldId, String name){
+//        return false;
+//    }
+//    static public boolean removeItemField(int itemId, int fieldId){
+//        return false;
+//    }
 
     // == get methods ==
     static public Collection<Item> getItemList(JSONObject filter){
@@ -148,19 +152,24 @@ public class API {
 //        }
         return null;
     }
-    static public Collection<String> getCategoryList(){
-//        System.out.println(Controller.INSTANCE.getCategoryList().toString());
+
+    public static Item getItemData(int itemIndex) {
+        return Controller.INSTANCE.getItem(itemIndex);
+    }
+
+    public static Collection<String> getCategoryList(){
         return Controller.INSTANCE.getCategoryList();
     }
-    static public JSONArray getFieldList(){
-        return null;
+//    static public JSONArray getFieldList(){
+//        return null;
+//    }
+
+    public static String encryptData(String data, String key){
+        return Controller.encryptText(data, key);
     }
 
     public static void saveAllChanges() throws IOException {
         Controller.INSTANCE.saveAll();
     }
 
-
-//    public static void displayItem(JSONObject json) {
-//    }
 }
