@@ -9,6 +9,7 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -23,7 +24,7 @@ public class Controller {
     private Collection<Item> items = new LinkedList<>();
 
     /** Stores the current user's categories */
-    private Collection<String> categories = new HashSet<>();
+    private ArrayList<String> categories = new ArrayList<>(); // new HashSet<>();
 
     /** The name of the user currently logged in to the app */
     private User loggedInUser;
@@ -54,11 +55,6 @@ public class Controller {
         categoryArray.addAll(categories);
         json.put("categories", categoryArray);
         json.put("items", items.stream().map(Item::toJSON).collect(Collectors.toList()));
-//        JSONArray itemArray = new JSONArray();
-//        for (Item item : items) {
-//            itemArray.add(item.toJSON());
-//        }
-//        json.put("items", itemArray);
         // Write out to file
         PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
         pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
@@ -126,7 +122,15 @@ public class Controller {
     }
 
     public boolean addNewCategory(String newCategory) {
-          return categories.add(newCategory);
+        if (!categories.contains(newCategory)) {
+            categories.add(newCategory);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean modifyCategory(String oldCategory, String newCategory) {
+        return categories.set(categories.indexOf(oldCategory), newCategory).equals(oldCategory);
     }
 
     public boolean removeCategory(String categoryToRemove) {
@@ -140,4 +144,5 @@ public class Controller {
     public Collection<Item> getItemList() {
         return items;
     }
+
 }

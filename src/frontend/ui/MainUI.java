@@ -178,7 +178,7 @@ public class MainUI extends JFrame {
                                 String oldCategory = tp.getLastPathComponent().toString();
                                 String categoryName = (String) JOptionPane.showInputDialog(this, "Szerkessze a kategória nevét!", "Kategória szerkesztése", JOptionPane.QUESTION_MESSAGE, null, null, tp.getLastPathComponent().toString());
                                 JSONObject json = new JSONObject();
-                                json.put("category", categoryName);
+                                json.put("newCategory", categoryName);
                                 json.put("oldCategory", oldCategory);
                                 if (API.modifyCategory(json))
                                     System.out.println("Sikeresk kategória szerkesztés");

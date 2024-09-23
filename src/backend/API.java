@@ -100,12 +100,17 @@ public class API {
 
     /**
      * Request to modify the category title with the given new and old titles.
-     * @JSONkeys "category", "oldCategory"
+     * @JSONkeys "newCategory", "oldCategory"
      * @param categoryData JSON object containing the necessary fields given in JSONkeys section
      * @return True: if the modification was successful, False: otherwise
      */
     static public boolean modifyCategory(JSONObject categoryData) {
         // TODO: Write modify category API
+        if (!categoryData.get("newCategory").toString().isEmpty() && !categoryData.get("oldCategory").toString().isEmpty()) {
+            String oldCategory = categoryData.get("oldCategory").toString();
+            String newCategory = categoryData.get("newCategory").toString();
+            return Controller.INSTANCE.modifyCategory(oldCategory, newCategory);
+        }
         return true;
     }
 
