@@ -1,8 +1,5 @@
 package backend.user;
 
-import backend.JSONSerializable;
-import org.json.simple.JSONObject;
-
 public class User/* implements JSONSerializable*/ {
     String name = "";
     String password = "";

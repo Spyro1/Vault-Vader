@@ -9,31 +9,26 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Controller {
 
-    /**
-     * Singleton instance of the class
-     */
+    /** Singleton instance of the class */
     public static final Controller INSTANCE = new Controller();
 
-    /**
-     * Stores the current user's password items
-     */
-    private ArrayList<Item> items = new ArrayList<>();
+    /** Stores the current user's password items */
+    private Collection<Item> items = new LinkedList<>();
 
-    /**
-     * Stores the current user's categories
-     */
-    private ArrayList<String> categories = new ArrayList<>();
+    /** Stores the current user's categories */
+    private Collection<String> categories = new HashSet<>();
 
-    /**
-     * The name of the user currently logged in to the app
-     */
+    /** The name of the user currently logged in to the app */
     private User loggedInUser;
 
-
+    /** Not accessible constructor */
     private Controller() {}
 
     // === Read / Write user data functions ===
@@ -42,8 +37,8 @@ public class Controller {
         items.clear();
         JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
         JSONArray categoryArray = (JSONArray) usersData.get("categories");
-        for (int i = 0; i < categoryArray.size(); i++) {
-            categories.add(categoryArray.get(i).toString());
+        for (Object categoryObj : categoryArray) {
+            categories.add(categoryObj.toString());
         }
         JSONArray itemArray = (JSONArray) usersData.get("items");
         for (Object itemObj : itemArray) {
@@ -52,19 +47,18 @@ public class Controller {
     }
     private void writeUserDateToFile() throws IOException {
         JSONObject json = new JSONObject();
-//        // Build json
+        // Build json
         json.put("username", loggedInUser.getName());
         json.put("password", loggedInUser.getPassword());
         JSONArray categoryArray = new JSONArray();
-        for (String category : categories) {
-            categoryArray.add(category);
-        }
+        categoryArray.addAll(categories);
         json.put("categories", categoryArray);
-        JSONArray itemArray = new JSONArray();
-        for (Item item : items) {
-            itemArray.add(item.toJSON());
-        }
-        json.put("items", itemArray);
+        json.put("items", items.stream().map(Item::toJSON).collect(Collectors.toList()));
+//        JSONArray itemArray = new JSONArray();
+//        for (Item item : items) {
+//            itemArray.add(item.toJSON());
+//        }
+//        json.put("items", itemArray);
         // Write out to file
         PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
         pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
@@ -72,15 +66,7 @@ public class Controller {
         pw.close();
     }
 
-    /*public JSONArray collectionToJSON(ArrayList<? extends JSONSerializable>  collection){
-        JSONArray itemArray = new JSONArray();
-        for (Object o : collection) {
-            itemArray.add(((JSONSerializable)o).toJSON());
-        }
-        return itemArray;
-    }*/
-
-    // == Cryption functions ==
+    // == Encryption function ==
     public static String encryptText(String text, String key) {
         StringBuilder result = new StringBuilder(); // init string builder object
         // Encrypt every character one by one
@@ -93,13 +79,9 @@ public class Controller {
 
     // === API called public functions ===
 
-    public void loadUser(){
+    public void loadUser() throws IOException, ParseException {
         if (loggedInUser != null) {
-            try {
-                readUsersDataFromFile();
-            } catch (Exception e){
-                JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            readUsersDataFromFile();
         }
     }
     public boolean checkUser(JSONObject userData) throws Exception {
@@ -121,10 +103,12 @@ public class Controller {
     }
     public boolean createUser(JSONObject userData) throws Exception {
         try {
-            FileReader fr = new FileReader("users/" + userData.get("username").toString() + ".json"); // Try to search for username.json --> if does not exist, then an exception is thrown.
+            // Try to search for username.json --> if it does not exist, then an exception is thrown.
+            FileReader fr = new FileReader("users/" + userData.get("username").toString() + ".json");
             fr.close();
-            return false;
+            return false; // If the username.json file exists, then return false, meaning the username already exists
         } catch (Exception e) {
+            // Create new user
             loggedInUser = new User(userData.get("username").toString(), userData.get("password").toString());
             // Setup default values
             categories.clear();
@@ -137,16 +121,12 @@ public class Controller {
         return true;
     }
 
-    public ArrayList<String> getCategoryList() {
+    public Collection<String> getCategoryList() {
         return categories;
     }
 
     public boolean addNewCategory(String newCategory) {
-        if (!categories.contains(newCategory)) {
-            categories.add(newCategory);
-            return true;
-        }
-        return false;
+          return categories.add(newCategory);
     }
 
     public boolean removeCategory(String categoryToRemove) {
@@ -157,7 +137,7 @@ public class Controller {
         writeUserDateToFile();
     }
 
-    public ArrayList<Item> getItemList() {
+    public Collection<Item> getItemList() {
         return items;
     }
 }

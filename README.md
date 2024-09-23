@@ -35,7 +35,7 @@ classDiagram
              <<singleton>>
              + INSTANCE : Controller$
              - items : List~Item~
-             - categories : List~String~
+             - categories : Set~String~
              - loggedInuser : User
              - Controller()
              + loadUser() void

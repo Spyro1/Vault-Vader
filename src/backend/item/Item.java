@@ -2,7 +2,6 @@ package backend.item;
 
 import backend.JSONSerializable;
 import backend.fields.*;
-import backend.category.*;
 
 import java.util.ArrayList;
 import org.json.simple.*;
@@ -32,12 +31,9 @@ public class Item implements JSONSerializable {
         category = null;
         icon = new ImageIcon("assets/white/picture.png", "assets/white/picture.png");
         fields.clear();
-//        initDefaultFields();
         fields.add(new TextField("Név", ""));
         fields.add(new PassField("Jelszó", ""));
     }
-//    public void initDefaultFields() {
-//    }
 
     public ImageIcon getIcon() { return icon; }
     public String getTitle() { return title; }

@@ -6,9 +6,8 @@ import frontend.ui.MainUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
 
 public class API {
 
@@ -16,7 +15,7 @@ public class API {
 
     /**
      * Create a login request to the controller object with the given user info.
-     * @JOSNkeys "username", "password"
+     * @JSONkeys "username", "password"
      * @param userData JSON object containing the necessary fields given in JSONkeys section
      * @return True: if username and password is correct, False: if the password is incorrect.
      * @throws Exception Thrown, if the username does not exist.
@@ -59,6 +58,7 @@ public class API {
      * @return
      */
     static public boolean addNewItem(JSONObject itemData) {
+        // TODO: Write add new item api function
         return false;
     }
 
@@ -69,6 +69,7 @@ public class API {
      * @return
      */
     static public boolean saveItem(JSONObject itemData) {
+        // TODO: Write save item api function
         return false;
     }
 
@@ -79,6 +80,7 @@ public class API {
      * @return
      */
     static public boolean removeItem(JSONObject itemData) {
+        // TODO: Write remove item api function
         return false;
     }
     // == Category Methods ==
@@ -131,9 +133,9 @@ public class API {
     }
 
     // == get methods ==
-    static public ArrayList<Item> getItemList(JSONObject filter){
+    static public Collection<Item> getItemList(JSONObject filter){
         if (filter == null){
-            ArrayList<Item> itemList = Controller.INSTANCE.getItemList();
+            Collection<Item> itemList = Controller.INSTANCE.getItemList();
             return itemList;
         }
 //        else {
@@ -141,7 +143,7 @@ public class API {
 //        }
         return null;
     }
-    static public ArrayList<String> getCategoryList(){
+    static public Collection<String> getCategoryList(){
 //        System.out.println(Controller.INSTANCE.getCategoryList().toString());
         return Controller.INSTANCE.getCategoryList();
     }
