@@ -1,5 +1,6 @@
 package backend.item;
 
+import backend.API;
 import backend.JSONSerializable;
 import backend.fields.*;
 
@@ -53,30 +54,30 @@ public class Item implements JSONSerializable {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
-        obj.put("id", ID);
-        obj.put("icon", icon.getDescription());
-        obj.put("title", title);
-        obj.put("category", category);
+        obj.put(API.ID_KEY, ID);
+        obj.put(API.ICON_KEY, icon.getDescription());
+        obj.put(API.TITLE_KEY, title);
+        obj.put(API.CATEGORY_KEY, category);
         JSONArray fieldsArray = new JSONArray();
         for (Field field : fields) {
             fieldsArray.add(field.toJSON());
         }
-        obj.put("fields", fieldsArray);
+        obj.put(API.FIELDS_KEY, fieldsArray);
         return obj;
     }
 
     @Override
     public Item fromJSON(JSONObject json) {
-        if (json.get("id") != null) ID = Integer.parseInt(json.get("id").toString());
-        if (json.get("icon") != null) icon = new ImageIcon(json.get("icon").toString());
-        if (json.get("title") != null) title = json.get("title").toString();
-        if (json.get("category") != null) category = json.get("category").toString();
+        if (json.get(API.ID_KEY) != null) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
+        if (json.get(API.ICON_KEY) != null) icon = new ImageIcon(json.get(API.ICON_KEY).toString());
+        if (json.get(API.TITLE_KEY) != null) title = json.get(API.TITLE_KEY).toString();
+        if (json.get(API.CATEGORY_KEY) != null) category = json.get(API.CATEGORY_KEY).toString();
         fields.clear();
-        if (json.get("fields") != null) {
-            JSONArray fieldsArray = (JSONArray) json.get("fields");
+        if (json.get(API.FIELDS_KEY) != null) {
+            JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
             for (int i = 0; i < fieldsArray.size(); i++) {
                 JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
-                String fieldType = jsonFieldData.get("type").toString();
+                String fieldType = jsonFieldData.get(API.TYPE_KEY).toString();
                 switch (fieldType){
                     case "IntField":
                         fields.add(new IntField().fromJSON(json));

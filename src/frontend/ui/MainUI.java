@@ -20,7 +20,8 @@ public class MainUI extends JFrame {
     final int width = 1000, height = 600; // Default  size of the window
     final double headerWeightY = 0.01, contentWeightY = 1- headerWeightY,
                  firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
-    JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel, editorPanel; //, categoryPanel;
+    JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel;
+    ItemEditorPanel editorPanel; //, categoryPanel;
     JTree categoryTree;
     JList<Item> itemJList;
     int singlifyer = 0, selectedItemIndex = -1;
@@ -223,15 +224,15 @@ public class MainUI extends JFrame {
                     try {
                         // TODO: Selection and unselection to fix!
                         int idx = itemJList.getSelectedIndex();
-                        if (singlifyer == 0 && selectedItemIndex == idx) {
-                            itemJList.removeSelectionInterval(0,idx);
-                            editorPanel.setVisible(false);
-                        } else if (singlifyer == 0) {
+//                        if (singlifyer == 0 && selectedItemIndex == idx) {
+//                            itemJList.removeSelectionInterval(0,idx);
+//                            editorPanel.setVisible(false);
+//                        } else if (singlifyer == 0) {
                             displayItem(idx);
                             selectedItemIndex = idx;
                             System.out.println(selectedItemIndex);
-                        }
-//                        singlifyer = (singlifyer + 1) % 2;
+//                        }
+//                        singlifyer = ++singlifyer % 2;
                     } catch (Exception e) {
                         System.out.println(e);
                     }
@@ -264,38 +265,13 @@ public class MainUI extends JFrame {
             contentBackPanel.setBackground(VV.bgLightColor);
             contentBackPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
 //            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
-            editorPanel = new JPanel(); {
-                editorPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            editorPanel = new ItemEditorPanel(new JSONObject()); {
+//                editorPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 //                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
 //                editorPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
-                editorPanel.setBackground(VV.bgLightColor);
+//                editorPanel.setBackground(VV.bgLightColor);
 //               editorPanel.setOpaque(false);
-                JPanel titleRow = new JPanel(new BorderLayout()); {
-                    titleRow.setOpaque(false);
-                    titleRow.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
-                    IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png"));
-                    titleRow.add(iconButton, BorderLayout.WEST);
-                    DarkTextField titleField = new DarkTextField("", "Bejegyzés címe");
-                    titleField.setUnderline(true);
-                    titleRow.add(titleField, BorderLayout.CENTER);
-                }
-                editorPanel.add(titleRow);
-                // PLACEHOLDER FIELDS
-                FieldPanel titleFieldPanel = new FieldPanel("Cím");
-//                titleFieldPanel.setPreferredSize(new Dimension(200, 80));
-                editorPanel.add(titleFieldPanel);
-                FieldPanel usernameFieldPanel = new FieldPanel("Felhasználónév");
-//                usernameFieldPanel.setPreferredSize(new Dimension(contentBackPanel.getWidth(), 80));
-                editorPanel.add(usernameFieldPanel);
-                FieldPanel passwordFieldPanel = new FieldPanel("Jelszó");
-//                passwordFieldPanel.setPreferredSize(new Dimension(contentBackPanel.getWidth(), 80));
-                editorPanel.add(passwordFieldPanel);
-                FieldPanel descriptionFieldPanel = new FieldPanel("Megjegyzés");
-//                descriptionFieldPanel.setPreferredSize(new Dimension(contentBackPanel.getWidth(), 80));
-                editorPanel.add(descriptionFieldPanel);
-                FieldPanel moreFieldPanel = new FieldPanel("Továbbiak");
-//                moreFieldPanel.setPreferredSize(new Dimension(contentBackPanel.getWidth(), 80));
-                editorPanel.add(moreFieldPanel);
+
                 editorPanel.setVisible(false);
             }
             JScrollPane editorContentScroller = new JScrollPane(editorPanel); {

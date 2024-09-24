@@ -130,7 +130,10 @@ public class Controller {
     }
 
     public boolean modifyCategory(String oldCategory, String newCategory) {
-        return categories.set(categories.indexOf(oldCategory), newCategory).equals(oldCategory);
+        if (!categories.contains(newCategory)) {
+            return categories.set(categories.indexOf(oldCategory), newCategory).equals(oldCategory);
+        }
+        return false;
     }
 
     public boolean removeCategory(String categoryToRemove) {

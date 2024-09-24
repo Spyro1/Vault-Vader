@@ -1,5 +1,6 @@
 package backend.fields;
 
+import backend.API;
 import org.json.simple.JSONObject;
 
 public class PassField extends TextField {
@@ -23,9 +24,9 @@ public class PassField extends TextField {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
-        obj.put("type", "PassField");
-        obj.put("fieldName", super.fieldName);
-        obj.put("value", super.text);
+        obj.put(API.TYPE_KEY, "PassField");
+        obj.put(API.FIELD_NAME_KEY, super.fieldName);
+        obj.put(API.VALUE_KEY, super.text);
         return obj;
     }
 }

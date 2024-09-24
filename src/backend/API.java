@@ -17,7 +17,14 @@ public class API {
             PASSWORD_KEY = "password",
             CATEGORY_KEY = "category",
             NEW_CATEGORY_KEY = "newCategory",
-            OLD_CATEGORY_KEY = "oldCategory";
+            OLD_CATEGORY_KEY = "oldCategory",
+            TITLE_KEY = "title",
+            FIELDS_KEY = "fields",
+            ID_KEY = "ID",
+            ICON_KEY = "ICON",
+            TYPE_KEY = "type",
+            FIELD_NAME_KEY = "fieldName",
+            VALUE_KEY = "value";
 
     // == Login / Register Methods ==
 
