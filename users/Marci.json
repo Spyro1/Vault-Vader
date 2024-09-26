@@ -5,15 +5,15 @@
 "Email"],
 "items":[
 {
-"icon":"assets\/white\/picture.png",
-"id":0,
+"ID":0,
+"ICON":"assets\/white\/picture.png",
 "title":"Gmail jelszó",
 "category":"Email",
 "fields":[
 ]},
 {
-"icon":"assets\/white\/picture.png",
-"id":1,
+"ID":1,
+"ICON":"assets\/white\/picture.png",
 "title":"SCH Account",
 "category":"Egyéb",
 "fields":[

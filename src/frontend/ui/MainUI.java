@@ -24,6 +24,7 @@ public class MainUI extends JFrame {
     ItemEditorPanel editorPanel; //, categoryPanel;
     JTree categoryTree;
     JList<Item> itemJList;
+    JSONObject displayedItem = null;
     int singlifyer = 0, selectedItemIndex = -1;
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
 
@@ -265,7 +266,7 @@ public class MainUI extends JFrame {
             contentBackPanel.setBackground(VV.bgLightColor);
             contentBackPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
 //            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
-            editorPanel = new ItemEditorPanel(new JSONObject()); {
+            editorPanel = new ItemEditorPanel(this); {
 //                editorPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 //                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
 //                editorPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
@@ -287,7 +288,7 @@ public class MainUI extends JFrame {
                 IconButton saveItemChanges = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
                     saveItemChanges.setToolTipText("Mentés");
                     saveItemChanges.addActionListener(event -> {
-                        API.saveItem(null); // TODO: Write save item action
+                        API.saveItem(displayedItem); // TODO: Write save item action
                     });
                 }
                 itemToolPanel.add(saveItemChanges);
@@ -365,7 +366,8 @@ public class MainUI extends JFrame {
     }
 
     private void displayItem(int itemIndex) {
-        API.getItemData(itemIndex);
+        displayedItem = API.getItemData(itemIndex);
+        editorPanel.displayItem(displayedItem);
         editorPanel.setVisible(true);
     }
 

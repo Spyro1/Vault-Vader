@@ -1,8 +1,8 @@
 package frontend.customComponents;
 
 import backend.API;
-import com.sun.tools.javac.Main;
 import frontend.VV;
+import frontend.ui.MainUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -12,42 +12,78 @@ import java.util.LinkedList;
 
 public class ItemEditorPanel extends JPanel {
 
-    public LinkedList<JTextField> fields;
-    public ItemEditorPanel(JSONObject item) {
-        setLayout(new GridLayout(10,1,VV.margin, VV.margin/2));
+    JPanel titleRow;
+    IconButton iconButton;
+    DarkTextField titleField;
+    IconButton addNewField;
+
+    public LinkedList<JTextField> textFieldsList = new LinkedList<>();
+
+    GridBagLayout gbl = new GridBagLayout();
+    GridBagConstraints gbc = new GridBagConstraints();
+    int gridY = 0;
+
+    public ItemEditorPanel(MainUI window) {
+//        setLayout(new GridLayout(10,1,VV.margin, VV.margin/2));
+
+        setLayout(gbl);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.weighty = 0.01;
+        gbc.weightx = 1;
         setBackground(VV.bgLightColor);
-        JPanel titleRow = new JPanel(new BorderLayout()); {
+        titleRow = new JPanel(new BorderLayout()); {
             titleRow.setOpaque(false);
             titleRow.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
-            IconButton iconButton = new IconButton("", new ImageIcon("assets/white/picture.png")); {
+            iconButton = new IconButton("", new ImageIcon("assets/white/picture.png")); {
                 iconButton.setToolTipText("Ikon hozzáadása");
+                iconButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
                 iconButton.addActionListener(e -> {
-                    FileDialog fd = new FileDialog((Frame) getParent());
+                    FileDialog fd = new FileDialog(window);
                     fd.setDirectory("C:\\");
                     fd.setFile("*.png|*.jpg|*.jpeg|*.gif");
                     fd.setVisible(true);
                     String filename = fd.getFile();
                     if (filename == null)
                         System.out.println("You cancelled the choice");
-                    else
+                    else{
+//                        API.saveItem() // TODO: Write icon saving ....
                         System.out.println("You chose " + filename);
+                    }
                 });
+                titleRow.add(iconButton, BorderLayout.WEST);
+                titleField = new DarkTextField("", "Bejegyzés címe");
+                titleField.setUnderline(true);
+                titleRow.add(titleField, BorderLayout.CENTER);
             }
             // TODO: json ne legyen null teszteket írni
-            iconButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin));
-            titleRow.add(iconButton, BorderLayout.WEST);
-            DarkTextField titleField = new DarkTextField(item.get(API.TITLE_KEY).toString(), "Bejegyzés címe");
-            titleField.setUnderline(true);
-            titleRow.add(titleField, BorderLayout.CENTER);
         }
-        add(titleRow);
-        JSONArray fieldsJSON = (JSONArray) item.get(API.FIELDS_KEY);
-        for (int i = 0; i < fields.size(); i++) {
-            JSONObject field = (JSONObject) fieldsJSON.get(i);
-            String fieldName = field.get(API.FIELD_NAME_KEY).toString();
-            String value = field.get(API.VALUE_KEY).toString();
-            fields.add(new DarkTextField(value, fieldName));
-            add(fields.getLast());
+        addNewField = new IconButton("Mező hozzáadása", new ImageIcon("assets/white/plus.png"));
+    }
+
+    public void displayItem(JSONObject displayedItem) {
+        removeAll(); // clears panel
+        add(titleRow, gbc);
+        gbc.gridy = gridY++;
+        if (displayedItem != null){
+            if (displayedItem.containsKey(API.ICON_KEY)) iconButton.setIcon(new ImageIcon(displayedItem.get(API.ICON_KEY).toString()));
+            if (displayedItem.containsKey(API.TITLE_KEY)) titleField.setText(displayedItem.get(API.TITLE_KEY).toString());
+            if (displayedItem.containsKey(API.FIELDS_KEY)) {
+                JSONArray fieldsJSON = (JSONArray) displayedItem.get(API.FIELDS_KEY);
+                if (fieldsJSON != null){
+                    for (int i = 0; i < textFieldsList.size(); i++) {
+                        JSONObject field = (JSONObject) fieldsJSON.get(i);
+                        String fieldName = field.get(API.FIELD_NAME_KEY).toString();
+                        String value = field.get(API.VALUE_KEY).toString();
+                        textFieldsList.add(new DarkTextField(value, fieldName));
+                        add(textFieldsList.getLast(), gbc);
+                        gbc.gridy = gridY++;
+                    }
+                }
+            }
         }
+
+        gbc.gridy = gridY++;
+        add(addNewField, gbc);
     }
 }

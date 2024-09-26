@@ -160,8 +160,8 @@ public class API {
         return null;
     }
 
-    public static Item getItemData(int itemIndex) {
-        return Controller.INSTANCE.getItem(itemIndex);
+    public static JSONObject getItemData(int itemIndex) {
+        return Controller.INSTANCE.getItem(itemIndex).toJSON();
     }
 
     public static Collection<String> getCategoryList(){
