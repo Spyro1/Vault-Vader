@@ -7,15 +7,17 @@
 {
 "ID":0,
 "ICON":"assets\/white\/picture.png",
-"title":"Gmail jelszó",
+"title":"Gmail",
 "category":"Email",
 "fields":[
-  {
-    "type" : 0,
-    "fieldName": "Name",
-    "value": "Value of the field"
-  }
-]},
+{
+"fieldName":"Felhasználónév",
+"type":0,
+"value":"marciszenes@gmail.com"},
+{
+"fieldName":"Jelszó",
+"type":2,
+"value":"Jelszó"}]},
 {
 "ID":1,
 "ICON":"assets\/white\/picture.png",

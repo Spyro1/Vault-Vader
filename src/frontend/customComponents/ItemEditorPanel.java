@@ -17,7 +17,7 @@ public class ItemEditorPanel extends JPanel {
     DarkTextField titleField;
     IconButton addNewFieldButton;
 
-    public LinkedList<JTextField> textFieldsList = new LinkedList<>();
+    public LinkedList<FieldPanel> textFieldsList = new LinkedList<>();
 
     GridBagLayout gbl = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
@@ -107,13 +107,15 @@ public class ItemEditorPanel extends JPanel {
             if (displayedItem.containsKey(API.FIELDS_KEY)) {
                 JSONArray fieldsJSON = (JSONArray) displayedItem.get(API.FIELDS_KEY);
                 if (fieldsJSON != null){
-                    for (int i = 0; i < textFieldsList.size(); i++) {
+                    for (int i = 0; i < fieldsJSON.size(); i++) {
                         JSONObject field = (JSONObject) fieldsJSON.get(i);
                         String fieldName = field.get(API.FIELD_NAME_KEY).toString();
                         String value = field.get(API.VALUE_KEY).toString();
-                        textFieldsList.add(new DarkTextField(value, fieldName));
-                        add(textFieldsList.getLast(), gbc);
+                        FieldPanel fp = new FieldPanel(fieldName);
+                        fp.textField.setText(value);
+                        textFieldsList.add(fp);
                         gbc.gridy = gridY++;
+                        add(fp, gbc);
                     }
                 }
             }
@@ -129,5 +131,6 @@ public class ItemEditorPanel extends JPanel {
         gbc.weighty = 0.9;
         gbc.gridy = gridY++;
         add(fillerPanel, gbc);
+        validate();
     }
 }

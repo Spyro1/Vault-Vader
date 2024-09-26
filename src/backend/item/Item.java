@@ -77,8 +77,7 @@ public class Item implements JSONSerializable {
             JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
             for (int i = 0; i < fieldsArray.size(); i++) {
                 JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
-                String fieldType = jsonFieldData.get(API.TYPE_KEY).toString();
-                fields.add(new Field().fromJSON(json));
+                fields.add(new Field().fromJSON(jsonFieldData));
             }
         }
         return this;

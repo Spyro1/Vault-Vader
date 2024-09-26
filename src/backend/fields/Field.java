@@ -8,32 +8,32 @@ import java.io.File;
 import java.io.Serializable;
 
 public class Field implements JSONSerializable {
-    public static enum FieldType {
-        TEXT,
-        INT,
-        PASS,
-        CATEGORY
-    }
+//    public static enum FieldType {
+//        TEXT,
+//        INT,
+//        PASS,
+//        CATEGORY
+//    }
     // Constants
-//    public static final int TEXTFIELD = 0;
-//    public static final int INTFIELD = 1;
-//    public static final int PASSFIELD = 2;
-//    public static final int CATEGORYFIELD = 3;
+    public static final int TEXTFIELD = 0;
+    public static final int INTFIELD = 1;
+    public static final int PASSFIELD = 2;
+    public static final int CATEGORYFIELD = 3;
 
     protected String fieldName;
     protected String text;
-    protected FieldType type;
+    protected int type;
 
     public Field() {
-        this("","", FieldType.TEXT);
+        this("","", TEXTFIELD);
     }
     public Field(String fieldName) {
-        this(fieldName, "", FieldType.TEXT);
+        this(fieldName, "", TEXTFIELD);
     }
     public Field(String fieldName, String text) {
-        this(fieldName, text, FieldType.TEXT);
+        this(fieldName, text, TEXTFIELD);
     }
-    public Field(String fieldName, String text, FieldType type) {
+    public Field(String fieldName, String text, int type) {
         this.fieldName = fieldName;
         this.text = text;
         this.type = type;
@@ -41,7 +41,7 @@ public class Field implements JSONSerializable {
 
     public String getFieldName() { return fieldName; }
     public String getText() { return text; }
-    public FieldType getType() { return type; }
+    public int getType() { return type; }
 
     public String toString() {
         return fieldName + " " + text + " " + type;
@@ -58,7 +58,7 @@ public class Field implements JSONSerializable {
 
     @Override
     public Field fromJSON(JSONObject json) {
-        type = (FieldType) (json.get(API.TYPE_KEY));
+        type = Integer.parseInt(json.get(API.TYPE_KEY).toString());
         fieldName = json.get(API.FIELD_NAME_KEY).toString();
         text = json.get(API.VALUE_KEY).toString();
         return this;

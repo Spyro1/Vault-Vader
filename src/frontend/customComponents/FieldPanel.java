@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class FieldPanel extends JPanel {
 
-    IconButton optionsButton = new IconButton("", new ImageIcon("assets/white/ui-dots.png"));
-    DarkTextField textField;
+    public IconButton optionsButton = new IconButton("", new ImageIcon("assets/white/ui-dots.png"));
+    public DarkTextField textField;
 //    JLabel fieldLabel = new JLabel();
 
     public FieldPanel(String labelTitle) {
