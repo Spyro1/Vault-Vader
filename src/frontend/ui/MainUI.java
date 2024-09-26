@@ -25,7 +25,8 @@ public class MainUI extends JFrame {
     JTree categoryTree;
     JList<Item> itemJList;
     JSONObject displayedItem = null;
-    int singlifyer = 0, selectedItemIndex = -1;
+    int singlifyer = 0;
+    public int selectedItemIndex = -1;
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
 
     public MainUI() {
@@ -224,13 +225,13 @@ public class MainUI extends JFrame {
                 itemJList.addListSelectionListener(event -> {
                     try {
                         // TODO: Selection and unselection to fix!
-                        int idx = itemJList.getSelectedIndex();
+                        selectedItemIndex = itemJList.getSelectedIndex();
 //                        if (singlifyer == 0 && selectedItemIndex == idx) {
 //                            itemJList.removeSelectionInterval(0,idx);
 //                            editorPanel.setVisible(false);
 //                        } else if (singlifyer == 0) {
-                            displayItem(idx);
-                            selectedItemIndex = idx;
+                            displayItem(selectedItemIndex);
+//                            selectedItemIndex = idx;
                             System.out.println(selectedItemIndex);
 //                        }
 //                        singlifyer = ++singlifyer % 2;

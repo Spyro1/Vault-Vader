@@ -1,5 +1,6 @@
 package backend;
 
+import backend.fields.Field;
 import backend.item.Item;
 import backend.user.User;
 import org.json.simple.JSONArray;
@@ -148,8 +149,11 @@ public class Controller {
         return items.get(index);
     }
 
-    public Collection<Item> getItemList() {
+    public LinkedList<Item> getItemList() {
         return items;
     }
 
+    public void addNewField(JSONObject fieldData, int selectedItemIndex) {
+        items.get(selectedItemIndex).getFields().add(new Field().fromJSON(fieldData));
+    }
 }

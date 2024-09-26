@@ -24,7 +24,8 @@ public class API {
             ICON_KEY = "ICON",
             TYPE_KEY = "type",
             FIELD_NAME_KEY = "fieldName",
-            VALUE_KEY = "value";
+            VALUE_KEY = "value",
+            TEXT_TYPE = "text", PASS_TYPE = "pass";
 
     // == Login / Register Methods ==
 
@@ -179,4 +180,10 @@ public class API {
         Controller.INSTANCE.saveAll();
     }
 
+    public static void addNewField(JSONObject fieldData, int selectedItemIndex) {
+        if (fieldData != null) {
+            if (fieldData.containsKey(API.TYPE_KEY))
+                Controller.INSTANCE.addNewField(fieldData, selectedItemIndex);
+        }
+    }
 }

@@ -10,6 +10,11 @@
 "title":"Gmail jelszó",
 "category":"Email",
 "fields":[
+  {
+    "type" : 0,
+    "fieldName": "Name",
+    "value": "Value of the field"
+  }
 ]},
 {
 "ID":1,

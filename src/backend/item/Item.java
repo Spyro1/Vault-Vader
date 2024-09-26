@@ -32,8 +32,8 @@ public class Item implements JSONSerializable {
         category = null;
         icon = new ImageIcon("assets/white/picture.png", "assets/white/picture.png");
         fields.clear();
-        fields.add(new TextField("Név", ""));
-        fields.add(new PassField("Jelszó", ""));
+        fields.add(new Field("Név"));
+        fields.add(new Field("Jelszó"));
     }
 
     public ImageIcon getIcon() { return icon; }
@@ -78,18 +78,7 @@ public class Item implements JSONSerializable {
             for (int i = 0; i < fieldsArray.size(); i++) {
                 JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
                 String fieldType = jsonFieldData.get(API.TYPE_KEY).toString();
-                switch (fieldType){
-                    case "IntField":
-                        fields.add(new IntField().fromJSON(json));
-                        break;
-                    case "TextField":
-                        fields.add(new TextField().fromJSON(json));
-                        break;
-                    case "PassField":
-                        fields.add(new PassField().fromJSON(json));
-                        break;
-                    default: break;
-                }
+                fields.add(new Field().fromJSON(json));
             }
         }
         return this;
