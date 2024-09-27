@@ -3,16 +3,15 @@ package backend;
 import backend.fields.Field;
 import backend.item.Item;
 import backend.user.User;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -34,33 +33,43 @@ public class Controller {
     private Controller() {}
 
     // === Read / Write user data functions ===
-    private void readUsersDataFromFile() throws IOException, ParseException {
+    private void readUsersDataFromFile() {
         categories.clear();
         items.clear();
-        JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
-        JSONArray categoryArray = (JSONArray) usersData.get("categories");
-        for (Object categoryObj : categoryArray) {
-            categories.add(categoryObj.toString());
-        }
-        JSONArray itemArray = (JSONArray) usersData.get("items");
-        for (Object itemObj : itemArray) {
-            items.add(new Item().fromJSON((JSONObject) itemObj));
+        try {
+            JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
+            JSONArray categoryArray = (JSONArray) usersData.get("categories");
+            for (Object categoryObj : categoryArray) {
+                categories.add(categoryObj.toString());
+            }
+            JSONArray itemArray = (JSONArray) usersData.get("items");
+            for (Object itemObj : itemArray) {
+                items.add(new Item().fromJSON((JSONObject) itemObj));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
-    private void writeUserDateToFile() throws IOException {
+    private void writeUserDateToFile() {
         JSONObject json = new JSONObject();
         // Build json
-        json.put("username", loggedInUser.getName());
-        json.put("password", loggedInUser.getPassword());
+        json.put(API.USERNAME_KEY, loggedInUser.getName());
+        json.put(API.PASSWORD_KEY, loggedInUser.getPassword());
         JSONArray categoryArray = new JSONArray();
         categoryArray.addAll(categories);
-        json.put("categories", categoryArray);
-        json.put("items", items.stream().map(Item::toJSON).collect(Collectors.toList()));
+        json.put(API.CATEGORY_KEY, categoryArray);
+        json.put(API.ITEMS_KEY, items.stream().map(Item::toJSON).collect(Collectors.toList()));
         // Write out to file
-        PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
-        pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
-        pw.flush();
-        pw.close();
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
+            pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
+            pw.flush();
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            pw.close();
+        }
     }
 
     // == Encryption function ==

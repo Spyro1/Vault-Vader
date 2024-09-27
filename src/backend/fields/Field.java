@@ -8,11 +8,11 @@ import java.io.File;
 import java.io.Serializable;
 
 public class Field implements JSONSerializable {
-//    public static enum FieldType {
+//    public enum FieldType {
 //        TEXT,
 //        INT,
 //        PASS,
-//        CATEGORY
+//        CATEGORY;
 //    }
     // Constants
     public static final int TEXTFIELD = 0;
@@ -44,7 +44,7 @@ public class Field implements JSONSerializable {
     public int getType() { return type; }
 
     public String toString() {
-        return fieldName + " " + text + " " + type;
+        return fieldName + ": " + text + " [" + type + "]";
     }
 
     @Override

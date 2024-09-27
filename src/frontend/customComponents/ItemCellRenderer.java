@@ -6,13 +6,13 @@ import frontend.VV;
 import javax.swing.*;
 import java.awt.*;
 
-public class ItemRenderer extends JPanel implements ListCellRenderer<Item> {
+public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
 
     private final JLabel  titleLabel = new JLabel();
     private final JLabel categoryLabel = new JLabel();
     private final JButton icon = new JButton();
 
-    public ItemRenderer() {
+    public ItemCellRenderer() {
         setLayout(new BorderLayout(5, 5));
         setBackground(VV.bgLightColor);
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));

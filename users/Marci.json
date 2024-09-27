@@ -1,12 +1,12 @@
 {
 "password":"\u0007\u0004\u001E\u0010\u0013¾",
-"categories":[
+"category":[
 "Bank",
 "Email"],
 "items":[
 {
-"ID":0,
-"ICON":"assets\/white\/picture.png",
+"icon":"assets\/white\/picture.png",
+"id":0,
 "title":"Gmail",
 "category":"Email",
 "fields":[
@@ -19,8 +19,8 @@
 "type":2,
 "value":"Jelszó"}]},
 {
-"ID":1,
-"ICON":"assets\/white\/picture.png",
+"icon":"assets\/white\/picture.png",
+"id":1,
 "title":"SCH Account",
 "category":"Egyéb",
 "fields":[

@@ -6,11 +6,11 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 
-public class MyTreeRenderer extends DefaultTreeCellRenderer {
+public class CategoryTreeRenderer extends DefaultTreeCellRenderer {
 
 //        private final ImageIcon leaf = new ImageIcon("../assets/white/file.png");
 
-        public MyTreeRenderer() {
+        public CategoryTreeRenderer() {
                 leafIcon = new ImageIcon("assets/white/label.png");
                 openIcon = new ImageIcon("assets/white/folder.png");
                 closedIcon = new ImageIcon("assets/white/folder.png");

@@ -7,9 +7,6 @@ import java.awt.*;
 
 public class IconButton extends JButton {
 
-//    private Color hoverBackgroundColor;
-//    private Color pressedBackgroundColor;
-
     public IconButton() {
         super();
         setup();
@@ -32,10 +29,6 @@ public class IconButton extends JButton {
         setForeground(VV.mainTextColor);
         setBorder(BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2));
         setFont(new Font("Arial", Font.PLAIN, 20));
-
-//        hoverBackgroundColor = getBackground().brighter();
-//        pressedBackgroundColor = getBackground().darker();
-
         setContentAreaFilled(false); // Sets to be able to paint enabled and hover background
     }
     @Override

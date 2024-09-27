@@ -22,6 +22,7 @@ public class MainUI extends JFrame {
                  firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel;
     ItemEditorPanel editorPanel; //, categoryPanel;
+    JScrollPane editorContentScroller;
     JTree categoryTree;
     JList<Item> itemJList;
     JSONObject displayedItem = null;
@@ -132,7 +133,7 @@ public class MainUI extends JFrame {
                 categoryTree.setOpaque(false);
                 categoryTree.setFont(new Font("Arial", Font.PLAIN, 15));
                 categoryTree.setForeground(VV.mainTextColor);
-                categoryTree.setCellRenderer(new MyTreeRenderer());
+                categoryTree.setCellRenderer(new CategoryTreeRenderer());
 //                categoryTree.setRootVisible(false);
             }
             refresh();
@@ -220,7 +221,7 @@ public class MainUI extends JFrame {
             sliderPanel.setBackground(VV.bgLightColor);
             sliderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, VV.margin, 0, VV.bgDarkColor));
             itemJList = createItemJList(API.getItemList(null)); {
-                itemJList.setCellRenderer(new ItemRenderer());
+                itemJList.setCellRenderer(new ItemCellRenderer());
                 itemJList.setBackground(VV.bgLightColor);
                 itemJList.addListSelectionListener(event -> {
                     try {
@@ -276,7 +277,7 @@ public class MainUI extends JFrame {
 
                 editorPanel.setVisible(false);
             }
-            JScrollPane editorContentScroller = new JScrollPane(editorPanel); {
+            /*JScrollPane*/ editorContentScroller = new JScrollPane(editorPanel); {
 //                editorContentScroller.setLayout(new BorderLayout());
                 editorContentScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 editorContentScroller.setBackground(VV.bgLightColor);
@@ -369,15 +370,8 @@ public class MainUI extends JFrame {
     private void displayItem(int itemIndex) {
         displayedItem = API.getItemData(itemIndex);
         editorPanel.displayItem(displayedItem);
+//        editorPanel.validate();
+        editorContentScroller.validate();
         editorPanel.setVisible(true);
     }
-
-//    public void addObject(Component component, Container yourcontainer, GridBagLayout layout, GridBagConstraints gbc, int gridx, int gridy, int gridwidth, int gridheight){
-//        gbc.gridx = gridx;
-//        gbc.gridy = gridy;
-//        gbc.gridwidth = gridwidth;
-//        gbc.gridheight = gridheight;
-//        layout.setConstraints(component, gbc);
-//        yourcontainer.add(component);
-//    }
 }
