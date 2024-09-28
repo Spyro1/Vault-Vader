@@ -2,6 +2,8 @@ package frontend.ui;
 
 import backend.API;
 import frontend.VV;
+import frontend.customComponents.DarkPassField;
+import frontend.customComponents.DarkTextField;
 import frontend.customComponents.IconButton;
 
 import org.json.simple.JSONObject;
@@ -21,8 +23,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
     }
 
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+    private DarkTextField usernameField;
+    private DarkPassField passwordField;
 
     public LoginUI() {
         // === Essential frame setup ===
@@ -58,26 +60,12 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         centerPanel.add(titleLabel);
         // Input fields
-        usernameField = new JTextField(); {
-            usernameField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Felhasználónév ", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
-            usernameField.setForeground(VV.mainTextColor);
-            usernameField.setCaretColor(VV.mainTextColor);
-            usernameField.setBackground(VV.bgLightColor);
-            usernameField.setFont(new Font("Arial", Font.PLAIN, 15));
-//            usernameField.setOpaque(false);
-        }
+        usernameField = new DarkTextField("","Felhasználónév");
         centerPanel.add(usernameField);
         JPanel passwordPanel = new JPanel(new BorderLayout()); {
-            passwordField = new JPasswordField(); {
-                passwordField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Jelszó", 0,0, new Font("Arial", Font.BOLD, 12),  VV.mainTextColor));
-                passwordField.setForeground(VV.mainTextColor);
-                passwordField.setCaretColor(VV.mainTextColor);
-                passwordField.setBackground(VV.bgLightColor);
-                passwordField.setFont(new Font("Arial", Font.PLAIN, 15));
-            }
+            passwordField = new DarkPassField("","Jelszó");
             passwordPanel.add(passwordField, BorderLayout.CENTER);
             JToggleButton showPasswordBox = new JToggleButton(); {
-//                showPasswordBox.setOpaque(true);
                 showPasswordBox.setBackground(VV.bgLightColor);
                 showPasswordBox.setUI(new MetalToggleButtonUI(){
                     @Override
@@ -88,14 +76,12 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
                 showPasswordBox.setToolTipText("Jelszó megjelenítése");
                 showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
                 showPasswordBox.setBorder(null);
-                char defChar = passwordField.getEchoChar();
                 showPasswordBox.addItemListener(e -> {
+                    passwordField.showPassword(e.getStateChange() == ItemEvent.SELECTED);
                     if (e.getStateChange() == ItemEvent.SELECTED) {
-                        passwordField.setEchoChar((char) 0);
                         showPasswordBox.setIcon(new ImageIcon("assets/white/eye.png"));
                         showPasswordBox.setToolTipText("Jelszó elrejtése");
                     } else {
-                        passwordField.setEchoChar(defChar);
                         showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
                         showPasswordBox.setToolTipText("Jelszó megjelenítése");
                     }
@@ -105,8 +91,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         centerPanel.add(passwordPanel);
         // Login Button
-        IconButton loginButton = new IconButton("Bejelentkezés");
-        {
+        IconButton loginButton = new IconButton("Bejelentkezés"); {
             loginButton.setIcon(new ImageIcon("assets/white/login.png"));
             loginButton.setBackground(VV.mainColor);
             loginButton.setForeground(VV.mainTextColor);
