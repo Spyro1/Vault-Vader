@@ -267,14 +267,7 @@ public class MainUI extends JFrame {
         contentBackPanel = new JPanel(new BorderLayout()); {
             contentBackPanel.setBackground(VV.bgLightColor);
             contentBackPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
-//            contentBackPanel.setLayout(new BoxLayout(contentBackPanel, BoxLayout.Y_AXIS));
             editorPanel = new ItemEditorPanel(this); {
-//                editorPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-//                editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
-//                editorPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
-//                editorPanel.setBackground(VV.bgLightColor);
-//               editorPanel.setOpaque(false);
-
                 editorPanel.setVisible(false);
             }
             /*JScrollPane*/ editorContentScroller = new JScrollPane(editorPanel); {
