@@ -7,6 +7,7 @@
 
 - [x] Write Tooltips for buttons
 - [x] Button click events organized into functions
+- [ ] Function documentation
   
 ## MainUI
 
@@ -27,6 +28,8 @@
   - [ ] Search Button functionality
   - [ ] Search Button works for Enter
   - [ ] Logout button right aligned
+
+- [ ] Function documentation
   
 # Backend
 

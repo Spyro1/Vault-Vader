@@ -20,17 +20,21 @@ import java.util.Collection;
 
 public class MainUI extends JFrame {
 
+    // Constants
     final int width = 1000, height = 600; // Default  size of the window
     final double headerWeightY = 0.01, contentWeightY = 1- headerWeightY,
                  firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
+    // Objects
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel;
     ItemEditorPanel editorPanel; //, categoryPanel;
     JScrollPane editorContentScroller;
     JTree categoryTree;
     JList<Item> itemJList;
-    JSONObject displayedItem = null;
-    int singlifyer = 0;
+    // Functioning variables
     public int selectedItemIndex = -1;
+    JSONObject displayedItem = null;
+//    int singlifyer = 0;
+    JSONObject filter = new JSONObject();
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
 
     public MainUI() {
@@ -187,7 +191,16 @@ public class MainUI extends JFrame {
                 itemToolPanel.setOpaque(false);
                 IconButton addNewItemButton = new IconButton("Új bejegyzés", new ImageIcon("assets/white/plus.png")); {
                     addNewItemButton.setToolTipText("Új bejegyzés");
-                    addNewItemButton.addActionListener(_ -> API.addNewItem(null));
+                    addNewItemButton.addActionListener(_ -> {
+                        int lastIndex = API.addNewItem();
+                        itemJList = createItemJList(API.getItemList(null)); {
+                            itemJList.setCellRenderer(new ItemCellRenderer());
+                            itemJList.setBackground(VV.bgLightColor);
+                            itemJList.addListSelectionListener(this::itemSelectedFromList);
+                        }
+                        itemListScrollPane.setViewportView(itemJList);
+                        itemJList.setSelectedIndex(lastIndex);
+                    });
                 }
                 itemToolPanel.add(addNewItemButton);
             }

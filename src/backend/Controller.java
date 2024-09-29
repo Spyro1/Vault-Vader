@@ -166,4 +166,9 @@ public class Controller {
     public void addNewField(JSONObject fieldData, int selectedItemIndex) {
         items.get(selectedItemIndex).getFields().add(new Field().fromJSON(fieldData));
     }
+
+    public int addNewItem() {
+        items.add(new Item());
+        return items.size() - 1;
+    }
 }

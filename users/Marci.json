@@ -24,5 +24,19 @@
 "title":"SCH Account",
 "category":"Egyéb",
 "fields":[
-]}],
+]},
+{
+"icon":"assets\/white\/picture.png",
+"id":2,
+"title":"",
+"category":null,
+"fields":[
+{
+"fieldName":"Név",
+"type":0,
+"value":""},
+{
+"fieldName":"Jelszó",
+"type":0,
+"value":""}]}],
 "username":"Marci"}

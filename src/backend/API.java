@@ -26,7 +26,7 @@ public class API {
             TYPE_KEY = "type",
             FIELD_NAME_KEY = "fieldName",
             VALUE_KEY = "value",
-            TEXT_TYPE = "text", PASS_TYPE = "pass";
+            TEXT_TYPE = "text", PASS_TYPE = "pass", CATEGORY_TYPE = "combo";
 
     // == Login / Register Methods ==
 
@@ -65,17 +65,16 @@ public class API {
         saveAllChanges();
         new LoginUI(); // Go back to log in ui
     }
+
     // == Item Methods ==
 
     /**
      *
-     * @JSONkeys "title", "category", "fields": []
-     * @param itemData JSON object containing the necessary fields given in JSONkeys section
      * @return
      */
-    static public boolean addNewItem(JSONObject itemData) {
+    static public int addNewItem(/*JSONObject itemData*/) {
         // TODO: Write add new item api function
-        return false;
+        return Controller.INSTANCE.addNewItem();
     }
 
     /**
