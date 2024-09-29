@@ -51,19 +51,22 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
         }
         // Title
-        JLabel titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER);
-        {
-            titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        JLabel titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER); {
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
             titleLabel.setBackground(Color.BLUE);
             titleLabel.setForeground(VV.mainTextColor);
             titleLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
         }
         centerPanel.add(titleLabel);
         // Input fields
-        usernameField = new DarkTextField("","Felhasználónév");
+        usernameField = new DarkTextField("","Felhasználónév"); {
+            usernameField.setToolTipText("Írja be a felhasználónevét!");
+        }
         centerPanel.add(usernameField);
         JPanel passwordPanel = new JPanel(new BorderLayout()); {
-            passwordField = new DarkPassField("","Jelszó");
+            passwordField = new DarkPassField("","Jelszó"); {
+                passwordField.setToolTipText("Írja be a jelszavát!");
+            }
             passwordPanel.add(passwordField, BorderLayout.CENTER);
             JToggleButton showPasswordBox = new JToggleButton(); {
                 showPasswordBox.setBackground(VV.bgLightColor);
@@ -95,18 +98,15 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             loginButton.setIcon(new ImageIcon("assets/white/login.png"));
             loginButton.setBackground(VV.mainColor);
             loginButton.setForeground(VV.mainTextColor);
-
-//            loginButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin * 3, VV.margin, VV.margin * 3));
+            loginButton.setToolTipText("Bejelentkezés");
             loginButton.addActionListener(_ -> {
                 try {
                     // Create JSON object from username and password
                     JSONObject userData = userFiledsToJSON();
                     // Try login with user's date
                     if (API.loginRequest(userData)){
-    //                    JOptionPane.showMessageDialog(null, "Sikeres bejelentkezés!", "Bejelentkezés", JOptionPane.INFORMATION_MESSAGE);
                         dispose(); // Successful login -> Close window
-                    }
-                    else{
+                    } else{
                         throw new Exception("Helytelen felhasználónév vagy jelszó!");
                     }
                 } catch (Exception ex) {
@@ -116,28 +116,24 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         centerPanel.add(loginButton);
         // Register Button
-        IconButton registerButton = new IconButton("Regisztráció");
-        {
+        IconButton registerButton = new IconButton("Regisztráció"); {
             registerButton.setIcon(new ImageIcon("assets/white/user.png"));
             registerButton.setBackground(VV.secondaryColor);
             registerButton.setForeground(VV.mainTextColor);
+            registerButton.setToolTipText("Regisztrációhoz írja be a használni kívánt felhasználónevét és jelszavát!");
             registerButton.setFont(new Font("Arial", Font.PLAIN, 16));
-//            registerButton.setBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin * 4, VV.margin, VV.margin * 4));
             registerButton.addActionListener(_ -> {
                 try {
                     // Create JSON object from username and password
                     JSONObject userData = userFiledsToJSON();
-//                    JSONObject userData;
                     // Ask for clarification
                     if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
                         // Try register with user's date
                         if (API.registerRequest(userData)){
                             JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!", "Regisztráció", JOptionPane.INFORMATION_MESSAGE); // Successful register -> Show a success dialog box
-                        }
-                        else{
+                        } else{
                             throw new Exception("Nem sikerült létrehozni a felhasználót!");
                         }
-
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

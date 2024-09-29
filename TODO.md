@@ -5,7 +5,7 @@
 
 ## LoginUI
 
-- [ ] Write Tooltips for buttons
+- [x] Write Tooltips for buttons
   
 ## MainUI
 
