@@ -6,6 +6,7 @@
 ## LoginUI
 
 - [x] Write Tooltips for buttons
+- [x] Button click events organized into functions
   
 ## MainUI
 

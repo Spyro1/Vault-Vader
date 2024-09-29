@@ -6,11 +6,14 @@ import frontend.VV;
 import frontend.customComponents.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import org.json.simple.JSONObject;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
@@ -47,11 +50,11 @@ public class MainUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 // On closing actions
                 try{
-                    API.saveAllChanges();
+                    API.saveAllChanges(); // Call API to save changes to the user data
                 } catch (Exception ex) {
                     System.out.println(ex.toString());
                 }
-                e.getWindow().dispose();
+                e.getWindow().dispose(); // Close the window
             }
         });
 
@@ -79,7 +82,7 @@ public class MainUI extends JFrame {
                 IconButton searchButton = new IconButton("", new ImageIcon("assets/white/search.png")); {
                     searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, VV.mainTextColor), BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2)));
                     searchButton.setToolTipText("Keresés");
-                    searchButton.setOpaque(false);
+                    searchButton.addActionListener(this::searchButtonClicked);
                 }
                 centerPanel.add(searchField, BorderLayout.CENTER);
                 centerPanel.add(searchButton, BorderLayout.EAST);
@@ -88,7 +91,6 @@ public class MainUI extends JFrame {
         }
         // HEADER PANEL for the tool buttons
         headerPanel = new JPanel(new BorderLayout()); {
-            headerPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
             headerPanel.setBackground(VV.bgDarkColor);
             JPanel centerPanel = new JPanel(); {
                 centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
@@ -98,10 +100,9 @@ public class MainUI extends JFrame {
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, VV.margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin,0,VV.margin)));
                 IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon("assets/white/logout.png")); {
                     logOutButton.setToolTipText("Kijelentkezés");
-                    logOutButton.setOpaque(false);
                     logOutButton.addActionListener(_ -> {
                         try {
-                            API.logoutRequest();
+                            API.logoutRequest(); // Send a request to the API to log out the user
                         } catch (Exception ex) {
                             System.out.println(ex.toString());
                         }
@@ -129,14 +130,15 @@ public class MainUI extends JFrame {
                 categoryLabelPanel.add(categoryLabel);
             }
             sidePanel.add(categoryLabelPanel, BorderLayout.NORTH);
+
             categoryTree = new JTree(allItemCategory); {
                 categoryTree.setOpaque(false);
                 categoryTree.setFont(new Font("Arial", Font.PLAIN, 15));
-                categoryTree.setForeground(VV.mainTextColor);
+//                categoryTree.setForeground(VV.mainTextColor);
                 categoryTree.setCellRenderer(new CategoryTreeRenderer());
-//                categoryTree.setRootVisible(false);
+                categoryTree.addTreeSelectionListener(this::categorySelected);
             }
-            refresh();
+            refreshCategoryTree(); // Refresh added category tree
             JScrollPane scrollPane = new JScrollPane(categoryTree); {
                 scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, VV.margin, 0, VV. margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin, VV.margin, VV.margin)));
                 scrollPane.setOpaque(false);
@@ -150,65 +152,15 @@ public class MainUI extends JFrame {
                 categoryEditorToolPanel.setOpaque(false);
                 IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
                     addCategoryButton.setToolTipText("Új kategória");
-                    addCategoryButton.addActionListener(event -> {
-                        try {
-                            String categoryName = JOptionPane.showInputDialog(this,"Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
-                            if (categoryName != null) {
-                                JSONObject json = new JSONObject();
-                                json.put(API.CATEGORY_KEY, categoryName);
-                                if (API.addNewCategory(json))
-                                    System.out.println("Sikeres kategória hozzáadás");
-                                else
-                                    System.out.println("Nem sikerült a kategória hozzáadás");
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        refresh();
-                    });
+                    addCategoryButton.addActionListener(this::addCategoryClicked);
                 }
                 IconButton editCategoryButton = new IconButton("", new ImageIcon("assets/white/setting.png")); {
                     editCategoryButton.setToolTipText("Kategoria szerkesztése");
-                    editCategoryButton.addActionListener(event -> {
-                        try {
-                            TreePath tp = categoryTree.getSelectionPath();
-                            if (tp != null) {
-                                String oldCategory = tp.getLastPathComponent().toString();
-                                String categoryName = (String) JOptionPane.showInputDialog(this, "Szerkessze a kategória nevét!", "Kategória szerkesztése", JOptionPane.QUESTION_MESSAGE, null, null, tp.getLastPathComponent().toString());
-                                JSONObject json = new JSONObject();
-                                json.put(API.NEW_CATEGORY_KEY, categoryName);
-                                json.put(API.OLD_CATEGORY_KEY, oldCategory);
-                                if (categoryName != null && oldCategory != null && API.modifyCategory(json)) {
-                                    System.out.println("Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
-                                    refresh();
-                                } else {
-                                    System.out.println("Nem sikerült a kategóriát szerkeszteni"); // JUST FOR DEBUG
-                                }
-                            }
-                        } catch (Exception e){
-                            System.out.println(e);
-                        }
-                    });
+                    editCategoryButton.addActionListener(this::editCategoryClicked);
                 }
                 IconButton removeCategoryButton = new IconButton("", new ImageIcon("assets/white/trash.png")); {
                     removeCategoryButton.setToolTipText("Kategória törlése");
-                    removeCategoryButton.addActionListener(event -> {
-                        try {
-                            TreePath tp = categoryTree.getSelectionPath();
-                            if (tp != null) {
-                                String oldCategory = tp.getLastPathComponent().toString();
-                                JSONObject json = new JSONObject();
-                                json.put(API.CATEGORY_KEY, oldCategory);
-                                if (API.removeCategory(json))
-                                    System.out.println("Sikeres törlés");
-                                else
-                                    System.out.println("Nem sikerült a törlés");
-                                refresh();
-                            }
-                        } catch (Exception e){
-                            System.out.println(e);
-                        }
-                    });
+                    removeCategoryButton.addActionListener(this::removeCategoryClicked);
                 }
                 categoryEditorToolPanel.add(addCategoryButton, BorderLayout.WEST);
                 categoryEditorToolPanel.add(editCategoryButton, BorderLayout.CENTER);
@@ -223,24 +175,7 @@ public class MainUI extends JFrame {
             itemJList = createItemJList(API.getItemList(null)); {
                 itemJList.setCellRenderer(new ItemCellRenderer());
                 itemJList.setBackground(VV.bgLightColor);
-                itemJList.addListSelectionListener(event -> {
-                    try {
-                        // TODO: Selection and unselection to fix!
-                        selectedItemIndex = itemJList.getSelectedIndex();
-//                        if (singlifyer == 0 && selectedItemIndex == idx) {
-//                            itemJList.removeSelectionInterval(0,idx);
-//                            editorPanel.setVisible(false);
-//                        } else if (singlifyer == 0) {
-                            displayItem(selectedItemIndex);
-//                            selectedItemIndex = idx;
-                            System.out.println(selectedItemIndex);
-//                        }
-//                        singlifyer = ++singlifyer % 2;
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-                });
-
+                itemJList.addListSelectionListener(this::itemSelectedFromList);
             }
             JScrollPane itemListScrollPane = new JScrollPane(itemJList); {
                 itemListScrollPane.setBackground(VV.bgLightColor);
@@ -250,14 +185,9 @@ public class MainUI extends JFrame {
             sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
             JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
                 itemToolPanel.setOpaque(false);
-//                itemToolPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, VV.bgDarkColor));
                 IconButton addNewItemButton = new IconButton("Új bejegyzés", new ImageIcon("assets/white/plus.png")); {
-//                    addNewItemButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, VV.margin, 0, VV.bgDarkColor), BorderFactory.createEmptyBorder(VV.margin,0,VV.margin,0)));
-//                    addNewItemButton.setBackground(VV.bgLightColor);
                     addNewItemButton.setToolTipText("Új bejegyzés");
-                    addNewItemButton.addActionListener(event -> {
-                        API.addNewItem(null); // TODO: Write add new item action
-                    });
+                    addNewItemButton.addActionListener(_ -> API.addNewItem(null));
                 }
                 itemToolPanel.add(addNewItemButton);
             }
@@ -270,8 +200,7 @@ public class MainUI extends JFrame {
             editorPanel = new ItemEditorPanel(this); {
                 editorPanel.setVisible(false);
             }
-            /*JScrollPane*/ editorContentScroller = new JScrollPane(editorPanel); {
-//                editorContentScroller.setLayout(new BorderLayout());
+            editorContentScroller = new JScrollPane(editorPanel); {
                 editorContentScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 editorContentScroller.setBackground(VV.bgLightColor);
                 editorContentScroller.setBorder(BorderFactory.createEmptyBorder());
@@ -282,9 +211,7 @@ public class MainUI extends JFrame {
                 itemToolPanel.setOpaque(false);
                 IconButton saveItemChanges = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
                     saveItemChanges.setToolTipText("Mentés");
-                    saveItemChanges.addActionListener(event -> {
-                        API.saveItem(displayedItem); // TODO: Write save item action
-                    });
+                    saveItemChanges.addActionListener(_ -> API.saveItem(displayedItem));
                 }
                 itemToolPanel.add(saveItemChanges);
             }
@@ -335,6 +262,96 @@ public class MainUI extends JFrame {
         setVisible(true);
     }
 
+
+
+    private void addCategoryClicked(ActionEvent actionEvent) {
+        try {
+            // Get selected category name
+            String categoryName = JOptionPane.showInputDialog(this,"Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
+            if (categoryName != null) { // Test if any is selected
+                JSONObject json = new JSONObject();
+                json.put(API.CATEGORY_KEY, categoryName); // Add data to json object
+                if (API.addNewCategory(json)) { // Call API to create the new category
+                    System.out.println("Sikeres kategória hozzáadás");
+                } else {
+                    System.out.println("Nem sikerült a kategória hozzáadás");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        refreshCategoryTree();
+    }
+    private void editCategoryClicked(ActionEvent actionEvent) {
+        try {
+            TreePath tp = categoryTree.getSelectionPath();
+            if (tp != null) {
+                String oldCategory = tp.getLastPathComponent().toString();
+                String categoryName = (String) JOptionPane.showInputDialog(this, "Szerkessze a kategória nevét!", "Kategória szerkesztése", JOptionPane.QUESTION_MESSAGE, null, null, tp.getLastPathComponent().toString());
+                JSONObject json = new JSONObject();
+                json.put(API.NEW_CATEGORY_KEY, categoryName);
+                json.put(API.OLD_CATEGORY_KEY, oldCategory);
+                if (categoryName != null && oldCategory != null && API.modifyCategory(json)) {
+                    System.out.println("Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
+                    refreshCategoryTree();
+                } else {
+                    System.out.println("Nem sikerült a kategóriát szerkeszteni"); // JUST FOR DEBUG
+                }
+            }
+        } catch (Exception ex){
+            System.out.println(ex);
+        }
+    }
+    private void removeCategoryClicked(ActionEvent actionEvent) {
+        try {
+            TreePath tp = categoryTree.getSelectionPath();
+            if (tp != null) {
+                String oldCategory = tp.getLastPathComponent().toString();
+                JSONObject json = new JSONObject();
+                json.put(API.CATEGORY_KEY, oldCategory);
+                if (API.removeCategory(json))
+                    System.out.println("Sikeres törlés");
+                else
+                    System.out.println("Nem sikerült a törlés");
+                refreshCategoryTree();
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    private void categorySelected(TreeSelectionEvent treeSelectionEvent) {
+        // TODO: Write category tree selection litener
+    }
+
+    private void searchButtonClicked(ActionEvent actionEvent) {
+        // TODO: Write search button action
+    }
+
+    private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
+        try {
+            // TODO: Selection and unselection to fix!
+            selectedItemIndex = itemJList.getSelectedIndex();
+//                        if (singlifyer == 0 && selectedItemIndex == idx) {
+//                            itemJList.removeSelectionInterval(0,idx);
+//                            editorPanel.setVisible(false);
+//                        } else if (singlifyer == 0) {
+            // Display item
+            displayedItem = API.getItemData(selectedItemIndex);
+            editorPanel.displayItem(displayedItem);
+//        editorPanel.validate();
+            editorContentScroller.validate();
+            editorPanel.setVisible(true);
+//                            selectedItemIndex = idx;
+            System.out.println(selectedItemIndex);
+//                        }
+//                        singlifyer = ++singlifyer % 2;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    // Helper functions
     private JList<Item> createItemJList(Collection<Item> itemList) {
         // Create list model
         DefaultListModel<Item> model = new DefaultListModel<>();
@@ -346,7 +363,7 @@ public class MainUI extends JFrame {
         return new JList<Item>(model);
     }
 
-    private void refresh(){
+    private void refreshCategoryTree(){
         // Refresh category tree data
         allItemCategory.removeAllChildren();
         Collection<String> categories = API.getCategoryList(); // GET data from API
@@ -360,11 +377,4 @@ public class MainUI extends JFrame {
         model.reload();
     }
 
-    private void displayItem(int itemIndex) {
-        displayedItem = API.getItemData(itemIndex);
-        editorPanel.displayItem(displayedItem);
-//        editorPanel.validate();
-        editorContentScroller.validate();
-        editorPanel.setVisible(true);
-    }
 }

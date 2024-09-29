@@ -38,11 +38,11 @@ public class Controller {
         items.clear();
         try {
             JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
-            JSONArray categoryArray = (JSONArray) usersData.get("categories");
+            JSONArray categoryArray = (JSONArray) usersData.get(API.CATEGORY_KEY);
             for (Object categoryObj : categoryArray) {
                 categories.add(categoryObj.toString());
             }
-            JSONArray itemArray = (JSONArray) usersData.get("items");
+            JSONArray itemArray = (JSONArray) usersData.get(API.ITEMS_KEY);
             for (Object itemObj : itemArray) {
                 items.add(new Item().fromJSON((JSONObject) itemObj));
             }
@@ -63,6 +63,7 @@ public class Controller {
         PrintWriter pw = null;
         try {
             pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
+            // Formatting
             pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
             pw.flush();
         } catch (Exception e) {
@@ -85,7 +86,7 @@ public class Controller {
 
     // === API called public functions ===
 
-    public void loadUser() throws IOException, ParseException {
+    public void loadUser() {
         if (loggedInUser != null) {
             readUsersDataFromFile();
         }

@@ -146,12 +146,13 @@ public class API {
 //    static public boolean modifyItemField(int itemId, int fieldId, String name){
 //        return false;
 //    }
-//    static public boolean removeItemField(int itemId, int fieldId){
+//    static public boolean removeItemField(int itemId, int fieldId){+
 //        return false;
 //    }
 
     // == get methods ==
     static public Collection<Item> getItemList(JSONObject filter){
+        // Show all items = no filter
         if (filter == null){
             Collection<Item> itemList = Controller.INSTANCE.getItemList();
             return itemList;
