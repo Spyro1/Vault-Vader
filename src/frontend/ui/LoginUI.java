@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 public class LoginUI extends JFrame /*implements ActionListener*/ {
@@ -25,6 +26,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     private DarkTextField usernameField;
     private DarkPassField passwordField;
+    private JToggleButton passwordShowToggler;
 
     public LoginUI() {
         // === Essential frame setup ===
@@ -43,7 +45,6 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         setSize(400, 300);
         setLocationRelativeTo(null);
         setBackground(VV.bgDarkColor);
-
 
         // Create Panel for Components
         JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15)); {
@@ -68,29 +69,20 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
                 passwordField.setToolTipText("Írja be a jelszavát!");
             }
             passwordPanel.add(passwordField, BorderLayout.CENTER);
-            JToggleButton showPasswordBox = new JToggleButton(); {
-                showPasswordBox.setBackground(VV.bgLightColor);
-                showPasswordBox.setUI(new MetalToggleButtonUI(){
+            passwordShowToggler = new JToggleButton(); {
+                passwordShowToggler.setBackground(VV.bgLightColor);
+                passwordShowToggler.setUI(new MetalToggleButtonUI(){
                     @Override
                     protected Color getSelectColor() {
                         return VV.secondaryTextColor;
                     }
                 });
-                showPasswordBox.setToolTipText("Jelszó megjelenítése");
-                showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
-                showPasswordBox.setBorder(null);
-                showPasswordBox.addItemListener(e -> {
-                    passwordField.showPassword(e.getStateChange() == ItemEvent.SELECTED);
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        showPasswordBox.setIcon(new ImageIcon("assets/white/eye.png"));
-                        showPasswordBox.setToolTipText("Jelszó elrejtése");
-                    } else {
-                        showPasswordBox.setIcon(new ImageIcon("assets/white/eye-closed.png"));
-                        showPasswordBox.setToolTipText("Jelszó megjelenítése");
-                    }
-                });
+                passwordShowToggler.setToolTipText("Jelszó megjelenítése");
+                passwordShowToggler.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+                passwordShowToggler.setBorder(null);
+                passwordShowToggler.addItemListener(this::togglePasswordButtonClcicked);
             }
-            passwordPanel.add(showPasswordBox, BorderLayout.EAST);
+            passwordPanel.add(passwordShowToggler, BorderLayout.EAST);
         }
         centerPanel.add(passwordPanel);
         // Login Button
@@ -99,20 +91,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             loginButton.setBackground(VV.mainColor);
             loginButton.setForeground(VV.mainTextColor);
             loginButton.setToolTipText("Bejelentkezés");
-            loginButton.addActionListener(_ -> {
-                try {
-                    // Create JSON object from username and password
-                    JSONObject userData = userFiledsToJSON();
-                    // Try login with user's date
-                    if (API.loginRequest(userData)){
-                        dispose(); // Successful login -> Close window
-                    } else{
-                        throw new Exception("Helytelen felhasználónév vagy jelszó!");
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            });
+            loginButton.addActionListener(this::loginButtonClicked);
         }
         centerPanel.add(loginButton);
         // Register Button
@@ -122,23 +101,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             registerButton.setForeground(VV.mainTextColor);
             registerButton.setToolTipText("Regisztrációhoz írja be a használni kívánt felhasználónevét és jelszavát!");
             registerButton.setFont(new Font("Arial", Font.PLAIN, 16));
-            registerButton.addActionListener(_ -> {
-                try {
-                    // Create JSON object from username and password
-                    JSONObject userData = userFiledsToJSON();
-                    // Ask for clarification
-                    if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-                        // Try register with user's date
-                        if (API.registerRequest(userData)){
-                            JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!", "Regisztráció", JOptionPane.INFORMATION_MESSAGE); // Successful register -> Show a success dialog box
-                        } else{
-                            throw new Exception("Nem sikerült létrehozni a felhasználót!");
-                        }
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            });
+            registerButton.addActionListener(this::registerButtonClicked);
         }
         centerPanel.add(registerButton);
 
@@ -157,4 +120,49 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         return userData;
     }
+
+    private void loginButtonClicked(ActionEvent e) {
+        try {
+            // Create JSON object from username and password
+            JSONObject userData = userFiledsToJSON();
+            // Try login with user's date
+            if (API.loginRequest(userData)){
+                dispose(); // Successful login -> Close window
+            } else{
+                throw new Exception("Helytelen felhasználónév vagy jelszó!");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void registerButtonClicked(ActionEvent e) {
+        try {
+            // Create JSON object from username and password
+            JSONObject userData = userFiledsToJSON();
+            // Ask for clarification
+            if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                // Try register with user's date
+                if (API.registerRequest(userData)){
+                    JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!", "Regisztráció", JOptionPane.INFORMATION_MESSAGE); // Successful register -> Show a success dialog box
+                } else{
+                    throw new Exception("Nem sikerült létrehozni a felhasználót!");
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void togglePasswordButtonClcicked(ItemEvent e) {
+        passwordField.showPassword(e.getStateChange() == ItemEvent.SELECTED);
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            passwordShowToggler.setIcon(new ImageIcon("assets/white/eye.png"));
+            passwordShowToggler.setToolTipText("Jelszó elrejtése");
+        } else {
+            passwordShowToggler.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+            passwordShowToggler.setToolTipText("Jelszó megjelenítése");
+        }
+    }
+
 }
