@@ -72,7 +72,7 @@ public class API {
      * @return
      */
     static public int addNewItem(/*JSONObject itemData*/) {
-        // TODO: Write add new item api function
+        // TODO: Write add new item api function == DO NOT USE
         return Controller.INSTANCE.addNewItem();
     }
 
@@ -176,7 +176,7 @@ public class API {
         return Controller.encryptText(data, key);
     }
 
-    public static void saveAllChanges() throws IOException {
+    public static void saveAllChanges() {
         Controller.INSTANCE.saveAll();
     }
 
@@ -185,5 +185,9 @@ public class API {
             if (fieldData.containsKey(API.TYPE_KEY))
                 Controller.INSTANCE.addNewField(fieldData, selectedItemIndex);
         }
+    }
+
+    public static Item getTemporalItem() {
+        return Controller.INSTANCE.getTemporalItem();
     }
 }

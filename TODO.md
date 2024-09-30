@@ -22,7 +22,7 @@
   - Editor Panel
     - [ ] Add field button functionality
     - [ ] Popup menu field type chooser
-    - [ ] Base fields added upon item setup
+    - [x] Base fields added upon item setup
     - [ ] Remove field functionality
 - Header Panel
   - [ ] Search Button functionality

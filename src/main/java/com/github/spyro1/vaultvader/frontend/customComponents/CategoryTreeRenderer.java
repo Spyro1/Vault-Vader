@@ -1,6 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
-import com.github.spyro1.vaultvader.frontend.VV;
+import com.github.spyro1.vaultvader.frontend.UI;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -15,10 +15,10 @@ public class CategoryTreeRenderer extends DefaultTreeCellRenderer {
                 openIcon = new ImageIcon("assets/white/folder.png");
                 closedIcon = new ImageIcon("assets/white/folder.png");
 
-                setTextSelectionColor(VV.mainTextColor);
-                setBackgroundSelectionColor(VV.mainColor);
-                setTextNonSelectionColor(VV.mainTextColor);
-                setBackgroundNonSelectionColor(VV.bgLightColor);
+                setTextSelectionColor(UI.mainTextColor);
+                setBackgroundSelectionColor(UI.mainColor);
+                setTextNonSelectionColor(UI.mainTextColor);
+                setBackgroundNonSelectionColor(UI.bgLightColor);
                 setBorderSelectionColor(null);
         }
 /*        @Override

@@ -5,21 +5,20 @@ import com.github.spyro1.vaultvader.frontend.UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class DarkTextField extends JTextField {
-
+public class DarkComboField extends JComboBox<String> {
     private String placeholder = "";
 
-    public DarkTextField() {
-        super();
+    public DarkComboField(String[] values) {
+        super(values);
         setup();
     }
-    public DarkTextField(String text, String placeholder) {
-        super(text);
+    public DarkComboField(String[] values, String placeholder) {
+        super(values);
         this.placeholder = placeholder;
         setup();
     }
-    public DarkTextField(String text, String placeholder, boolean underline) {
-        super(text);
+    public DarkComboField(String[] values, String placeholder, boolean underline) {
+        super(values);
         this.placeholder = placeholder;
         setup();
         setUnderline(underline);
@@ -28,7 +27,7 @@ public class DarkTextField extends JTextField {
         setForeground(UI.mainTextColor);
         setBackground(UI.bgLightColor);
         setFont(new Font("Arial", Font.PLAIN, 20));
-        setCaretColor(UI.mainTextColor);
+//        setCaretColor(UI.mainTextColor);
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
     }
     public void setUnderline(boolean underline) {

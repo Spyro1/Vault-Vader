@@ -1,7 +1,7 @@
 package com.github.spyro1.vaultvader.frontend.ui;
 
 import com.github.spyro1.vaultvader.backend.API;
-import com.github.spyro1.vaultvader.frontend.VV;
+import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.customComponents.DarkPassField;
 import com.github.spyro1.vaultvader.frontend.customComponents.DarkTextField;
 import com.github.spyro1.vaultvader.frontend.customComponents.IconButton;
@@ -44,18 +44,18 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         setLayout(new BorderLayout());
         setSize(400, 300);
         setLocationRelativeTo(null);
-        setBackground(VV.bgDarkColor);
+        setBackground(UI.bgDarkColor);
 
         // Create Panel for Components
         JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15)); {
-            centerPanel.setBackground(VV.bgDarkColor);
+            centerPanel.setBackground(UI.bgDarkColor);
             centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
         }
         // Title
         JLabel titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER); {
             titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
             titleLabel.setBackground(Color.BLUE);
-            titleLabel.setForeground(VV.mainTextColor);
+            titleLabel.setForeground(UI.mainTextColor);
             titleLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
         }
         centerPanel.add(titleLabel);
@@ -70,11 +70,11 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             }
             passwordPanel.add(passwordField, BorderLayout.CENTER);
             passwordShowToggler = new JToggleButton(); {
-                passwordShowToggler.setBackground(VV.bgLightColor);
+                passwordShowToggler.setBackground(UI.bgLightColor);
                 passwordShowToggler.setUI(new MetalToggleButtonUI(){
                     @Override
                     protected Color getSelectColor() {
-                        return VV.secondaryTextColor;
+                        return UI.secondaryTextColor;
                     }
                 });
                 passwordShowToggler.setToolTipText("Jelszó megjelenítése");
@@ -88,8 +88,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         // Login Button
         IconButton loginButton = new IconButton("Bejelentkezés"); {
             loginButton.setIcon(new ImageIcon("assets/white/login.png"));
-            loginButton.setBackground(VV.mainColor);
-            loginButton.setForeground(VV.mainTextColor);
+            loginButton.setBackground(UI.mainColor);
+            loginButton.setForeground(UI.mainTextColor);
             loginButton.setToolTipText("Bejelentkezés");
             loginButton.addActionListener(this::loginButtonClicked);
         }
@@ -97,8 +97,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         // Register Button
         IconButton registerButton = new IconButton("Regisztráció"); {
             registerButton.setIcon(new ImageIcon("assets/white/user.png"));
-            registerButton.setBackground(VV.secondaryColor);
-            registerButton.setForeground(VV.mainTextColor);
+            registerButton.setBackground(UI.secondaryColor);
+            registerButton.setForeground(UI.mainTextColor);
             registerButton.setToolTipText("Regisztrációhoz írja be a használni kívánt felhasználónevét és jelszavát!");
             registerButton.setFont(new Font("Arial", Font.PLAIN, 16));
             registerButton.addActionListener(this::registerButtonClicked);

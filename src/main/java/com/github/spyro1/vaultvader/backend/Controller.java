@@ -7,7 +7,6 @@ import com.github.spyro1.vaultvader.backend.user.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ public class Controller {
 
     /** The name of the user currently logged in to the app */
     private User loggedInUser;
+    private Item tempItem = new Item();
 
     /** Not accessible constructor */
     private Controller() {}
@@ -86,6 +86,7 @@ public class Controller {
 
     // === API called public functions ===
 
+    // == User ==
     public void loadUser() {
         if (loggedInUser != null) {
             readUsersDataFromFile();
@@ -127,11 +128,15 @@ public class Controller {
         }
         return true;
     }
+    public void saveAll() {
+        writeUserDateToFile();
+    }
 
+
+    // == Category ==
     public Collection<String> getCategoryList() {
         return categories;
     }
-
     public boolean addNewCategory(String newCategory) {
         if (!categories.contains(newCategory)) {
             categories.add(newCategory);
@@ -139,30 +144,26 @@ public class Controller {
         }
         return false;
     }
-
     public boolean modifyCategory(String oldCategory, String newCategory) {
         if (!categories.contains(newCategory)) {
             return categories.set(categories.indexOf(oldCategory), newCategory).equals(oldCategory);
         }
         return false;
     }
-
     public boolean removeCategory(String categoryToRemove) {
         return categories.remove(categoryToRemove);
     }
 
-    public void saveAll() throws IOException {
-        writeUserDateToFile();
-    }
 
+    // == Item ==
     public Item getItem(int index){
         return items.get(index);
     }
-
     public LinkedList<Item> getItemList() {
         return items;
     }
 
+    // == Item's fields ==
     public void addNewField(JSONObject fieldData, int selectedItemIndex) {
         items.get(selectedItemIndex).getFields().add(new Field().fromJSON(fieldData));
     }
@@ -170,5 +171,9 @@ public class Controller {
     public int addNewItem() {
         items.add(new Item());
         return items.size() - 1;
+    }
+
+    public Item getTemporalItem() {
+        return tempItem;
     }
 }

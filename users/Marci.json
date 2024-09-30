@@ -12,11 +12,11 @@
 "fields":[
 {
 "fieldName":"Felhasználónév",
-"type":0,
+"type":"text",
 "value":"marciszenes@gmail.com"},
 {
 "fieldName":"Jelszó",
-"type":2,
+"type":"pass",
 "value":"Jelszó"}]},
 {
 "icon":"assets\/white\/picture.png",
@@ -33,10 +33,10 @@
 "fields":[
 {
 "fieldName":"Név",
-"type":0,
+"type":"text",
 "value":""},
 {
 "fieldName":"Jelszó",
-"type":0,
+"type":"pass",
 "value":""}]}],
 "username":"Marci"}

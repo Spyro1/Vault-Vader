@@ -1,6 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
-import com.github.spyro1.vaultvader.frontend.VV;
+import com.github.spyro1.vaultvader.frontend.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,9 +25,9 @@ public class IconButton extends JButton {
     }
     private void setup(){
 //        setOpaque(false);
-        setBackground(VV.bgLightColor);
-        setForeground(VV.mainTextColor);
-        setBorder(BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2));
+        setBackground(UI.bgLightColor);
+        setForeground(UI.mainTextColor);
+        setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
         setFont(new Font("Arial", Font.PLAIN, 20));
         setContentAreaFilled(false); // Sets to be able to paint enabled and hover background
     }

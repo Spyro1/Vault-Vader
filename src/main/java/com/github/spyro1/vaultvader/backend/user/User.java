@@ -1,8 +1,8 @@
 package com.github.spyro1.vaultvader.backend.user;
 
 public class User/* implements JSONSerializable*/ {
-    String name = "";
-    String password = "";
+    String name;
+    String password;
 
     public User(String name, String password) {
         this.name = name;

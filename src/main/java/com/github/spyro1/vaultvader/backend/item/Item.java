@@ -5,6 +5,8 @@ import com.github.spyro1.vaultvader.backend.JSONSerializable;
 import com.github.spyro1.vaultvader.backend.fields.Field;
 
 import java.util.ArrayList;
+
+import com.github.spyro1.vaultvader.backend.fields.FieldType;
 import org.json.simple.*;
 
 import javax.swing.*;
@@ -32,8 +34,9 @@ public class Item implements JSONSerializable {
         category = null;
         icon = new ImageIcon("assets/white/picture.png", "assets/white/picture.png");
         fields.clear();
-        fields.add(new Field("Név"));
-        fields.add(new Field("Jelszó"));
+        fields.add(new Field("Név", "", FieldType.TEXT));
+        fields.add(new Field("Jelszó", "", FieldType.PASS));
+        fields.add(new Field("Kategória", "", FieldType.CATEGORY));
     }
 
     public ImageIcon getIcon() { return icon; }
@@ -81,5 +84,9 @@ public class Item implements JSONSerializable {
             }
         }
         return this;
+    }
+
+    public void reset() {
+        setupItem();
     }
 }

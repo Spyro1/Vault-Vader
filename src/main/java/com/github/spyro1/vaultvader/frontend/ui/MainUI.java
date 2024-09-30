@@ -2,7 +2,7 @@ package com.github.spyro1.vaultvader.frontend.ui;
 
 import com.github.spyro1.vaultvader.backend.API;
 import com.github.spyro1.vaultvader.backend.item.Item;
-import com.github.spyro1.vaultvader.frontend.VV;
+import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.customComponents.*;
 
 import javax.swing.*;
@@ -65,10 +65,10 @@ public class MainUI extends JFrame {
         // TITLE PANEL for displaying the app name
         titlePanel = new JPanel(new BorderLayout()); {
             JPanel titleCenterPanel = new JPanel(new BorderLayout()); {
-                titleCenterPanel.setBackground(VV.bgDarkColor);
-                titleCenterPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin), BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin)));
+                titleCenterPanel.setBackground(UI.bgDarkColor);
+                titleCenterPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
                 JLabel VaultVaderLabel = new JLabel("Vault Vader", JLabel.CENTER); {
-                    VaultVaderLabel.setForeground(VV.mainTextColor);
+                    VaultVaderLabel.setForeground(UI.mainTextColor);
                     VaultVaderLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
                     VaultVaderLabel.setFont(new Font("Impact", Font.BOLD, 30));
                     titleCenterPanel.add(VaultVaderLabel);
@@ -78,13 +78,13 @@ public class MainUI extends JFrame {
          }
         // SEARCH PANEL for the search bar
         searchPanel = new JPanel(new BorderLayout()); {
-            searchPanel.setBackground(VV.bgDarkColor);
+            searchPanel.setBackground(UI.bgDarkColor);
             JPanel centerPanel = new JPanel(new BorderLayout()); {
-                centerPanel.setBackground(VV.bgLightColor);
-                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, 0, VV.bgDarkColor), BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin)));
+                centerPanel.setBackground(UI.bgLightColor);
+                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, 0, UI.bgDarkColor), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
                 DarkTextField searchField = new DarkTextField("","Keresés", true);
                 IconButton searchButton = new IconButton("", new ImageIcon("assets/white/search.png")); {
-                    searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, VV.mainTextColor), BorderFactory.createEmptyBorder(VV.margin/2, VV.margin/2, VV.margin/2, VV.margin/2)));
+                    searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor), BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2)));
                     searchButton.setToolTipText("Keresés");
                     searchButton.addActionListener(this::searchButtonClicked);
                 }
@@ -95,13 +95,13 @@ public class MainUI extends JFrame {
         }
         // HEADER PANEL for the tool buttons
         headerPanel = new JPanel(new BorderLayout()); {
-            headerPanel.setBackground(VV.bgDarkColor);
+            headerPanel.setBackground(UI.bgDarkColor);
             JPanel centerPanel = new JPanel(); {
                 centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-                centerPanel.setBackground(VV.bgLightColor);
+                centerPanel.setBackground(UI.bgLightColor);
                 centerPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
                 centerPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(VV.margin, 0, VV.margin, VV.margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin,0,VV.margin)));
+                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, UI.margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(0, UI.margin,0, UI.margin)));
                 IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon("assets/white/logout.png")); {
                     logOutButton.setToolTipText("Kijelentkezés");
                     logOutButton.addActionListener(_ -> {
@@ -119,17 +119,17 @@ public class MainUI extends JFrame {
         }
         // SIDE PANEL for filtering for categories
         sidePanel = new JPanel(new BorderLayout()); {
-            sidePanel.setBackground(VV.bgLightColor);
+            sidePanel.setBackground(UI.bgLightColor);
             JPanel categoryLabelPanel = new JPanel(new BorderLayout()); {
-                categoryLabelPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin,0, VV.margin, VV.bgDarkColor));
+                categoryLabelPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin,0, UI.margin, UI.bgDarkColor));
                 categoryLabelPanel.setOpaque(false);
                 JLabel categoryLabel = new JLabel("Kategóriák"); {
-                    categoryLabel.setForeground(VV.mainTextColor);
-                    categoryLabel.setForeground(VV.mainTextColor);
+                    categoryLabel.setForeground(UI.mainTextColor);
+                    categoryLabel.setForeground(UI.mainTextColor);
                     categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                    categoryLabel.setForeground(VV.mainTextColor);
+                    categoryLabel.setForeground(UI.mainTextColor);
                     categoryLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-                    categoryLabel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(VV.margin, VV.margin, VV.margin, VV.margin), BorderFactory.createMatteBorder(0,0,2,0, Color.white)));
+                    categoryLabel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin), BorderFactory.createMatteBorder(0,0,2,0, Color.white)));
                 }
                 categoryLabelPanel.add(categoryLabel);
             }
@@ -144,15 +144,15 @@ public class MainUI extends JFrame {
             }
             refreshCategoryTree(); // Refresh added category tree
             JScrollPane scrollPane = new JScrollPane(categoryTree); {
-                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, VV.margin, 0, VV. margin, VV.bgDarkColor), BorderFactory.createEmptyBorder(0, VV.margin, VV.margin, VV.margin)));
+                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, UI.margin, 0, UI. margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(0, UI.margin, UI.margin, UI.margin)));
                 scrollPane.setOpaque(false);
-                scrollPane.setBackground(VV.bgLightColor);
+                scrollPane.setBackground(UI.bgLightColor);
                 scrollPane.getViewport().setOpaque(false);
             }
             sidePanel.add(scrollPane, BorderLayout.CENTER);
 
             JPanel categoryEditorToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
-                categoryEditorToolPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
+                categoryEditorToolPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin, UI.margin, UI.margin, UI.bgDarkColor));
                 categoryEditorToolPanel.setOpaque(false);
                 IconButton addCategoryButton = new IconButton("", new ImageIcon("assets/white/plus.png")); {
                     addCategoryButton.setToolTipText("Új kategória");
@@ -174,15 +174,15 @@ public class MainUI extends JFrame {
         }
         // SLIDER PANEL for displaying every
         sliderPanel = new JPanel(new BorderLayout()); {
-            sliderPanel.setBackground(VV.bgLightColor);
-            sliderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, VV.margin, 0, VV.bgDarkColor));
+            sliderPanel.setBackground(UI.bgLightColor);
+            sliderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, UI.margin, 0, UI.bgDarkColor));
             itemJList = createItemJList(API.getItemList(null)); {
                 itemJList.setCellRenderer(new ItemCellRenderer());
-                itemJList.setBackground(VV.bgLightColor);
+                itemJList.setBackground(UI.bgLightColor);
                 itemJList.addListSelectionListener(this::itemSelectedFromList);
             }
             JScrollPane itemListScrollPane = new JScrollPane(itemJList); {
-                itemListScrollPane.setBackground(VV.bgLightColor);
+                itemListScrollPane.setBackground(UI.bgLightColor);
                 itemListScrollPane.setBorder(BorderFactory.createEmptyBorder());
                 itemListScrollPane.getViewport().setOpaque(false);
             }
@@ -191,16 +191,7 @@ public class MainUI extends JFrame {
                 itemToolPanel.setOpaque(false);
                 IconButton addNewItemButton = new IconButton("Új bejegyzés", new ImageIcon("assets/white/plus.png")); {
                     addNewItemButton.setToolTipText("Új bejegyzés");
-                    addNewItemButton.addActionListener(_ -> {
-                        int lastIndex = API.addNewItem();
-                        itemJList = createItemJList(API.getItemList(null)); {
-                            itemJList.setCellRenderer(new ItemCellRenderer());
-                            itemJList.setBackground(VV.bgLightColor);
-                            itemJList.addListSelectionListener(this::itemSelectedFromList);
-                        }
-                        itemListScrollPane.setViewportView(itemJList);
-                        itemJList.setSelectedIndex(lastIndex);
-                    });
+                    addNewItemButton.addActionListener(this::newItem);
                 }
                 itemToolPanel.add(addNewItemButton);
             }
@@ -208,14 +199,14 @@ public class MainUI extends JFrame {
         }
         // EDITOR PANEL for editing items
         contentBackPanel = new JPanel(new BorderLayout()); {
-            contentBackPanel.setBackground(VV.bgLightColor);
-            contentBackPanel.setBorder(BorderFactory.createMatteBorder(0, VV.margin, VV.margin, VV.margin, VV.bgDarkColor));
+            contentBackPanel.setBackground(UI.bgLightColor);
+            contentBackPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin, UI.margin, UI.margin, UI.bgDarkColor));
             editorPanel = new ItemEditorPanel(this); {
                 editorPanel.setVisible(false);
             }
             editorContentScroller = new JScrollPane(editorPanel); {
                 editorContentScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                editorContentScroller.setBackground(VV.bgLightColor);
+                editorContentScroller.setBackground(UI.bgLightColor);
                 editorContentScroller.setBorder(BorderFactory.createEmptyBorder());
                 editorContentScroller.getViewport().setOpaque(false);
             }
@@ -276,7 +267,7 @@ public class MainUI extends JFrame {
     }
 
 
-
+    // == Category ==
     private void addCategoryClicked(ActionEvent actionEvent) {
         try {
             // Get selected category name
@@ -332,35 +323,28 @@ public class MainUI extends JFrame {
             System.out.println(e);
         }
     }
-
     private void categorySelected(TreeSelectionEvent treeSelectionEvent) {
         // TODO: Write category tree selection litener
     }
-
+    // == Search ==
     private void searchButtonClicked(ActionEvent actionEvent) {
         // TODO: Write search button action
     }
-
+    // == Item ==
+    private void newItem(ActionEvent actionEvent) {
+        // TODO: Show an empty editor field in content panel
+        API.getTemporalItem().reset();
+        editorPanel.displayItem(API.getTemporalItem().toJSON());
+    }
     private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
         try {
             // TODO: Selection and unselection to fix!
             selectedItemIndex = itemJList.getSelectedIndex();
-//                        if (singlifyer == 0 && selectedItemIndex == idx) {
-//                            itemJList.removeSelectionInterval(0,idx);
-//                            editorPanel.setVisible(false);
-//                        } else if (singlifyer == 0) {
-            // Display item
             displayedItem = API.getItemData(selectedItemIndex);
             editorPanel.displayItem(displayedItem);
-//        editorPanel.validate();
-            editorContentScroller.validate();
-            editorPanel.setVisible(true);
-//                            selectedItemIndex = idx;
-            System.out.println(selectedItemIndex);
-//                        }
-//                        singlifyer = ++singlifyer % 2;
+            System.out.println("DEBUG/Item displayed: " + selectedItemIndex);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("ERROR/ItemSelector/ " + e);
         }
     }
 
