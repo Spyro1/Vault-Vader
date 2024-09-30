@@ -1,7 +1,7 @@
 package com.github.spyro1.vaultvader.frontend.ui;
 
 import com.github.spyro1.vaultvader.backend.API;
-import com.github.spyro1.vaultvader.backend.item.Item;
+import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.customComponents.*;
 
@@ -26,16 +26,16 @@ public class MainUI extends JFrame {
                  firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
     // Objects
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel;
-    ItemEditorPanel editorPanel; //, categoryPanel;
-    JScrollPane editorContentScroller;
+    ItemEditorPanel editorPanel;
+    JScrollPane editorContentScroller, itemListScrollPane;
     JTree categoryTree;
     JList<Item> itemJList;
     // Functioning variables
-    public int selectedItemIndex = -1;
-    JSONObject displayedItem = null;
-//    int singlifyer = 0;
+    int selectedItemIndex = -1;
+    public boolean itemIsModifyed = false;
     JSONObject filter = new JSONObject();
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
+//    int singlifyer = 0;
 
     public MainUI() {
         // Create main frame
@@ -181,7 +181,7 @@ public class MainUI extends JFrame {
                 itemJList.setBackground(UI.bgLightColor);
                 itemJList.addListSelectionListener(this::itemSelectedFromList);
             }
-            JScrollPane itemListScrollPane = new JScrollPane(itemJList); {
+            itemListScrollPane = new JScrollPane(itemJList); {
                 itemListScrollPane.setBackground(UI.bgLightColor);
                 itemListScrollPane.setBorder(BorderFactory.createEmptyBorder());
                 itemListScrollPane.getViewport().setOpaque(false);
@@ -215,12 +215,13 @@ public class MainUI extends JFrame {
                 itemToolPanel.setOpaque(false);
                 IconButton saveItemChanges = new IconButton("Mentés", new ImageIcon("assets/white/save.png")); {
                     saveItemChanges.setToolTipText("Mentés");
-                    saveItemChanges.addActionListener(_ -> API.saveItem(displayedItem));
+                    saveItemChanges.addActionListener(this::saveItemButtonClicked);
                 }
                 itemToolPanel.add(saveItemChanges);
             }
             contentBackPanel.add(itemToolPanel, BorderLayout.SOUTH);
         }
+
         /* Setup GridBagLayout properties and add panels */ {
 
             // title panel: Top-right corner
@@ -264,6 +265,12 @@ public class MainUI extends JFrame {
 
         // Set window visible
         setVisible(true);
+    }
+
+    private void saveItemButtonClicked(ActionEvent actionEvent) {
+        // TODO: Write check for null fields and empty items !!!
+        API.saveItem();
+        refreshItemList();
     }
 
 
@@ -334,14 +341,21 @@ public class MainUI extends JFrame {
     private void newItem(ActionEvent actionEvent) {
         // TODO: Show an empty editor field in content panel
         API.getTemporalItem().reset();
-        editorPanel.displayItem(API.getTemporalItem().toJSON());
+        editorPanel.displayItem(API.getTemporalItem());
     }
     private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
         try {
             // TODO: Selection and unselection to fix!
             selectedItemIndex = itemJList.getSelectedIndex();
-            displayedItem = API.getItemData(selectedItemIndex);
-            editorPanel.displayItem(displayedItem);
+            Item selectedItem = API.getItemData(selectedItemIndex);
+//            if (itemIsModifyed && selectedItem.ID != API.getTemporalItem().ID) {
+//                if (JOptionPane.showConfirmDialog(this, "Szeretnéd menteni a változásokat?", "Mentés", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//                    API.saveItem();
+//                    itemIsModifyed = false;
+//                    System.out.println("DEBUG/Item saved");
+//                }
+//            }
+            editorPanel.displayItem(API.setTemporalItem(selectedItem));
             System.out.println("DEBUG/Item displayed: " + selectedItemIndex);
         } catch (Exception e) {
             System.out.println("ERROR/ItemSelector/ " + e);
@@ -372,6 +386,14 @@ public class MainUI extends JFrame {
         // Reload Tree view
         DefaultTreeModel model = (DefaultTreeModel) categoryTree.getModel();
         model.reload();
+    }
+    private void refreshItemList(){
+        itemJList = createItemJList(API.getItemList(null)); {
+            itemJList.setCellRenderer(new ItemCellRenderer());
+            itemJList.setBackground(UI.bgLightColor);
+            itemJList.addListSelectionListener(this::itemSelectedFromList);
+        }
+        itemListScrollPane.setViewportView(itemJList);
     }
 
 }

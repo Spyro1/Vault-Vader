@@ -1,12 +1,12 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
 import com.github.spyro1.vaultvader.backend.API;
-import com.github.spyro1.vaultvader.backend.fields.FieldType;
+import com.github.spyro1.vaultvader.backend.Field;
+import com.github.spyro1.vaultvader.backend.FieldType;
+import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.ui.MainUI;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,6 +20,7 @@ public class ItemEditorPanel extends JPanel {
     IconButton addNewFieldButton;
 
     MainUI window;
+    Item displayedItem;
 
     public LinkedList<FieldPanel> fieldsList = new LinkedList<>();
 
@@ -48,98 +49,36 @@ public class ItemEditorPanel extends JPanel {
             // TODO: json ne legyen null teszteket írni
         }
         addNewFieldButton = new IconButton("Mező hozzáadása", new ImageIcon("assets/white/plus.png")); {
-            addNewFieldButton.addActionListener(this::addNewFieldButtonClciked);
+            addNewFieldButton.addActionListener(this::addNewFieldButtonClicked);
         }
     }
 
-    private void iconSelectorButtonClicked(ActionEvent actionEvent) {
-        FileDialog fd = new FileDialog(window);
-        fd.setDirectory("C:\\");
-        fd.setFile("*.png|*.jpg|*.jpeg|*.gif");
-        fd.setVisible(true);
-        String filename = fd.getFile();
-        if (filename == null)
-            System.out.println("You cancelled the choice");
-        else{
-//                        API.saveItem() // TODO: Write icon saving ....
-            System.out.println("You chose " + filename);
-        }
-    }
-
-    private void addNewFieldButtonClciked(ActionEvent actionEvent) {
-        JPopupMenu pm = new JPopupMenu(); {
-            pm.setBackground(UI.bgDarkColor);
-            pm.setForeground(UI.mainTextColor);
-            pm.setBorder(BorderFactory.createLineBorder(UI.secondaryTextColor));
-            JMenuItem mi1 = new JMenuItem("Új szöveg mező"); {
-                mi1.setForeground(UI.mainTextColor);
-                mi1.setOpaque(false);
-                mi1.addActionListener(_ -> {
-                    System.out.println("szöveg clicked");
-                    JSONObject json = new JSONObject();
-                    json.put(API.TYPE_KEY, API.TEXT_TYPE);
-                    API.addNewField(json, window.selectedItemIndex);
-                    displayItem(API.getItemData(window.selectedItemIndex)); // Refresh
-                });
-            }
-            JMenuItem mi2 = new JMenuItem("Új jelszó mező"); {
-                mi2.setForeground(UI.mainTextColor);
-                mi2.setOpaque(false);
-                mi2.addActionListener(_ -> {System.out.println("Jelszó clicked"); });
-            }
-            pm.add(mi1);
-            pm.add(mi2);
-        }
-        Component source = (Component)actionEvent.getSource();
-        Dimension size = source.getSize();
-        int xPos = ((size.width - pm.getPreferredSize().width) / 2);
-        int yPos = size.height;
-        pm.show(source, xPos, yPos);
-
-    }
-
-    public void hideItem() {
+    public void hidePanel() {
         this.setVisible(false);
     }
 
-    public void displayItem(JSONObject displayedItem) {
+    public void displayItem(Item displayedItem) {
+        this.displayedItem = displayedItem;
         removeAll(); // clears panel
         gbc.weighty = 0.01;
         gbc.gridy = gridY++;
         add(titleRow, gbc);
         try {
-            if (displayedItem != null){
-                if (displayedItem.containsKey(API.ICON_KEY)) iconButton.setIcon(new ImageIcon(displayedItem.get(API.ICON_KEY).toString()));
-                if (displayedItem.containsKey(API.TITLE_KEY)) titleField.setText(displayedItem.get(API.TITLE_KEY).toString());
-                if (displayedItem.containsKey(API.FIELDS_KEY)) {
-                    JSONArray fieldsJSON = (JSONArray) displayedItem.get(API.FIELDS_KEY);
-                    if (fieldsJSON != null){
-                        for (int i = 0; i < fieldsJSON.size(); i++) {
-                            JSONObject field = (JSONObject) fieldsJSON.get(i);
-                            String fieldName = field.get(API.FIELD_NAME_KEY).toString();
-                            String value = field.get(API.VALUE_KEY).toString();
-                            FieldType type = FieldType.fromString(field.get(API.TYPE_KEY).toString());
-                            FieldPanel fp = null; //= new FieldPanel(new DarkTextField(value, fieldName, true));
-                            switch (type) {
-                                case TEXT:
-                                    fp = new FieldPanel(new DarkTextField(value, fieldName, true));
-                                    break;
-                                case PASS:
-                                    fp = new FieldPanel(new DarkPassField(value, fieldName, true));
-                                    break;
-                                case CATEGORY:
-                                    fp = new FieldPanel(new DarkComboField((new String[] {"elso", "masodik", "harmadik"}), fieldName, true));
-                                    break;
-                                case null:
-                                default:
-                                    fp = new FieldPanel(new DarkTextField(value, fieldName, true));
-                                    break;
-                            }
-                            fieldsList.add(fp);
-                            gbc.gridy = gridY++;
-                            add(fp, gbc);
-                        }
-                    }
+            if (displayedItem != null) {
+                iconButton.setIcon(displayedItem.getIcon());
+                titleField.setText(displayedItem.getTitle());
+                for (int i = 0; i < displayedItem.getFields().size(); i++) {
+                    String fieldName = displayedItem.getFields().get(i).getFieldName();
+                    String text = displayedItem.getFields().get(i).getText();
+                    FieldPanel fp = switch (displayedItem.getFields().get(i).getType()) {
+                        case TEXT -> new FieldPanel(new DarkTextField(text, displayedItem.getFields().get(i).getFieldName(), true));
+                        case PASS -> new FieldPanel(new DarkPassField(text, fieldName, true));
+                        case CATEGORY -> new FieldPanel(new DarkComboField((new String[]{"elso", "masodik", "harmadik"}), fieldName, true));
+                        case null, default -> new FieldPanel(new DarkTextField(text, fieldName, true));
+                    };
+                    fieldsList.add(fp);
+                    gbc.gridy = gridY++;
+                    add(fp, gbc);
                 }
             }
         } catch (Exception e){
@@ -156,5 +95,55 @@ public class ItemEditorPanel extends JPanel {
         add(fillerPanel, gbc);
         validate();
         setVisible(true);
+    }
+
+    // == Click events ==
+
+    private void iconSelectorButtonClicked(ActionEvent actionEvent) {
+        FileDialog fd = new FileDialog(window);
+        fd.setDirectory("C:\\");
+        fd.setFile("*.png|*.jpg|*.jpeg|*.gif");
+        fd.setVisible(true);
+        String filename = fd.getFile();
+        if (filename == null)
+            System.out.println("You cancelled the choice");
+        else{
+//                        API.saveItem() // TODO: Write icon saving ....
+            System.out.println("You chose " + filename);
+        }
+    }
+
+    private void addNewFieldButtonClicked(ActionEvent actionEvent) {
+        JPopupMenu pm = new JPopupMenu(); {
+            pm.setBackground(UI.bgDarkColor);
+            pm.setForeground(UI.mainTextColor);
+//            pm.setBorder(BorderFactory.createLineBorder(UI.secondaryTextColor));
+            pm.setBorder(BorderFactory.createEmptyBorder());
+            JMenuItem mi1 = new JMenuItem("Új szöveg mező"); {
+                mi1.setForeground(UI.mainTextColor);
+                mi1.setOpaque(false);
+                mi1.addActionListener(_ -> popupMenuItemClicked(FieldType.TEXT));
+            }
+            JMenuItem mi2 = new JMenuItem("Új jelszó mező"); {
+                mi2.setForeground(UI.mainTextColor);
+                mi2.setOpaque(false);
+                mi2.addActionListener(_ -> popupMenuItemClicked(FieldType.PASS));
+            }
+            pm.add(mi1);
+            pm.add(mi2);
+        }
+        // Show popupmenu at buttons position
+        Component source = (Component)actionEvent.getSource();
+        Dimension size = source.getSize();
+        int xPos = ((size.width - pm.getPreferredSize().width) / 2);
+        int yPos = size.height;
+        pm.show(source, xPos, yPos);
+    }
+
+    private void popupMenuItemClicked(FieldType chosenType) {
+        String fieldName = JOptionPane.showInputDialog(this,"Írja be az új mező nevét!", "Új mező", JOptionPane.QUESTION_MESSAGE);
+        if (fieldName != null && !fieldName.isBlank()) {
+            displayItem(API.getTemporalItem().addField(new Field(fieldName, "", chosenType)));
+        }
     }
 }

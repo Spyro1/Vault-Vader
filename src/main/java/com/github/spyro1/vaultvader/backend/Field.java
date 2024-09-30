@@ -1,11 +1,6 @@
-package com.github.spyro1.vaultvader.backend.fields;
+package com.github.spyro1.vaultvader.backend;
 
-import com.github.spyro1.vaultvader.backend.API;
-import com.github.spyro1.vaultvader.backend.JSONSerializable;
 import org.json.simple.JSONObject;
-
-import java.io.File;
-import java.io.Serializable;
 
 public class Field implements JSONSerializable {
 

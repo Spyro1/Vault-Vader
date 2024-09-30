@@ -1,6 +1,5 @@
 package com.github.spyro1.vaultvader.backend;
 
-import com.github.spyro1.vaultvader.backend.item.Item;
 import com.github.spyro1.vaultvader.frontend.ui.LoginUI;
 import com.github.spyro1.vaultvader.frontend.ui.MainUI;
 
@@ -78,12 +77,10 @@ public class API {
 
     /**
      *
-     * @JSONkeys
-     * @param itemData JSON object containing the necessary fields given in JSONkeys section
      * @return
      */
-    static public boolean saveItem(JSONObject itemData) {
-        // TODO: Write save item api function
+    static public boolean saveItem() {
+        Controller.INSTANCE.saveTemporalItem();
         return false;
     }
 
@@ -161,8 +158,8 @@ public class API {
         return null;
     }
 
-    public static JSONObject getItemData(int itemIndex) {
-        return Controller.INSTANCE.getItem(itemIndex).toJSON();
+    public static Item getItemData(int itemIndex) {
+        return Controller.INSTANCE.getItem(itemIndex);
     }
 
     public static Collection<String> getCategoryList(){
@@ -180,14 +177,21 @@ public class API {
         Controller.INSTANCE.saveAll();
     }
 
-    public static void addNewField(JSONObject fieldData, int selectedItemIndex) {
-        if (fieldData != null) {
-            if (fieldData.containsKey(API.TYPE_KEY))
-                Controller.INSTANCE.addNewField(fieldData, selectedItemIndex);
-        }
-    }
-
+    /**
+     * Retrieves the current temporal item managed by the Controller.
+     * @return the current temporal item of type {@link Item}.
+     */
     public static Item getTemporalItem() {
         return Controller.INSTANCE.getTemporalItem();
     }
+
+    /**
+     * Sets the temporal item to a specified reference managed by the Controller.
+     * @param itemReference the {@link Item} instance to be set as the temporal item.
+     * @return the given item reference of type {@link Item} so the function can be chained.
+     */
+    public static Item setTemporalItem(Item itemReference) {
+        return Controller.INSTANCE.setTemporalItem(itemReference);
+    }
+
 }

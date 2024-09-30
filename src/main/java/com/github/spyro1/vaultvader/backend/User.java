@@ -1,4 +1,4 @@
-package com.github.spyro1.vaultvader.backend.user;
+package com.github.spyro1.vaultvader.backend;
 
 public class User/* implements JSONSerializable*/ {
     String name;

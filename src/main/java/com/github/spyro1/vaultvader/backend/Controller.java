@@ -1,9 +1,5 @@
 package com.github.spyro1.vaultvader.backend;
 
-import com.github.spyro1.vaultvader.backend.fields.Field;
-import com.github.spyro1.vaultvader.backend.item.Item;
-import com.github.spyro1.vaultvader.backend.user.User;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,7 +16,7 @@ public class Controller {
     public static final Controller INSTANCE = new Controller();
 
     /** Stores the current user's password items */
-    private LinkedList<Item> items = new LinkedList<>();
+    private ArrayList<Item> items = new ArrayList<>();
 
     /** Stores the current user's categories */
     private ArrayList<String> categories = new ArrayList<>(); // new HashSet<>();
@@ -159,7 +155,7 @@ public class Controller {
     public Item getItem(int index){
         return items.get(index);
     }
-    public LinkedList<Item> getItemList() {
+    public ArrayList<Item> getItemList() {
         return items;
     }
 
@@ -175,5 +171,20 @@ public class Controller {
 
     public Item getTemporalItem() {
         return tempItem;
+    }
+
+    public Item setTemporalItem(Item itemReference) {
+        tempItem = new Item().fromJSON(itemReference.toJSON());
+        return tempItem;
+    }
+
+    public void saveTemporalItem() {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).ID == tempItem.ID) {
+                items.set(i, tempItem);
+                return;
+            }
+        }
+        items.add(tempItem);
     }
 }

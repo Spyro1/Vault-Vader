@@ -1,6 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
-import com.github.spyro1.vaultvader.backend.item.Item;
+import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
 
 import javax.swing.*;

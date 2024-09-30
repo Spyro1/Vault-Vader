@@ -1,12 +1,7 @@
-package com.github.spyro1.vaultvader.backend.item;
-
-import com.github.spyro1.vaultvader.backend.API;
-import com.github.spyro1.vaultvader.backend.JSONSerializable;
-import com.github.spyro1.vaultvader.backend.fields.Field;
+package com.github.spyro1.vaultvader.backend;
 
 import java.util.ArrayList;
 
-import com.github.spyro1.vaultvader.backend.fields.FieldType;
 import org.json.simple.*;
 
 import javax.swing.*;
@@ -44,10 +39,15 @@ public class Item implements JSONSerializable {
     public String getCategory() { return category; }
     public ArrayList<Field> getFields() { return fields; }
 
-    public void setIcon(ImageIcon icon) { this.icon = icon; }
-    public void setTitle(String title) { this.title = title; }
-    public void setCategory(String category) { this.category = category; }
-    public void setFields(ArrayList<Field> fields) { this.fields = fields; }
+//    public void setIcon(ImageIcon icon) { this.icon = icon; }
+//    public void setTitle(String title) { this.title = title; }
+//    public void setCategory(String category) { this.category = category; }
+//    public void setFields(ArrayList<Field> fields) { this.fields = fields; }
+
+    public Item addField(Field field) {
+        fields.add(field);
+        return this;
+    }
 
     @Override
     public String toString() {
@@ -71,19 +71,24 @@ public class Item implements JSONSerializable {
 
     @Override
     public Item fromJSON(JSONObject json) {
-        if (json.get(API.ID_KEY) != null) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
-        if (json.get(API.ICON_KEY) != null) icon = new ImageIcon(json.get(API.ICON_KEY).toString());
-        if (json.get(API.TITLE_KEY) != null) title = json.get(API.TITLE_KEY).toString();
-        if (json.get(API.CATEGORY_KEY) != null) category = json.get(API.CATEGORY_KEY).toString();
-        fields.clear();
-        if (json.get(API.FIELDS_KEY) != null) {
-            JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
-            for (int i = 0; i < fieldsArray.size(); i++) {
-                JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
-                fields.add(new Field().fromJSON(jsonFieldData));
+        if (json != null){
+            if (json.get(API.ID_KEY) != null) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
+            if (json.get(API.ICON_KEY) != null) icon = new ImageIcon(json.get(API.ICON_KEY).toString());
+            if (json.get(API.TITLE_KEY) != null) title = json.get(API.TITLE_KEY).toString();
+            if (json.get(API.CATEGORY_KEY) != null) category = json.get(API.CATEGORY_KEY).toString();
+            fields.clear();
+            if (json.get(API.FIELDS_KEY) != null) {
+                JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
+                for (int i = 0; i < fieldsArray.size(); i++) {
+                    JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
+                    fields.add(new Field().fromJSON(jsonFieldData));
+                }
             }
+            return this;
         }
-        return this;
+        else {
+            return null;
+        }
     }
 
     public void reset() {
