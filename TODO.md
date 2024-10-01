@@ -24,6 +24,7 @@
     - [x] Popup menu field type chooser
     - [x] Base fields added upon item setup
     - [ ] Remove field functionality
+    - [ ] Icon selector button
 - Header Panel
   - [ ] Search Button functionality
   - [ ] Search Button works for Enter

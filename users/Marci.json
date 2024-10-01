@@ -5,7 +5,7 @@
 "Email"],
 "items":[
 {
-"icon":"assets\/white\/picture.png",
+"icon":"picture.png",
 "id":0,
 "title":"Gmail",
 "category":"Email",
@@ -19,14 +19,14 @@
 "type":"pass",
 "value":"Jelszó"}]},
 {
-"icon":"assets\/white\/picture.png",
+"icon":"picture.png",
 "id":1,
 "title":"SCH Account",
 "category":"Egyéb",
 "fields":[
 ]},
 {
-"icon":"assets\/white\/picture.png",
+"icon":"picture.png",
 "id":2,
 "title":"",
 "category":null,
@@ -40,7 +40,7 @@
 "type":"pass",
 "value":""}]},
 {
-"icon":"assets\/white\/picture.png",
+"icon":"picture.png",
 "id":4,
 "title":"",
 "category":null,
@@ -58,7 +58,7 @@
 "type":"combo",
 "value":""}]},
 {
-"icon":"assets\/white\/picture.png",
+"icon":"picture.png",
 "id":8,
 "title":"",
 "category":null,
@@ -76,7 +76,7 @@
 "type":"combo",
 "value":""}]},
 {
-"icon":"assets\/white\/picture.png",
+"icon":"picture.png",
 "id":53,
 "title":"",
 "category":null,

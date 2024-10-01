@@ -11,9 +11,9 @@ public class CategoryTreeRenderer extends DefaultTreeCellRenderer {
 //        private final ImageIcon leaf = new ImageIcon("../assets/white/file.png");
 
         public CategoryTreeRenderer() {
-                leafIcon = new ImageIcon("assets/white/label.png");
-                openIcon = new ImageIcon("assets/white/folder.png");
-                closedIcon = new ImageIcon("assets/white/folder.png");
+                leafIcon = new ImageIcon(this.getClass().getClassLoader().getResource("label.png"));
+                openIcon = new ImageIcon(this.getClass().getClassLoader().getResource("folder.png"));
+                closedIcon = new ImageIcon(this.getClass().getClassLoader().getResource("folder.png"));
 
                 setTextSelectionColor(UI.mainTextColor);
                 setBackgroundSelectionColor(UI.mainColor);

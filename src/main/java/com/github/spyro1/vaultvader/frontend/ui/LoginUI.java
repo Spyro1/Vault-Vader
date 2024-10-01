@@ -32,7 +32,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         // === Essential frame setup ===
         setTitle("Vault Vader");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ImageIcon lockIcon = new ImageIcon("assets/black/lock.png");
+        ImageIcon lockIcon = new ImageIcon(this.getClass().getClassLoader().getResource("lock.png")); //"assets/black/lock.png");
         setIconImage(lockIcon.getImage()); // Set status bar icon
         // === Component setup ===
         initMinimalistLoginUI();
@@ -78,7 +78,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
                     }
                 });
                 passwordShowToggler.setToolTipText("Jelszó megjelenítése");
-                passwordShowToggler.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+                passwordShowToggler.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("eye-closed.png")));
                 passwordShowToggler.setBorder(null);
                 passwordShowToggler.addItemListener(this::togglePasswordButtonClcicked);
             }
@@ -87,7 +87,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         centerPanel.add(passwordPanel);
         // Login Button
         IconButton loginButton = new IconButton("Bejelentkezés"); {
-            loginButton.setIcon(new ImageIcon("assets/white/login.png"));
+            loginButton.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("login.png")));
             loginButton.setBackground(UI.mainColor);
             loginButton.setForeground(UI.mainTextColor);
             loginButton.setToolTipText("Bejelentkezés");
@@ -96,7 +96,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         centerPanel.add(loginButton);
         // Register Button
         IconButton registerButton = new IconButton("Regisztráció"); {
-            registerButton.setIcon(new ImageIcon("assets/white/user.png"));
+            registerButton.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("user.png")));
             registerButton.setBackground(UI.secondaryColor);
             registerButton.setForeground(UI.mainTextColor);
             registerButton.setToolTipText("Regisztrációhoz írja be a használni kívánt felhasználónevét és jelszavát!");
@@ -157,10 +157,10 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
     private void togglePasswordButtonClcicked(ItemEvent e) {
         passwordField.showPassword(e.getStateChange() == ItemEvent.SELECTED);
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            passwordShowToggler.setIcon(new ImageIcon("assets/white/eye.png"));
+            passwordShowToggler.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("eye.png")));
             passwordShowToggler.setToolTipText("Jelszó elrejtése");
         } else {
-            passwordShowToggler.setIcon(new ImageIcon("assets/white/eye-closed.png"));
+            passwordShowToggler.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("eye-closed.png")));
             passwordShowToggler.setToolTipText("Jelszó megjelenítése");
         }
     }

@@ -27,7 +27,7 @@ public class Item implements JSONSerializable {
         ID = idCounter++;
         title = "";
         category = null;
-        icon = new ImageIcon("assets/white/picture.png", "assets/white/picture.png");
+        icon = new ImageIcon(this.getClass().getClassLoader().getResource("picture.png"), "picture.png");
         fields.clear();
         fields.add(new Field("Név", "", FieldType.TEXT));
         fields.add(new Field("Jelszó", "", FieldType.PASS));
@@ -73,7 +73,7 @@ public class Item implements JSONSerializable {
     public Item fromJSON(JSONObject json) {
         if (json != null){
             if (json.get(API.ID_KEY) != null) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
-            if (json.get(API.ICON_KEY) != null) icon = new ImageIcon(json.get(API.ICON_KEY).toString());
+            if (json.get(API.ICON_KEY) != null) icon = new ImageIcon(this.getClass().getClassLoader().getResource(json.get(API.ICON_KEY).toString()), json.get(API.ICON_KEY).toString());
             if (json.get(API.TITLE_KEY) != null) title = json.get(API.TITLE_KEY).toString();
             if (json.get(API.CATEGORY_KEY) != null) category = json.get(API.CATEGORY_KEY).toString();
             fields.clear();
