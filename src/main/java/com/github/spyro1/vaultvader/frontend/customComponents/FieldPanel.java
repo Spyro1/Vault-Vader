@@ -1,6 +1,8 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
+import com.github.spyro1.vaultvader.api.JSONSerializable;
 import com.github.spyro1.vaultvader.frontend.UI;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +17,6 @@ public class FieldPanel extends JPanel {
 
     public FieldPanel(JComponent dataField) {
         this.dataField = dataField;
-//        if (this.dataField.getClass() == DarkTextField.class) {
-//        }
         setLayout(new BorderLayout());
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
@@ -30,6 +30,21 @@ public class FieldPanel extends JPanel {
             panel.add(optionsButton, BorderLayout.EAST);
         }
         add(panel);
+    }
+
+    /**
+     * @JSONkeys "fieldName", "type", "vale"
+     * @return the value of the field which implements the JSONSerializable interface
+     */
+    public JSONObject getFieldValue(){
+//        if (this.dataField.getClass() == DarkTextField.class) {
+//            return ((DarkTextField)this.dataField).toJSON();
+//        } else if (this.dataField.getClass() == DarkPassField.class){
+//            return ((DarkPassField)this.dataField).toJSON();
+//        } else if (this.dataField.getClass() == DarkComboField.class){
+//            return ((DarkComboField)this.dataField).toJSON();
+//        }
+        return ((JSONSerializable)(this.dataField)).toJSON();
     }
 
     private void moreOptionsButtonClicked(ActionEvent actionEvent) {

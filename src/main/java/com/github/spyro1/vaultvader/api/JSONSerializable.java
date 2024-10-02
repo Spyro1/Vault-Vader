@@ -1,4 +1,4 @@
-package com.github.spyro1.vaultvader.backend;
+package com.github.spyro1.vaultvader.api;
 
 import org.json.simple.JSONObject;
 /**
@@ -21,5 +21,6 @@ public interface JSONSerializable {
      *         This allows for method chaining.
      */
     Object fromJSON(JSONObject json);
+
 }
 

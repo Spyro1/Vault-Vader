@@ -1,6 +1,7 @@
 package com.github.spyro1.vaultvader.frontend.ui;
 
-import com.github.spyro1.vaultvader.backend.API;
+import com.github.spyro1.vaultvader.api.API;
+import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.customComponents.*;
@@ -269,6 +270,14 @@ public class MainUI extends JFrame {
 
     private void saveItemButtonClicked(ActionEvent actionEvent) {
         // TODO: Write check for null fields and empty items !!!
+        // TODO: Fix saving, Működik úgy ahogy, de nem jóóól!
+        Item tempItem = API.getTemporalItem();
+        tempItem.getFields().clear();
+        for (FieldPanel fp : editorPanel.fieldsList){
+            JSONObject fieldValue = fp.getFieldValue();
+            Field f = new Field().fromJSON(fieldValue);
+            tempItem.addField(f);
+        }
         API.saveItem();
         refreshItemList();
     }
@@ -356,6 +365,7 @@ public class MainUI extends JFrame {
 //                }
 //            }
             editorPanel.displayItem(API.setTemporalItem(selectedItem));
+            editorContentScroller.validate();
             System.out.println("DEBUG/Item displayed: " + selectedItemIndex);
         } catch (Exception e) {
             System.out.println("ERROR/ItemSelector/ " + e);

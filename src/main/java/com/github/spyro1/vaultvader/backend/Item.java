@@ -2,14 +2,14 @@ package com.github.spyro1.vaultvader.backend;
 
 import java.util.ArrayList;
 
+import com.github.spyro1.vaultvader.api.API;
+import com.github.spyro1.vaultvader.api.JSONSerializable;
 import org.json.simple.*;
 
 import javax.swing.*;
 
 public class Item implements JSONSerializable {
     private static int idCounter = 0;
-
-    private final String defaultIconPath = "picture.png";
 
     public int ID;
     private ImageIcon icon;
@@ -30,6 +30,7 @@ public class Item implements JSONSerializable {
         ID = idCounter++;
         title = null;
         category = null;
+        String defaultIconPath = "picture.png";
         icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath), defaultIconPath);
         fields.clear();
         fields.add(new Field("Felhasználónév", "", FieldType.TEXT));

@@ -1,14 +1,13 @@
-package com.github.spyro1.vaultvader.backend;
+package com.github.spyro1.vaultvader.api;
 
+import com.github.spyro1.vaultvader.backend.Controller;
+import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.ui.LoginUI;
 import com.github.spyro1.vaultvader.frontend.ui.MainUI;
 
 import org.json.simple.JSONObject;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collection;
 
 public class API {
@@ -27,7 +26,7 @@ public class API {
             TYPE_KEY = "type",
             FIELD_NAME_KEY = "fieldName",
             VALUE_KEY = "value",
-            TEXT_TYPE = "text", PASS_TYPE = "pass", CATEGORY_TYPE = "combo";
+            TEXT_TYPE = "text", PASS_TYPE = "pass", COMBO_TYPE = "combo";
 
     // == Login / Register Methods ==
 

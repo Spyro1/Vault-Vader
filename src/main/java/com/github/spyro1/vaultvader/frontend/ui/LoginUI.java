@@ -1,6 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.ui;
 
-import com.github.spyro1.vaultvader.backend.API;
+import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.customComponents.DarkPassField;
 import com.github.spyro1.vaultvader.frontend.customComponents.DarkTextField;
@@ -14,15 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 
 public class LoginUI extends JFrame /*implements ActionListener*/ {
-
-    static public void main(String[] args){
-        try{
-            new LoginUI(); // TO RUN
-//            new MainUI(); // TESTING
-        } catch (Exception e){
-            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     private DarkTextField usernameField;
     private DarkPassField passwordField;

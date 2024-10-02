@@ -1,6 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
-import com.github.spyro1.vaultvader.backend.API;
+import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.FieldType;
 import com.github.spyro1.vaultvader.backend.Item;
@@ -69,7 +69,7 @@ public class ItemEditorPanel extends JPanel {
                 titleField.setText(displayedItem.getTitle());
                 for (int i = 0; i < displayedItem.getFields().size(); i++) {
                     String fieldName = displayedItem.getFields().get(i).getFieldName();
-                    String text = displayedItem.getFields().get(i).getText();
+                    String text = displayedItem.getFields().get(i).getValue();
                     FieldPanel fp = switch (displayedItem.getFields().get(i).getType()) {
                         case TEXT -> new FieldPanel(new DarkTextField(text, displayedItem.getFields().get(i).getFieldName(), true));
                         case PASS -> new FieldPanel(new DarkPassField(text, fieldName, true));

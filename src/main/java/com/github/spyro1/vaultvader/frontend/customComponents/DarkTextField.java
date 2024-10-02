@@ -1,26 +1,23 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
+import com.github.spyro1.vaultvader.api.API;
+import com.github.spyro1.vaultvader.api.JSONSerializable;
 import com.github.spyro1.vaultvader.frontend.UI;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class DarkTextField extends JTextField {
+public class DarkTextField extends JTextField implements JSONSerializable {
 
-    private String placeholder = "";
+    private String fieldName;
 
-    public DarkTextField() {
-        super();
-        setup();
+    public DarkTextField(String text, String fieldName) {
+        this(text, fieldName, false);
     }
-    public DarkTextField(String text, String placeholder) {
+    public DarkTextField(String text, String fieldName, boolean underline) {
         super(text);
-        this.placeholder = placeholder;
-        setup();
-    }
-    public DarkTextField(String text, String placeholder, boolean underline) {
-        super(text);
-        this.placeholder = placeholder;
+        this.fieldName = fieldName;
         setup();
         setUnderline(underline);
     }
@@ -29,12 +26,28 @@ public class DarkTextField extends JTextField {
         setBackground(UI.bgLightColor);
         setFont(new Font("Arial", Font.PLAIN, 20));
         setCaretColor(UI.mainTextColor);
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
     }
     public void setUnderline(boolean underline) {
         if (underline)
-            setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor), BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor)));
+            setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor), BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor)));
         else
-            setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), placeholder, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
+            setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put(API.TYPE_KEY, API.TEXT_TYPE);
+        json.put(API.VALUE_KEY, getText());
+        return json;
+    }
+
+    @Override
+    public Object fromJSON(JSONObject json) {
+        if (json.containsKey(API.VALUE_KEY)) {
+            setText(json.get(API.VALUE_KEY).toString());
+        }
+        return this;
     }
 }

@@ -1,6 +1,8 @@
 package com.github.spyro1.vaultvader.backend;
 
-public enum FieldType {
+import com.github.spyro1.vaultvader.api.API;
+
+public enum FieldType  {
     TEXT,
     PASS,
     CATEGORY;
@@ -9,7 +11,7 @@ public enum FieldType {
         return switch (t) {
             case API.TEXT_TYPE -> TEXT;
             case API.PASS_TYPE -> PASS;
-            case API.CATEGORY_TYPE -> CATEGORY;
+            case API.COMBO_TYPE -> CATEGORY;
             default -> null;
         };
     }
@@ -17,7 +19,7 @@ public enum FieldType {
         return switch (this) {
             case TEXT -> API.TEXT_TYPE;
             case PASS -> API.PASS_TYPE;
-            case CATEGORY -> API.CATEGORY_TYPE;
+            case CATEGORY -> API.COMBO_TYPE;
             default -> null;
         };
     }
