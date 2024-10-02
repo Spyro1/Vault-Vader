@@ -38,7 +38,7 @@ public class ItemEditorPanel extends JPanel {
         titleRow = new JPanel(new BorderLayout()); {
             titleRow.setOpaque(false);
             titleRow.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
-            iconButton = new IconButton("", new ImageIcon(this.getClass().getClassLoader().getResource("picture.png"))); {
+            iconButton = new IconButton("", "picture.png"); {
                 iconButton.setToolTipText("Ikon hozzáadása");
                 iconButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
                 iconButton.addActionListener(this::iconSelectorButtonClicked);
@@ -48,7 +48,7 @@ public class ItemEditorPanel extends JPanel {
             titleRow.add(titleField, BorderLayout.CENTER);
             // TODO: json ne legyen null teszteket írni
         }
-        addNewFieldButton = new IconButton("Mező hozzáadása", new ImageIcon(this.getClass().getClassLoader().getResource("plus.png"))); {
+        addNewFieldButton = new IconButton("Mező hozzáadása", "plus.png"); {
             addNewFieldButton.addActionListener(this::addNewFieldButtonClicked);
         }
     }
@@ -82,7 +82,7 @@ public class ItemEditorPanel extends JPanel {
                 }
             }
         } catch (Exception e){
-            System.out.println("ERROR/ItemEditorPanel/ " + e);
+            System.err.println("ERROR/ItemEditorPanel/ " + e);
         }
 
         gbc.gridy = gridY++;
@@ -108,8 +108,9 @@ public class ItemEditorPanel extends JPanel {
         if (filename == null)
             System.out.println("You cancelled the choice");
         else{
-//                        API.saveItem() // TODO: Write icon saving ....
+            displayedItem.setIcon(new ImageIcon(filename, filename));
             System.out.println("You chose " + filename);
+            displayItem(displayedItem); // refresh
         }
     }
 

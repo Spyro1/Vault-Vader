@@ -2,35 +2,37 @@ package com.github.spyro1.vaultvader.frontend.customComponents;
 
 import com.github.spyro1.vaultvader.frontend.UI;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.awt.event.ActionEvent;
 
 public class FieldPanel extends JPanel {
 
-    public IconButton optionsButton = new IconButton("", new ImageIcon(this.getClass().getClassLoader().getResource("ui-dots.png")));
+    public IconButton optionsButton;
 //    public DarkTextField textField;
-    public JComponent componentField;
+    public JComponent dataField;
 //    JLabel fieldLabel = new JLabel();
 
-    public FieldPanel(JComponent componentField) {
+    public FieldPanel(JComponent dataField) {
+        this.dataField = dataField;
+//        if (this.dataField.getClass() == DarkTextField.class) {
+//        }
         setLayout(new BorderLayout());
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
-//        try {
-//            optionsButton = new IconButton("", (Icon) ImageIO.read(getClass().getResource("/resources/ui-dots.png"))); // new ImageIcon(this.getClass().getClassLoader().getResource("ui-dots.png"));
-//        } catch (IOException e) {
-//            System.err.println("ERROR/FieldPanel: options button could not be loaded");
-//        }
+
+        optionsButton = new IconButton("", "ui-dots.png");
+        optionsButton.addActionListener(this::moreOptionsButtonClicked);
+
         JPanel panel = new JPanel(new BorderLayout()); {
             panel.setOpaque(false);
-//            textField = new DarkTextField("", labelTitle, true);
-            this.componentField = componentField;
-            panel.add(componentField, BorderLayout.CENTER);
-            optionsButton.addActionListener(e -> {System.out.println("Megkattintottak!");});
+            panel.add(dataField, BorderLayout.CENTER);
             panel.add(optionsButton, BorderLayout.EAST);
         }
         add(panel);
+    }
+
+    private void moreOptionsButtonClicked(ActionEvent actionEvent) {
+        System.out.println("Megkattintottak!");
     }
 }

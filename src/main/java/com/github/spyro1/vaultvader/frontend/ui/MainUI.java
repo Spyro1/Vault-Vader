@@ -83,7 +83,7 @@ public class MainUI extends JFrame {
                 centerPanel.setBackground(UI.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, 0, UI.bgDarkColor), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
                 DarkTextField searchField = new DarkTextField("","Keresés", true);
-                IconButton searchButton = new IconButton("", new ImageIcon(this.getClass().getClassLoader().getResource("search.png"))); {
+                IconButton searchButton = new IconButton("", "search.png"); {
                     searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor), BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2)));
                     searchButton.setToolTipText("Keresés");
                     searchButton.addActionListener(this::searchButtonClicked);
@@ -102,7 +102,7 @@ public class MainUI extends JFrame {
                 centerPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
                 centerPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, UI.margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(0, UI.margin,0, UI.margin)));
-                IconButton logOutButton = new IconButton("Kijelentkezés", new ImageIcon(this.getClass().getClassLoader().getResource("logout.png"))); {
+                IconButton logOutButton = new IconButton("Kijelentkezés", "logout.png"); {
                     logOutButton.setToolTipText("Kijelentkezés");
                     logOutButton.addActionListener(_ -> {
                         try {
@@ -154,15 +154,15 @@ public class MainUI extends JFrame {
             JPanel categoryEditorToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
                 categoryEditorToolPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin, UI.margin, UI.margin, UI.bgDarkColor));
                 categoryEditorToolPanel.setOpaque(false);
-                IconButton addCategoryButton = new IconButton("", new ImageIcon(this.getClass().getClassLoader().getResource("plus.png"))); {
+                IconButton addCategoryButton = new IconButton("", "plus.png"); {
                     addCategoryButton.setToolTipText("Új kategória");
                     addCategoryButton.addActionListener(this::addCategoryClicked);
                 }
-                IconButton editCategoryButton = new IconButton("", new ImageIcon(this.getClass().getClassLoader().getResource("setting.png"))); {
+                IconButton editCategoryButton = new IconButton("", "setting.png"); {
                     editCategoryButton.setToolTipText("Kategoria szerkesztése");
                     editCategoryButton.addActionListener(this::editCategoryClicked);
                 }
-                IconButton removeCategoryButton = new IconButton("", new ImageIcon(this.getClass().getClassLoader().getResource("trash.png"))); {
+                IconButton removeCategoryButton = new IconButton("", "trash.png"); {
                     removeCategoryButton.setToolTipText("Kategória törlése");
                     removeCategoryButton.addActionListener(this::removeCategoryClicked);
                 }
@@ -189,7 +189,7 @@ public class MainUI extends JFrame {
             sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
             JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
                 itemToolPanel.setOpaque(false);
-                IconButton addNewItemButton = new IconButton("Új bejegyzés", new ImageIcon(this.getClass().getClassLoader().getResource("plus.png"))); {
+                IconButton addNewItemButton = new IconButton("Új bejegyzés","plus.png"); {
                     addNewItemButton.setToolTipText("Új bejegyzés");
                     addNewItemButton.addActionListener(this::newItem);
                 }
@@ -213,7 +213,7 @@ public class MainUI extends JFrame {
             contentBackPanel.add(editorContentScroller, BorderLayout.CENTER);
             JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
                 itemToolPanel.setOpaque(false);
-                IconButton saveItemChanges = new IconButton("Mentés", new ImageIcon(this.getClass().getClassLoader().getResource("save.png"))); {
+                IconButton saveItemChanges = new IconButton("Mentés", "save.png"); {
                     saveItemChanges.setToolTipText("Mentés");
                     saveItemChanges.addActionListener(this::saveItemButtonClicked);
                 }

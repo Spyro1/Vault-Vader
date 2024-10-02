@@ -31,7 +31,67 @@ classDiagram
             - createItemJList(itemList: List~Item~) List~JList~
             - displayItem(index: int) void
         }
+       
+        class CategoryTreeRenderer {
+            + CategoryTreeRenderer()
+            + getTreeCellRendererComponent(...) Component
+        }
+        class ItemCellRenderer {
+            - titleLabel : JLabel
+            - categoryLabel : JLabel
+            - icon : JButton
+            + ItemCellRenderer()
+            + getListCellRendererComponent(...) Component
+        }
+        class IconButton {
+            + IconButton()
+            + IconButton(icon: Icon)
+            + IconButton(text: String)
+            + IconButton(text: String, icon: Icon)
+            +IconButton(text: String, resourcePath: String)
+            - setup() void
+            # paintComponent(g: Graphics) void
+        }
+        class DarkComboField {
+            +
+        }
+        class DarkPassField {
+            +
+        }
+        class DarkTextField {
+            +
+        }
+        class FieldPanel {
+            +
+        }
+        class ItemEditorPanel {
+            +
+        }
+
     }
+    
+    MainUI --> ItemCellRenderer
+    MainUI --> CategoryTreeRenderer
+    MainUI --> DarkComboField
+    MainUI --> DarkPassField
+    MainUI --> DarkTextField
+    LoginUI --> DarkTextField
+    MainUI --> IconButton
+    LoginUI --> IconButton
+    MainUI --> FieldPanel
+    MainUI --> ItemEditorPanel
+    
+    CategoryTreeRenderer --|> DefaultTreeCellRenderer
+    ItemCellRenderer --|> JPanel
+    IconButton --|> JButton
+    DarkComboField --|> JBComboField
+    DarkPassField --|> JPassField
+    DarkTextField --|> JTextField
+    FieldPanel --|> JPanel
+    ItemEditorPane --|> JPanel
+
+    
+    
     namespace backend {
             
         class Controller{
@@ -72,26 +132,14 @@ classDiagram
             - fieldName : String
             + getFieldName() String
         }
-%%        class IntField{
-%%            - value : int
-%%            + getValue() int
-%%            + setValue() void
-%%        }
-%%        class TextField{
-%%            - text : String
-%%            + getText() String
-%%            + setText(text: String) void
-%%        }
-%%        class PassField{
-%%            + getDecryptedText() String
-%%            + setText(secret: String) void @Override
-%%            - encryptText(text: String) String
-%%            - decryptText(text: String) String
-%%        }
-        
+      
     }
-%%    namespace api{
-        
+
+    Controller o-- User
+    Controller o-- Item
+
+    Item *-- Field
+
     class API{
         + loginRequest(userData: JSON) bool$
         + registerRequest(userData: JSON) bool$
@@ -108,21 +156,13 @@ classDiagram
         + encryptData(data: String, key: String) String$
         + saveAllChanges() void$
     }
-%%    }
-    
-    Controller o-- User
-    Controller o-- Item
-    
-%%    TextField <|-- PassField
-    Item *-- Field
-%%    Field <|-- TextField
-%%    Field <|-- IntField
     
     API --> Controller
     API <-- LoginUI
     API <-- MainUI
 %%    LoginUI --> API
-%%    MainUI --> API   
+%%    MainUI --> API
+ 
    
 
 ```

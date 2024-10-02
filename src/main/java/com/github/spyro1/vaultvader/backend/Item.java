@@ -8,6 +8,9 @@ import javax.swing.*;
 
 public class Item implements JSONSerializable {
     private static int idCounter = 0;
+
+    private final String defaultIconPath = "picture.png";
+
     public int ID;
     private ImageIcon icon;
     private String title;
@@ -25,11 +28,11 @@ public class Item implements JSONSerializable {
 
     private void setupItem(){
         ID = idCounter++;
-        title = "";
+        title = null;
         category = null;
-        icon = new ImageIcon(this.getClass().getClassLoader().getResource("picture.png"), "picture.png");
+        icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath), defaultIconPath);
         fields.clear();
-        fields.add(new Field("Név", "", FieldType.TEXT));
+        fields.add(new Field("Felhasználónév", "", FieldType.TEXT));
         fields.add(new Field("Jelszó", "", FieldType.PASS));
         fields.add(new Field("Kategória", "", FieldType.CATEGORY));
     }
@@ -39,10 +42,10 @@ public class Item implements JSONSerializable {
     public String getCategory() { return category; }
     public ArrayList<Field> getFields() { return fields; }
 
-//    public void setIcon(ImageIcon icon) { this.icon = icon; }
-//    public void setTitle(String title) { this.title = title; }
-//    public void setCategory(String category) { this.category = category; }
-//    public void setFields(ArrayList<Field> fields) { this.fields = fields; }
+    public void setIcon(ImageIcon icon) { this.icon = icon; }
+    public void setTitle(String title) { this.title = title; }
+    public void setCategory(String category) { this.category = category; }
+    public void setFields(ArrayList<Field> fields) { this.fields = fields; }
 
     public Item addField(Field field) {
         fields.add(field);

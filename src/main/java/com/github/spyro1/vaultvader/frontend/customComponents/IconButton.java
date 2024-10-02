@@ -7,6 +7,8 @@ import java.awt.*;
 
 public class IconButton extends JButton {
 
+    public static final String defaultIconPath = "picture.png";
+
     public IconButton() {
         super();
         setup();
@@ -21,6 +23,18 @@ public class IconButton extends JButton {
     }
     public IconButton(String text, Icon icon) {
         super(text, icon);
+        setup();
+    }
+    public IconButton(String text, String resourcePath) {
+        super(text);
+        ImageIcon icon;
+        try {
+            icon = new ImageIcon(this.getClass().getClassLoader().getResource(resourcePath));
+        } catch (Exception ex) {
+            System.err.println("ERROR/IconButton: resources/" + resourcePath + " file is not found at location");
+            icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath));
+        }
+        setIcon(icon);
         setup();
     }
     private void setup(){
