@@ -14,6 +14,27 @@ This is a Password Manager application which is written in Java with Swing.
 
 # UML - diagram
 
+## Overview
+
+```mermaid
+classDiagram
+    namespace frontend {
+        class LoginUI
+        class MainUI
+    }
+    namespace backend {
+        class Controller
+    }
+    class API {
+        
+    }
+    API --> Controller
+    API <-- LoginUI
+    API <-- MainUI
+    
+```
+
+## Detailed UML diagram
 ```mermaid
 classDiagram
     direction TB
@@ -53,43 +74,77 @@ classDiagram
             # paintComponent(g: Graphics) void
         }
         class DarkComboField {
-            +
+            - placeholder : String
+            + DarkComboField(values: String[])
+            + DarkComboField(values: String[], placeholder: String)
+            + DarkComboField(values: String[], placeholder: String, underline: bool)
+            - setup() void
+            + setUnderline(underline: bool) void
         }
         class DarkPassField {
-            +
+            - placeholder : String
+            - defChar: char
+            + DarkPassField(text: String)
+            + DarkPassField(text: String, placeholder: String)
+            + DarkPassField(text: String, placeholder: String, underline: bool)
+            - setup() void
+            + setUnderline(underline: bool) void
         }
         class DarkTextField {
-            +
+            - placeholder : String
+            + DarkTextField(text: String)
+            + DarkTextField(text: String, placeholder: String)
+            + DarkTextField(text: String, placeholder: String, underline: bool)
+            - setup() void
+            + setUnderline(underline: bool) void
         }
         class FieldPanel {
-            +
+            + optionsButton: IconButton
+            + dataField: JComponent
+            + FieldPanel(dataField: JComponent)
+            - moreOptionsButtonClicked(Actionevent e) void
         }
         class ItemEditorPanel {
-            +
+            - titleRow: JPanel
+            - iconButton: IconButton
+            - titleField: DarkTextField
+            - addNewFieldButton: IconButton
+            - window: MainUI
+            - displayedItem: Item
+            + fieldList: List~FieldPanel~
+            + ItemEditorPanel(window: MainUI)
+            + hidePanel() void
+            + displayItem(displayedItem: Item) void
+            - iconSelectorButtonClicked(e: ActionEvent ) void
+            - addNewFieldButtonClicked(e: ActionEvent ) void
+            - popupMenuItemClicked(chosenType: FieldType) void
         }
 
     }
     
-    MainUI --> ItemCellRenderer
     MainUI --> CategoryTreeRenderer
+    MainUI --> ItemCellRenderer
     MainUI --> DarkComboField
     MainUI --> DarkPassField
     MainUI --> DarkTextField
     LoginUI --> DarkTextField
-    MainUI --> IconButton
-    LoginUI --> IconButton
     MainUI --> FieldPanel
     MainUI --> ItemEditorPanel
+    LoginUI --> IconButton
+    MainUI --> IconButton
     
     CategoryTreeRenderer --|> DefaultTreeCellRenderer
+    ItemCellRenderer ..|> ListCellRenderer~Item~
     ItemCellRenderer --|> JPanel
+    
     IconButton --|> JButton
     DarkComboField --|> JBComboField
     DarkPassField --|> JPassField
     DarkTextField --|> JTextField
     FieldPanel --|> JPanel
-    ItemEditorPane --|> JPanel
-
+    ItemEditorPanel --|> JPanel
+    
+%%    FieldPanel --> IconButton
     
     
     namespace backend {
