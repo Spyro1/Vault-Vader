@@ -36,7 +36,7 @@ public class MainUI extends JFrame {
     public boolean itemIsModifyed = false;
     JSONObject filter = new JSONObject();
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
-//    int singlifyer = 0;
+    int singlifyer = 0;
 
     public MainUI() {
         // Create main frame
@@ -355,8 +355,15 @@ public class MainUI extends JFrame {
     private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
         try {
             // TODO: Selection and unselection to fix!
-            selectedItemIndex = itemJList.getSelectedIndex();
-            Item selectedItem = API.getItemData(selectedItemIndex);
+            if (singlifyer == 0){
+                selectedItemIndex = itemJList.getSelectedIndex();
+                Item selectedItem = API.getItemData(selectedItemIndex);
+                editorPanel.displayItem(API.setTemporalItem(selectedItem));
+                editorContentScroller.validate();
+                System.out.println("DEBUG/Item displayed: " + selectedItemIndex);
+                singlifyer = 1;
+            }
+            else singlifyer = 0;
 //            if (itemIsModifyed && selectedItem.ID != API.getTemporalItem().ID) {
 //                if (JOptionPane.showConfirmDialog(this, "Szeretnéd menteni a változásokat?", "Mentés", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 //                    API.saveItem();
@@ -364,9 +371,6 @@ public class MainUI extends JFrame {
 //                    System.out.println("DEBUG/Item saved");
 //                }
 //            }
-            editorPanel.displayItem(API.setTemporalItem(selectedItem));
-            editorContentScroller.validate();
-            System.out.println("DEBUG/Item displayed: " + selectedItemIndex);
         } catch (Exception e) {
             System.out.println("ERROR/ItemSelector/ " + e);
         }
