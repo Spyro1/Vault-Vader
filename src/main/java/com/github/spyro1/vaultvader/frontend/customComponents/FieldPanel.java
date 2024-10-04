@@ -1,6 +1,8 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
 import com.github.spyro1.vaultvader.api.JSONSerializable;
+import com.github.spyro1.vaultvader.backend.Field;
+import com.github.spyro1.vaultvader.backend.FieldType;
 import com.github.spyro1.vaultvader.frontend.UI;
 import org.json.simple.JSONObject;
 
@@ -8,15 +10,37 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class FieldPanel extends JPanel {
+public class FieldPanel extends JPanel implements JSONSerializable {
 
     public IconButton optionsButton;
-//    public DarkTextField textField;
-    public JComponent dataField;
-//    JLabel fieldLabel = new JLabel();
+    public JComponent component;
+    public Field data;
 
-    public FieldPanel(JComponent dataField) {
-        this.dataField = dataField;
+    public FieldPanel(JComponent component, Field data) {
+        this.component = component;
+        this.data = data;
+        setup();
+    }
+    public FieldPanel(Field data) {
+        this.data = data;
+        createField();
+        setup();
+    }
+    public FieldPanel(String fieldName, String text, FieldType type) {
+        this.data = new Field(fieldName, text, type);
+        createField();
+        setup();
+    }
+
+    private void createField(){
+        this.component = switch (data.getType()) {
+            case TEXT -> new DarkTextField(data.getValue(), data.getFieldName(), true);
+            case PASS -> new DarkPassField(data.getValue(), data.getFieldName(), true);
+//            case CATEGORY -> new DarkComboField(API.getCategoryList(), displayedItem.getCategoryIdx(), fieldName, true);
+            case null, default -> null; // throw new Exception("ERROR/FieldPanel: Incorrect type");
+        };
+    }
+    private void setup() {
         setLayout(new BorderLayout());
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
@@ -26,25 +50,10 @@ public class FieldPanel extends JPanel {
 
         JPanel panel = new JPanel(new BorderLayout()); {
             panel.setOpaque(false);
-            panel.add(dataField, BorderLayout.CENTER);
+            panel.add(component, BorderLayout.CENTER);
             panel.add(optionsButton, BorderLayout.EAST);
         }
         add(panel);
-    }
-
-    /**
-     * @JSONkeys "fieldName", "type", "vale"
-     * @return the value of the field which implements the JSONSerializable interface
-     */
-    public JSONObject getFieldValue(){
-//        if (this.dataField.getClass() == DarkTextField.class) {
-//            return ((DarkTextField)this.dataField).toJSON();
-//        } else if (this.dataField.getClass() == DarkPassField.class){
-//            return ((DarkPassField)this.dataField).toJSON();
-//        } else if (this.dataField.getClass() == DarkComboField.class){
-//            return ((DarkComboField)this.dataField).toJSON();
-//        }
-        return ((JSONSerializable)(this.dataField)).toJSON();
     }
 
     private void moreOptionsButtonClicked(ActionEvent actionEvent) {
@@ -52,19 +61,25 @@ public class FieldPanel extends JPanel {
         DarkPopupMenuItem renameFieldMenuItem = new DarkPopupMenuItem("Mező átnevezése", this::renameThisFieldMenuItemClicked);
         DarkPopupMenu moreOptions = new DarkPopupMenu(deleteFieldMenuItem, renameFieldMenuItem);
         moreOptions.show(actionEvent);
-//
-//        Component source = (Component)actionEvent.getSource();
-//        Dimension size = source.getSize();
-//        int xPos = ((size.width /*- moreOptions.getPreferredSize().width) / 2*/));
-//        int yPos = 0; //size.height / 2;
-//        moreOptions.show(source, xPos, yPos);
     }
 
     private void renameThisFieldMenuItemClicked(ActionEvent e) {
-
+        // TODO: Write rename field
     }
 
     private void deleteThisFieldMenuItemClicked(ActionEvent e) {
+        // TODO: Write delete field
+    }
 
+    @Override
+    public JSONObject toJSON() {
+        return data.toJSON();
+    }
+
+    @Override
+    public FieldPanel fromJSON(JSONObject json) {
+        data.fromJSON(json);
+        createField();
+        return this;
     }
 }

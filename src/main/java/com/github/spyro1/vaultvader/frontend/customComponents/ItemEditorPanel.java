@@ -1,11 +1,14 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
 import com.github.spyro1.vaultvader.api.API;
+import com.github.spyro1.vaultvader.api.JSONSerializable;
 import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.FieldType;
 import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.ui.MainUI;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +16,7 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.Vector;
 
-public class ItemEditorPanel extends JPanel {
+public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     // Components
     JPanel titleRow;
@@ -81,21 +84,28 @@ public class ItemEditorPanel extends JPanel {
         this.displayedItem = displayedItem;
         removeAll(); // clears panel
         gbc.weighty = 0.01;
+        // Add Title
         gbc.gridy = gridY++;
         add(titleRow, gbc);
+        // Add Category
+        gbc.gridy = gridY++;
+        categoryBox = new FieldPanel(new DarkComboField(API.getCategoryList(), displayedItem.getCategoryIdx(), displayedItem.getCategory().getFieldName(), true), displayedItem.getCategory());
+        add(categoryBox, gbc);
+        // Add fields
         try {
             if (displayedItem != null) {
-                iconButton.setIcon(displayedItem.getIcon());
+                iconButton.setIcon(new ImageIcon("", displayedItem.getIcon()));
                 titleField.setText(displayedItem.getTitle());
                 for (int i = 0; i < displayedItem.getFields().size(); i++) {
                     String fieldName = displayedItem.getFields().get(i).getFieldName();
                     String text = displayedItem.getFields().get(i).getValue();
-                    FieldPanel fp = switch (displayedItem.getFields().get(i).getType()) {
-                        case TEXT -> new FieldPanel(new DarkTextField(text, displayedItem.getFields().get(i).getFieldName(), true));
-                        case PASS -> new FieldPanel(new DarkPassField(text, fieldName, true));
-                        case CATEGORY -> new FieldPanel(new DarkComboField(API.getCategoryList(), displayedItem.getCategory(), fieldName, true));
-                        case null, default -> null;
-                    };
+                    FieldPanel fp = new FieldPanel(fieldName, text, displayedItem.getFields().get(i).getType());
+//                    FieldPanel fp = switch (displayedItem.getFields().get(i).getType()) {
+//                        case TEXT -> new FieldPanel(new DarkTextField(text, displayedItem.getFields().get(i).getFieldName(), true));
+//                        case PASS -> new FieldPanel(new DarkPassField(text, fieldName, true));
+//                        case CATEGORY -> new FieldPanel(new DarkComboField(API.getCategoryList(), displayedItem.getCategoryIdx(), fieldName, true));
+//                        case null, default -> null;
+//                    };
                     if (fp != null) {
                         fieldsList.add(fp);
                         gbc.gridy = gridY++;
@@ -118,6 +128,9 @@ public class ItemEditorPanel extends JPanel {
         validate();
         setVisible(true);
     }
+    private void addRow(JComponent component){
+
+    }
 
     // == Getters ==
 
@@ -127,8 +140,10 @@ public class ItemEditorPanel extends JPanel {
     public ImageIcon getIcon(){
         return (ImageIcon) iconButton.getIcon();
     }
-    public String getCategory() {
-        return ((DarkComboField)categoryBox.dataField).getSelectedItem().toString(); // TODO: ALWAYS ERROR HERE
+    public int getCategoryIdx() {
+        return displayedItem.getCategoryIdx();
+//        return ((DarkComboField)categoryBox.dataField).getSelectedIndex();
+//        return ((DarkComboField)categoryBox.dataField).getSelectedItem().toString(); // TODO: ALWAYS ERROR HERE
     }
     // == Click events ==
 
@@ -139,10 +154,10 @@ public class ItemEditorPanel extends JPanel {
         fd.setVisible(true);
         iconFilePath = fd.getFile();
         if (iconFilePath == null)
-            System.out.println("You cancelled the choice");
+            System.out.println("DEBUG/ItemEditorPanel/iconButton: You cancelled the choice"); // Dor
         else{
-            displayedItem.setIcon(new ImageIcon(iconFilePath, iconFilePath));
-            System.out.println("You chose " + iconFilePath);
+            System.out.println("DEBUG/ItemEditorPanel/iconButton: You chose " + iconFilePath);
+            displayedItem.setIcon(iconFilePath);
             displayItem(displayedItem); // refresh
         }
     }
@@ -170,4 +185,28 @@ public class ItemEditorPanel extends JPanel {
     private void deleteThisItem(ActionEvent actionEvent) {
     }
 
+    /**
+     * @JSONkeys "icon", "title", "category", "fields"
+     */
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put(API.ICON_KEY, ((ImageIcon)iconButton.getIcon()).getDescription());
+        json.put(API.TITLE_KEY, titleField.getText());
+        json.put(API.CATEGORY_KEY, ((DarkComboField)categoryBox.component).getSelectedIndex());
+        JSONArray fieldsJSON = new JSONArray();
+        for (FieldPanel fp : fieldsList) {
+            fieldsJSON.add(fp.toJSON());
+        }
+        json.put(API.FIELDS_KEY, fieldsList);
+        return json;
+    }
+
+    /**
+     * @JSONkeys "id", "icon", "title", "category", "fields"
+     */
+    @Override
+    public Object fromJSON(JSONObject json) {
+        return null; // TODO: Write Item editor panel fromJSON this later
+    }
 }

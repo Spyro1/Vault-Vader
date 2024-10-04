@@ -117,6 +117,8 @@ public class Controller {
             // Setup default values
             categories.clear();
             items.clear();
+            // Create default categories
+            categories.add("Minden bejegyzés");
             categories.add("Email");
             categories.add("Pénzügyek");
             categories.add("Egyéb");
@@ -130,7 +132,7 @@ public class Controller {
 
 
     // == Category ==
-    public Collection<String> getCategoryList() {
+    public ArrayList<String> getCategoryList() {
         return categories;
     }
     public boolean addNewCategory(String newCategory) {
@@ -178,13 +180,14 @@ public class Controller {
         return tempItem;
     }
 
-    public void saveTemporalItem() {
+    public boolean saveTemporalItem() {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).ID == tempItem.ID) {
                 items.set(i, tempItem);
-                return;
+                return true; // Old item modified
             }
         }
         items.add(tempItem);
+        return false; // New item added
     }
 }

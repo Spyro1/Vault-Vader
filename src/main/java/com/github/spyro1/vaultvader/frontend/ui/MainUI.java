@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class MainUI extends JFrame {
@@ -270,19 +271,7 @@ public class MainUI extends JFrame {
     }
 
     private void saveItemButtonClicked(ActionEvent actionEvent) {
-        // TODO: Write check for null fields and empty items !!!
-        // TODO: Fix saving, Működik úgy ahogy, de nem jóóól!
-        Item tempItem = API.getTemporalItem();
-        tempItem.getFields().clear();
-        tempItem.setTitle(editorPanel.getTitle());
-        tempItem.setIcon(editorPanel.getIcon());
-        tempItem.setCategory(editorPanel.getCategory());
-        for (FieldPanel fp : editorPanel.fieldsList){
-            JSONObject fieldValue = fp.getFieldValue();
-            Field f = new Field().fromJSON(fieldValue);
-            tempItem.addField(f);
-        }
-        API.saveItem();
+        API.saveItem(editorPanel.toJSON());
         refreshItemList();
     }
 
@@ -394,9 +383,9 @@ public class MainUI extends JFrame {
     private void refreshCategoryTree(){
         // Refresh category tree data
         allItemCategory.removeAllChildren();
-        Collection<String> categories = API.getCategoryList(); // GET data from API
-        for (String category : categories) {
-            allItemCategory.add(new DefaultMutableTreeNode(category));
+        ArrayList<String> categories = API.getCategoryList(); // GET data from API
+        for (int i = 0; i < categories.size(); i++) {
+            allItemCategory.add(new DefaultMutableTreeNode(categories.get(i)));
         }
         // Expand the root
         categoryTree.expandRow(0);

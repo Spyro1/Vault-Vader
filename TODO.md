@@ -34,3 +34,5 @@
   
 # Backend
 
+- [ ] Category reference with index: 0: all, 1..*: index of specific category
+

@@ -1,5 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
+import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
 
@@ -44,8 +45,8 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
     @Override
     public Component getListCellRendererComponent(JList<? extends Item> list, Item value, int index, boolean isSelected, boolean cellHasFocus) {
         titleLabel.setText(value.getTitle());
-        categoryLabel.setText(value.getCategory());
-        icon.setIcon(value.getIcon());
+        categoryLabel.setText(API.getCategoryList().get(value.getCategoryIdx()));
+        icon.setIcon(new ImageIcon(value.getIcon()));
         // when select item
         if (isSelected) {
             setBackground(UI.mainColor);

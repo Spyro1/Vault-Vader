@@ -15,15 +15,15 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
 
     private String fieldName;
 
-    public DarkComboField(Collection<String> values, String value, String fieldName) {
-        this(values, value, fieldName, false);
+    public DarkComboField(Collection<String> values, int selectedIdx, String fieldName) {
+        this(values, selectedIdx, fieldName, false);
     }
-    public DarkComboField(Collection<String> values, String value, String fieldName, boolean underline) {
+    public DarkComboField(Collection<String> values, int selectedIdx, String fieldName, boolean underline) {
         super(new Vector<String>(values));
         this.fieldName = fieldName;
         setup();
         setUnderline(underline);
-        setSelectedItem(value);
+        setSelectedIndex(selectedIdx);
     }
     private void setup(){
         setForeground(UI.mainTextColor);

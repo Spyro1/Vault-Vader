@@ -1,13 +1,16 @@
 package com.github.spyro1.vaultvader.api;
 
 import com.github.spyro1.vaultvader.backend.Controller;
+import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.Item;
+import com.github.spyro1.vaultvader.frontend.customComponents.FieldPanel;
 import com.github.spyro1.vaultvader.frontend.ui.LoginUI;
 import com.github.spyro1.vaultvader.frontend.ui.MainUI;
 
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class API {
@@ -82,9 +85,9 @@ public class API {
      *
      * @return
      */
-    static public boolean saveItem() {
-        Controller.INSTANCE.saveTemporalItem();
-        return false;
+    static public boolean saveItem(JSONObject itemData) {
+        API.getTemporalItem().fromJSON(itemData); // Set temporal item with the given item data
+        return Controller.INSTANCE.saveTemporalItem();
     }
 
     /**
@@ -165,7 +168,7 @@ public class API {
         return Controller.INSTANCE.getItem(itemIndex);
     }
 
-    public static Collection<String> getCategoryList(){
+    public static ArrayList<String> getCategoryList(){
         return Controller.INSTANCE.getCategoryList();
     }
 //    static public JSONArray getFieldList(){
