@@ -12,7 +12,7 @@
 ## MainUI
 
 - Category editor panel
-  - [ ] Create right click popup menu for tool buttons also
+  - [ ] (Create right click popup menu for tool buttons also)
   - [ ] Set selection listener to filter the displayed items in `slider panel` according to selected category 
 - Item List Slider panel
   - [ ] Create right click popup menu for adding new item
@@ -24,7 +24,7 @@
     - [x] Popup menu field type chooser
     - [x] Base fields added upon item setup
     - [ ] Remove field functionality
-    - [ ] Icon selector button
+    - [x] Icon selector button
 - Header Panel
   - [ ] Search Button functionality
   - [ ] Search Button works for Enter

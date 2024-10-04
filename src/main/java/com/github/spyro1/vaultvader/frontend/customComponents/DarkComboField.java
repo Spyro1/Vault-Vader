@@ -7,19 +7,23 @@ import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
 
 public class DarkComboField extends JComboBox<String> implements JSONSerializable {
 
     private String fieldName;
 
-    public DarkComboField(String[] values, String fieldName) {
-        this(values, fieldName, false);
+    public DarkComboField(Collection<String> values, String value, String fieldName) {
+        this(values, value, fieldName, false);
     }
-    public DarkComboField(String[] values, String fieldName, boolean underline) {
-        super(values);
+    public DarkComboField(Collection<String> values, String value, String fieldName, boolean underline) {
+        super(new Vector<String>(values));
         this.fieldName = fieldName;
         setup();
         setUnderline(underline);
+        setSelectedItem(value);
     }
     private void setup(){
         setForeground(UI.mainTextColor);
@@ -36,7 +40,7 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
     }
 
     /**
-     * @JSONkeys "fieldName", "type", "vale"
+     * @JSONkeys "fieldName", "type", "value"
      */
     @Override
     public JSONObject toJSON() {
@@ -48,13 +52,16 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
     }
 
     /**
-     * @JSONkeys "fieldName", "type", "vale"
+     * @JSONkeys "fieldName", "value", "values"
      */
     @Override
     public Object fromJSON(JSONObject json) {
-        if (json.containsKey(API.VALUE_KEY)) {
-            setSelectedItem(json.get(API.VALUE_KEY).toString());
-        }
+        String fieldName = "";
+        String[] values = new String[0];
+        if (json.containsKey(API.VALUE_KEY)) setSelectedItem(json.get(API.VALUE_KEY).toString());
+        // TODO: Write Dark combo to set values
+        if(json.containsKey(API.VALUES_KEY)) values = (String[]) json.get(API.VALUES_KEY);
+        if (json.containsKey(API.FIELD_NAME_KEY)) fieldName = json.get(API.FIELD_NAME_KEY).toString();
         return this;
     }
 }

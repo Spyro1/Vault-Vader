@@ -48,6 +48,23 @@ public class FieldPanel extends JPanel {
     }
 
     private void moreOptionsButtonClicked(ActionEvent actionEvent) {
-        System.out.println("Megkattintottak!");
+        DarkPopupMenuItem deleteFieldMenuItem = new DarkPopupMenuItem("Mező törlése", this::deleteThisFieldMenuItemClicked);
+        DarkPopupMenuItem renameFieldMenuItem = new DarkPopupMenuItem("Mező átnevezése", this::renameThisFieldMenuItemClicked);
+        DarkPopupMenu moreOptions = new DarkPopupMenu(deleteFieldMenuItem, renameFieldMenuItem);
+        moreOptions.show(actionEvent);
+//
+//        Component source = (Component)actionEvent.getSource();
+//        Dimension size = source.getSize();
+//        int xPos = ((size.width /*- moreOptions.getPreferredSize().width) / 2*/));
+//        int yPos = 0; //size.height / 2;
+//        moreOptions.show(source, xPos, yPos);
+    }
+
+    private void renameThisFieldMenuItemClicked(ActionEvent e) {
+
+    }
+
+    private void deleteThisFieldMenuItemClicked(ActionEvent e) {
+
     }
 }

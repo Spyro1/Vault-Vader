@@ -33,9 +33,9 @@ public class Item implements JSONSerializable {
         String defaultIconPath = "picture.png";
         icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath), defaultIconPath);
         fields.clear();
+        fields.add(new Field("Kategória", "", FieldType.CATEGORY));
         fields.add(new Field("Felhasználónév", "", FieldType.TEXT));
         fields.add(new Field("Jelszó", "", FieldType.PASS));
-        fields.add(new Field("Kategória", "", FieldType.CATEGORY));
     }
 
     public ImageIcon getIcon() { return icon; }

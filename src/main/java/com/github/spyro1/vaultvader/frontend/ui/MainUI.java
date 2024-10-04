@@ -177,16 +177,17 @@ public class MainUI extends JFrame {
         sliderPanel = new JPanel(new BorderLayout()); {
             sliderPanel.setBackground(UI.bgLightColor);
             sliderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, UI.margin, 0, UI.bgDarkColor));
-            itemJList = createItemJList(API.getItemList(null)); {
-                itemJList.setCellRenderer(new ItemCellRenderer());
-                itemJList.setBackground(UI.bgLightColor);
-                itemJList.addListSelectionListener(this::itemSelectedFromList);
-            }
-            itemListScrollPane = new JScrollPane(itemJList); {
+//            itemJList = createItemJList(API.getItemList(null)); {
+//                itemJList.setCellRenderer(new ItemCellRenderer());
+//                itemJList.setBackground(UI.bgLightColor);
+//                itemJList.addListSelectionListener(this::itemSelectedFromList);
+//            }
+            itemListScrollPane = new JScrollPane(); {
                 itemListScrollPane.setBackground(UI.bgLightColor);
                 itemListScrollPane.setBorder(BorderFactory.createEmptyBorder());
                 itemListScrollPane.getViewport().setOpaque(false);
             }
+            refreshItemList(); // Create Item JList and refresh
             sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
             JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
                 itemToolPanel.setOpaque(false);
@@ -273,6 +274,9 @@ public class MainUI extends JFrame {
         // TODO: Fix saving, Működik úgy ahogy, de nem jóóól!
         Item tempItem = API.getTemporalItem();
         tempItem.getFields().clear();
+        tempItem.setTitle(editorPanel.getTitle());
+        tempItem.setIcon(editorPanel.getIcon());
+        tempItem.setCategory(editorPanel.getCategory());
         for (FieldPanel fp : editorPanel.fieldsList){
             JSONObject fieldValue = fp.getFieldValue();
             Field f = new Field().fromJSON(fieldValue);
@@ -354,7 +358,6 @@ public class MainUI extends JFrame {
     }
     private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
         try {
-            // TODO: Selection and unselection to fix!
             if (singlifyer == 0){
                 selectedItemIndex = itemJList.getSelectedIndex();
                 Item selectedItem = API.getItemData(selectedItemIndex);

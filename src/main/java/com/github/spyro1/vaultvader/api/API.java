@@ -26,6 +26,7 @@ public class API {
             TYPE_KEY = "type",
             FIELD_NAME_KEY = "fieldName",
             VALUE_KEY = "value",
+            VALUES_KEY = "values",
             TEXT_TYPE = "text", PASS_TYPE = "pass", COMBO_TYPE = "combo";
 
     // == Login / Register Methods ==
@@ -155,7 +156,7 @@ public class API {
             return itemList;
         }
 //        else {
-//        TODO: Lesz itt valami filteres cucc
+        // TODO: Lesz itt valami filteres cucc a kereséshez
 //        }
         return null;
     }
