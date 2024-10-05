@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class API {
 
@@ -155,7 +156,10 @@ public class API {
         return Controller.INSTANCE.getItem(itemIndex);
     }
 
-    public static ArrayList<String> getCategoryList(){
+//    public static String getCategory(int categoryIndex){
+//        return Controller.INSTANCE.getCategory(categoryIndex);
+//    }
+    public static HashSet<String> getCategoryList(){
         return Controller.INSTANCE.getCategoryList();
     }
 

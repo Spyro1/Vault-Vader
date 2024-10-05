@@ -18,6 +18,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class MainUI extends JFrame {
 
@@ -281,6 +282,8 @@ public class MainUI extends JFrame {
                 json.put(API.CATEGORY_KEY, categoryName); // Add data to json object
                 if (API.addNewCategory(json)) { // Call API to create the new category
                     System.out.println("DEBUG/addCategoryClicked: Sikeres kategória hozzáadás");
+                    refreshCategoryTree();
+                    refreshEditorPanel();
                 } else {
                     System.out.println("DEBUG/addCategoryClicked: Nem sikerült a kategória hozzáadás");
                 }
@@ -288,7 +291,6 @@ public class MainUI extends JFrame {
         } catch (Exception e) {
             System.err.println("ERROR/addCategoryClicked: " + e);
         }
-        refreshCategoryTree();
     }
     private void editCategoryClicked(ActionEvent actionEvent) {
         try {
@@ -302,6 +304,7 @@ public class MainUI extends JFrame {
                 if (categoryName != null && oldCategory != null && API.modifyCategory(json)) {
                     System.out.println("DEBUG/editCategoryClicked: Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
                     refreshCategoryTree();
+                    refreshEditorPanel();
                 } else {
                     System.out.println("DEBUG/editCategoryClicked: Nem sikerült a kategóriát szerkeszteni"); // JUST FOR DEBUG
                 }
@@ -317,11 +320,13 @@ public class MainUI extends JFrame {
                 String oldCategory = tp.getLastPathComponent().toString();
                 JSONObject json = new JSONObject();
                 json.put(API.CATEGORY_KEY, oldCategory);
-                if (API.removeCategory(json))
+                if (API.removeCategory(json)) {
                     System.out.println("DEBUG/removeCategoryClicked: Sikeres törlés");
-                else
+                    refreshCategoryTree();
+                    refreshEditorPanel();
+                } else {
                     System.out.println("DEBUG/removeCategoryClicked: Nem sikerült a törlés");
-                refreshCategoryTree();
+                }
             }
         } catch (Exception e){
             System.err.println("ERROR/removeCategoryClicked: " + e.getMessage());
@@ -339,6 +344,8 @@ public class MainUI extends JFrame {
     // == Item ==
     private void newItemButtonClicked(ActionEvent actionEvent) {
         editorPanel.displayItem(API.newTemporalItem());
+        itemJList.setSelectedIndex(-1);
+        refreshCategoryTree();
     }
     private void saveItemButtonClicked(ActionEvent actionEvent) {
         if (API.saveItem(editorPanel.toJSON())){
@@ -385,9 +392,9 @@ public class MainUI extends JFrame {
     private void refreshCategoryTree(){
         // Refresh category tree data
         allItemCategory.removeAllChildren();
-        ArrayList<String> categories = API.getCategoryList(); // GET data from API
-        for (int i = 0; i < categories.size(); i++) {
-            allItemCategory.add(new DefaultMutableTreeNode(categories.get(i)));
+        HashSet<String> categories = API.getCategoryList(); // GET data from API
+        for (String category : categories) {
+            allItemCategory.add(new DefaultMutableTreeNode(category));
         }
         // Expand the root
         categoryTree.expandRow(0);
@@ -402,6 +409,9 @@ public class MainUI extends JFrame {
             itemJList.addListSelectionListener(this::itemSelectedFromList);
         }
         itemListScrollPane.setViewportView(itemJList);
+    }
+    private void refreshEditorPanel() {
+        editorPanel.displayItem(API.getTemporalItem().fromJSON(editorPanel.toJSON()));
     }
 
 }

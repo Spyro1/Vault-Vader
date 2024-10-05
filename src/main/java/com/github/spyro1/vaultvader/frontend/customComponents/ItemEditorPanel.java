@@ -87,7 +87,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         add(titleRow, gbc);
         // Add Category
         gbc.gridy = gridY++;
-        categoryBox = new FieldPanel(new DarkComboField(API.getCategoryList(), displayedItem.getCategoryIdx(), displayedItem.getCategory().getFieldName(), true), displayedItem.getCategory());
+        categoryBox = new FieldPanel(new DarkComboField(API.getCategoryList(), displayedItem.getCategory().getValue(), displayedItem.getCategory().getFieldName(), true), displayedItem.getCategory());
         add(categoryBox, gbc);
         // Add fields
         try {
@@ -182,7 +182,8 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         JSONObject json = new JSONObject();
         json.put(API.ICON_KEY, iconButton.getIconPath());
         json.put(API.TITLE_KEY, titleField.getText());
-        json.put(API.CATEGORY_KEY, ((DarkComboField)categoryBox.component).getSelectedIndex());
+        Object category = ((DarkComboField)categoryBox.component).getSelectedItem();
+        json.put(API.CATEGORY_KEY, category == null ? "" : category.toString());
         JSONArray fieldsJSON = new JSONArray();
         for (FieldPanel fp : fieldsList) {
             JSONObject readFieldJSON = fp.toJSON();

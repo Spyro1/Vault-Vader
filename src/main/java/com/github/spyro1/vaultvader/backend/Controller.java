@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -18,7 +19,7 @@ public class Controller {
     private final ArrayList<Item> items = new ArrayList<>();
 
     /** Stores the current user's categories */
-    private final ArrayList<String> categories = new ArrayList<>(); // new HashSet<>();
+    private final HashSet<String> categories = new HashSet<>(); // new HashSet<>();
 
     /** The name of the user currently logged in to the app */
     private User loggedInUser;
@@ -45,7 +46,9 @@ public class Controller {
             if (usersData.containsKey(API.ITEMS_KEY)) {
                 JSONArray itemArray = (JSONArray) usersData.get(API.ITEMS_KEY);
                 for (Object itemObj : itemArray) {
-                    items.add(new Item().fromJSON((JSONObject) itemObj));
+                    Item item = new Item().fromJSON((JSONObject) itemObj);
+//                    item.setCategoryIdx(categories.indexOf(item.getCategory().getValue())); // Set index for easy access
+                    items.add(item);
                 }
             }
         } catch (Exception e) {
@@ -121,7 +124,7 @@ public class Controller {
             categories.clear();
             items.clear();
             // Create default categories
-            categories.add("Minden bejegyzés");
+//            categories.add("Minden bejegyzés");
             categories.add("Email");
             categories.add("Pénzügyek");
             categories.add("Egyéb");
@@ -135,7 +138,11 @@ public class Controller {
 
 
     // == Category ==
-    public ArrayList<String> getCategoryList() {
+    public HashSet<String> getCategoryList() {
+//        categories.clear();
+        for (Item item : items) {
+            categories.add(item.getCategory().getValue());
+        }
         return categories;
     }
     public boolean addNewCategory(String newCategory) {
@@ -146,10 +153,12 @@ public class Controller {
         return false;
     }
     public boolean modifyCategory(String oldCategory, String newCategory) {
-        if (!categories.contains(newCategory)) {
-            return categories.set(categories.indexOf(oldCategory), newCategory).equals(oldCategory);
-        }
-        return false;
+//        if (!categories.contains(newCategory)) {
+//            return categories.set(categories.indexOf(oldCategory), newCategory).equals(oldCategory);
+//        }
+//        return false;
+        if (categories.remove(oldCategory)) return categories.add(newCategory);
+        else return false;
     }
     public boolean removeCategory(String categoryToRemove) {
         return categories.remove(categoryToRemove);
@@ -181,7 +190,7 @@ public class Controller {
     }
 
     public boolean saveTemporalItem() {
-        if (tempItem.getTitle().isBlank() || tempItem.getCategoryIdx() == -1) {
+        if (tempItem.getTitle().isBlank() || tempItem.getCategory().getValue().isBlank()) {
             return false; // Blank fields
         } else {
             for (int i = 0; i < items.size(); i++) {
@@ -194,4 +203,13 @@ public class Controller {
             return true;
         }
     }
+
+//    public String getCategory(int categoryIndex) {
+//        if (categoryIndex >= 0 && categoryIndex < categories.size()){
+//            return categories.get(categoryIndex);
+//        }
+//        else {
+//            return "";
+//        }
+//    }
 }

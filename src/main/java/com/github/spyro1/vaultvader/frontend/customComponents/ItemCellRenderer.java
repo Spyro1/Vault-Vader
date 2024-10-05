@@ -45,7 +45,7 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
     @Override
     public Component getListCellRendererComponent(JList<? extends Item> list, Item value, int index, boolean isSelected, boolean cellHasFocus) {
         titleLabel.setText(value.getTitle());
-        categoryLabel.setText(API.getCategoryList().get(value.getCategoryIdx()));
+        categoryLabel.setText(value.getCategory().getValue());
         icon.setIcon(value.getIcon());
         // when select item
         if (isSelected) {

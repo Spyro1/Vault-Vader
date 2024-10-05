@@ -66,7 +66,8 @@ public class Item implements JSONSerializable {
         JSONObject obj = new JSONObject();
         obj.put(API.ICON_KEY, icon);
         obj.put(API.TITLE_KEY, title);
-        obj.put(API.CATEGORY_KEY, categoryIdx);
+//        obj.put(API.CATEGORY_KEY, categoryIdx);
+        obj.put(API.CATEGORY_KEY, category.getValue());
         JSONArray fieldsArray = new JSONArray();
         for (Field field : fields) {
             fieldsArray.add(field.toJSON());
@@ -84,7 +85,8 @@ public class Item implements JSONSerializable {
 //            if (json.containsKey(API.ID_KEY)) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
             if (json.containsKey(API.ICON_KEY)) icon = json.get(API.ICON_KEY).toString(); //new ImageIcon(this.getClass().getClassLoader().getResource(json.get(API.ICON_KEY).toString()), json.get(API.ICON_KEY).toString());
             if (json.containsKey(API.TITLE_KEY)) title = json.get(API.TITLE_KEY).toString();
-            if (json.containsKey(API.CATEGORY_KEY)) categoryIdx = Integer.parseInt(json.get(API.CATEGORY_KEY).toString());
+//            if (json.containsKey(API.CATEGORY_KEY)) categoryIdx = Integer.parseInt(json.get(API.CATEGORY_KEY).toString());
+            if (json.containsKey(API.CATEGORY_KEY)) category.setValue(json.get(API.CATEGORY_KEY).toString());
             fields.clear();
             if (json.containsKey(API.FIELDS_KEY)) {
                 JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
