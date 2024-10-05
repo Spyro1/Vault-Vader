@@ -10,8 +10,8 @@ import java.awt.*;
 
 public class DarkPassField extends JPasswordField implements JSONSerializable {
 
-    private String fieldName;
-    private char defChar = getEchoChar();
+    private final String fieldName;
+    private final char defChar = getEchoChar();
 
     public DarkPassField(String text, String fieldName) {
         this(text, fieldName, false);

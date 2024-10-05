@@ -20,7 +20,6 @@ public enum FieldType  {
             case TEXT -> API.TEXT_TYPE;
             case PASS -> API.PASS_TYPE;
             case CATEGORY -> API.COMBO_TYPE;
-            default -> null;
         };
     }
 }

@@ -61,27 +61,18 @@ public class API {
 
     /**
      * Create a request to log out the user and save all data to the user's file.
-     * @throws IOException Thrown if the user's file can not be opened.
      */
-    public static void logoutRequest() throws IOException {
+    public static void logoutRequest() {
         saveAllChanges();
         new LoginUI(); // Go back to log in ui
     }
 
     // == Item Methods ==
 
-    /**
-     *
-     * @return
-     */
     static public Item newTemporalItem(/*JSONObject itemData*/) {
         return Controller.INSTANCE.newTemporalItem();
     }
 
-    /**
-     *
-     * @return
-     */
     static public boolean saveItem(JSONObject itemData) {
         API.getTemporalItem().fromJSON(itemData); // Set temporal item with the given item data
         return Controller.INSTANCE.saveTemporalItem();
@@ -152,11 +143,10 @@ public class API {
     static public Collection<Item> getItemList(JSONObject filter){
         // Show all items = no filter
         if (filter == null){
-            Collection<Item> itemList = Controller.INSTANCE.getItemList();
-            return itemList;
+            return Controller.INSTANCE.getItemList();
         }
 //        else {
-        // TODO: Lesz itt valami filteres cucc a kereséshez
+        // TODO: Write filter fir get Item list
 //        }
         return null;
     }
@@ -168,9 +158,6 @@ public class API {
     public static ArrayList<String> getCategoryList(){
         return Controller.INSTANCE.getCategoryList();
     }
-//    static public JSONArray getFieldList(){
-//        return null;
-//    }
 
     public static String encryptData(String data, String key){
         return Controller.encryptText(data, key);

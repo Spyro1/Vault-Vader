@@ -9,7 +9,7 @@ import org.json.simple.*;
 public class Item implements JSONSerializable {
     private static int idCounter = 0;
 
-    public int ID = idCounter++;;
+    public int ID = idCounter++;
     private String icon;
     private String title;
     private Field category;
@@ -29,8 +29,7 @@ public class Item implements JSONSerializable {
         title = null;
         categoryIdx = -1;
         category = new Field("Kategória", "", FieldType.CATEGORY);
-        final String defaultIconPath = "picture.png";
-        icon = defaultIconPath; //new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath), defaultIconPath);
+        icon = "picture.png"; //new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath), defaultIconPath);
         fields.clear();
 //        fields.add(new Field("Kategória", "", FieldType.CATEGORY));
         fields.add(new Field("Felhasználónév", "", FieldType.TEXT));
@@ -60,12 +59,11 @@ public class Item implements JSONSerializable {
     }
 
     /**
-     * @JSONkeys "id", "icon", "title", "category", "fields"
+     * @JSONkeys "icon", "title", "category", "fields"
      */
     @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
-//        obj.put(API.ID_KEY, ID);
         obj.put(API.ICON_KEY, icon);
         obj.put(API.TITLE_KEY, title);
         obj.put(API.CATEGORY_KEY, categoryIdx);
@@ -78,7 +76,7 @@ public class Item implements JSONSerializable {
     }
 
     /**
-     * @JSONkeys "id", "icon", "title", "category", "fields"
+     * @JSONkeys "icon", "title", "category", "fields"
      */
     @Override
     public Item fromJSON(JSONObject json) {
@@ -90,8 +88,8 @@ public class Item implements JSONSerializable {
             fields.clear();
             if (json.containsKey(API.FIELDS_KEY)) {
                 JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
-                for (int i = 0; i < fieldsArray.size(); i++) {
-                    JSONObject jsonFieldData = (JSONObject) fieldsArray.get(i);
+                for (Object fieldObj : fieldsArray) {
+                    JSONObject jsonFieldData = (JSONObject) fieldObj;
                     fields.add(new Field().fromJSON(jsonFieldData));
                 }
             }

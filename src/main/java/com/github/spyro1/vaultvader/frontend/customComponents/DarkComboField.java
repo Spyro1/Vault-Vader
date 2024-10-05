@@ -12,13 +12,13 @@ import java.util.Vector;
 
 public class DarkComboField extends JComboBox<String> implements JSONSerializable {
 
-    private String fieldName;
+    private final String fieldName;
 
     public DarkComboField(Collection<String> values, int selectedIdx, String fieldName) {
         this(values, selectedIdx, fieldName, false);
     }
     public DarkComboField(Collection<String> values, int selectedIdx, String fieldName, boolean underline) {
-        super(new Vector<String>(values));
+        super(new Vector<>(values));
         this.fieldName = fieldName;
         setup();
         setUnderline(underline);

@@ -50,12 +50,8 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
         // when select item
         if (isSelected) {
             setBackground(UI.mainColor);
-//            titleLabel.setForeground(VV.mainTextColor);
-//            categoryLabel.setForeground(VV.mainTextColor);
         } else { // when don't select
             setBackground(UI.bgLightColor);
-//            titleLabel.setForeground(VV.mainTextColor);
-//            categoryLabel.setForeground(VV.mainTextColor);
         }
 
         return this;

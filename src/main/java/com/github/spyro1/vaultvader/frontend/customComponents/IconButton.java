@@ -4,6 +4,7 @@ import com.github.spyro1.vaultvader.frontend.UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class IconButton extends JButton {
 
@@ -35,13 +36,13 @@ public class IconButton extends JButton {
         ImageIcon icon;
         iconPath = path;
         try {
-            icon = new ImageIcon(this.getClass().getClassLoader().getResource(path));
+            icon = new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource(path)));
         } catch (Exception ex) {
             try {
                 icon = new ImageIcon(path);
             } catch (Exception ex2) {
                 System.err.println("ERROR/IconButton: resources/" + path + " file is not found at location");
-                icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath));
+                icon = new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource(defaultIconPath)));
             }
         }
         Image resized = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);

@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class DarkTextField extends JTextField implements JSONSerializable {
 
-    private String fieldName;
+    private final String fieldName;
 
     public DarkTextField(String text, String fieldName) {
         this(text, fieldName, false);

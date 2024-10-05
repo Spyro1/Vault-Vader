@@ -5,15 +5,14 @@ import com.github.spyro1.vaultvader.frontend.UI;
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
+import java.util.Objects;
 
 public class CategoryTreeRenderer extends DefaultTreeCellRenderer {
 
-//        private final ImageIcon leaf = new ImageIcon("../assets/white/file.png");
-
         public CategoryTreeRenderer() {
-                leafIcon = new ImageIcon(this.getClass().getClassLoader().getResource("label.png"));
-                openIcon = new ImageIcon(this.getClass().getClassLoader().getResource("folder.png"));
-                closedIcon = new ImageIcon(this.getClass().getClassLoader().getResource("folder.png"));
+                leafIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("label.png")));
+                openIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("folder.png")));
+                closedIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("folder.png")));
 
                 setTextSelectionColor(UI.mainTextColor);
                 setBackgroundSelectionColor(UI.mainColor);

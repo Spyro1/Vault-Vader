@@ -11,11 +11,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
-import java.util.Vector;
 
 public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
@@ -54,8 +52,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
                 iconButton.setToolTipText("Ikon hozzáadása");
                 iconButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
                 iconButton.addActionListener(this::iconSelectorButtonClicked);
-//                iconButton.setBackground(UI.bgDarkColor);
-//                iconButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(0,0,0, UI.margin), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
             }
             titleRow.add(iconButton, BorderLayout.WEST);
             titleField = new DarkTextField("", "Bejegyzés címe", true);
@@ -76,8 +72,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
             bottomToolPanel.add(addNewFieldButton);
         }
     }
-
-
 
     public void hidePanel() {
         this.setVisible(false);
@@ -137,8 +131,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     }
     public int getCategoryIdx() {
         return displayedItem.getCategoryIdx();
-//        return ((DarkComboField)categoryBox.dataField).getSelectedIndex();
-//        return ((DarkComboField)categoryBox.dataField).getSelectedItem().toString(); // TODO: ALWAYS ERROR HERE
     }
     // == Click events ==
 
@@ -154,8 +146,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         else{
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You chose " + iconFilePath);
            iconButton.setIcon(iconFilePath);
-//            API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
-//            displayItem(API.getTemporalItem()); // Re-display
         }
     }
 
@@ -181,6 +171,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     }
 
     private void deleteThisItem(ActionEvent actionEvent) {
+        // TODO: Write delete this item function
     }
 
     /**

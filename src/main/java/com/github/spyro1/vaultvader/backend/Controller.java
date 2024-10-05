@@ -15,10 +15,10 @@ public class Controller {
     public static final Controller INSTANCE = new Controller();
 
     /** Stores the current user's password items */
-    private ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Item> items = new ArrayList<>();
 
     /** Stores the current user's categories */
-    private ArrayList<String> categories = new ArrayList<>(); // new HashSet<>();
+    private final ArrayList<String> categories = new ArrayList<>(); // new HashSet<>();
 
     /** The name of the user currently logged in to the app */
     private User loggedInUser;
@@ -62,16 +62,12 @@ public class Controller {
         json.put(API.CATEGORY_KEY, categoryArray);
         json.put(API.ITEMS_KEY, items.stream().map(Item::toJSON).collect(Collectors.toList()));
         // Write out to file
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"));
+        try (PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"))) {
             // Formatting
             pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
             pw.flush();
         } catch (Exception e) {
             System.err.println("ERROR/Controller/writeUserDateToFile: " + e.getMessage());
-        } finally {
-            pw.close();
         }
     }
 
@@ -112,7 +108,7 @@ public class Controller {
         }
         return false; // False, if the user exists, but the password is incorrect
     }
-    public boolean createUser(JSONObject userData) throws Exception {
+    public boolean createUser(JSONObject userData) {
         try {
             // Try to search for username.json --> if it does not exist, then an exception is thrown.
             FileReader fr = new FileReader("users/" + userData.get("username").toString() + ".json");
@@ -169,15 +165,10 @@ public class Controller {
     }
 
     // == Item's fields ==
-//    public void addNewField(JSONObject fieldData, int selectedItemIndex) {
-//        items.get(selectedItemIndex).getFields().add(new Field().fromJSON(fieldData));
-//    }
 
     public Item newTemporalItem() {
-//        items.add(new Item());
         tempItem = new Item();
         return tempItem;
-//        return items.size() - 1;
     }
 
     public Item getTemporalItem() {
@@ -185,7 +176,6 @@ public class Controller {
     }
 
     public Item setTemporalItem(Item itemReference) {
-//        tempItem = new Item().fromJSON(itemReference.toJSON());
         tempItem = itemReference;
         return tempItem;
     }
