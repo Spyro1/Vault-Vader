@@ -11,7 +11,7 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
 
     private final JLabel  titleLabel = new JLabel();
     private final JLabel categoryLabel = new JLabel();
-    private final JButton icon = new JButton();
+    private final IconButton icon = new IconButton();
 
     public ItemCellRenderer() {
         setLayout(new BorderLayout(5, 5));
@@ -33,9 +33,9 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
                 textPanel.add(titleLabel, BorderLayout.CENTER);
                 textPanel.add(categoryLabel, BorderLayout.SOUTH);
             }
-            icon.setBackground(UI.bgDarkColor);
+//            icon.setBackground(UI.bgDarkColor);
             icon.setBorder(BorderFactory.createLineBorder(UI.bgDarkColor, UI.margin));
-            icon.addActionListener(_ -> System.out.println("Megnyomtak"));
+//            icon.addActionListener(_ -> System.out.println("Megnyomtak"));
             innerPanel.add(icon, BorderLayout.WEST);
             innerPanel.add(textPanel, BorderLayout.CENTER);
         }
@@ -46,7 +46,7 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
     public Component getListCellRendererComponent(JList<? extends Item> list, Item value, int index, boolean isSelected, boolean cellHasFocus) {
         titleLabel.setText(value.getTitle());
         categoryLabel.setText(API.getCategoryList().get(value.getCategoryIdx()));
-        icon.setIcon(new ImageIcon(value.getIcon()));
+        icon.setIcon(value.getIcon());
         // when select item
         if (isSelected) {
             setBackground(UI.mainColor);

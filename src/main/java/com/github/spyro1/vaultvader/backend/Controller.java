@@ -7,7 +7,6 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -23,7 +22,9 @@ public class Controller {
 
     /** The name of the user currently logged in to the app */
     private User loggedInUser;
-    private Item tempItem = new Item();
+
+    /** Temporal item for displaying the item data on screen and then saving the changes*/
+    private Item tempItem = null;// = new Item();
 
     /** Not accessible constructor */
     private Controller() {}
@@ -33,17 +34,22 @@ public class Controller {
         categories.clear();
         items.clear();
         try {
+            // TODO: read user data better file handling!! (Error when "users" directory does not exists)
             JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
-            JSONArray categoryArray = (JSONArray) usersData.get(API.CATEGORY_KEY);
-            for (Object categoryObj : categoryArray) {
-                categories.add(categoryObj.toString());
+            if (usersData.containsKey(API.CATEGORY_KEY)) {
+                JSONArray categoryArray = (JSONArray) usersData.get(API.CATEGORY_KEY);
+                for (Object categoryObj : categoryArray) {
+                    categories.add(categoryObj.toString());
+                }
             }
-            JSONArray itemArray = (JSONArray) usersData.get(API.ITEMS_KEY);
-            for (Object itemObj : itemArray) {
-                items.add(new Item().fromJSON((JSONObject) itemObj));
+            if (usersData.containsKey(API.ITEMS_KEY)) {
+                JSONArray itemArray = (JSONArray) usersData.get(API.ITEMS_KEY);
+                for (Object itemObj : itemArray) {
+                    items.add(new Item().fromJSON((JSONObject) itemObj));
+                }
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.err.println("ERROR/Controller/readUsersDataFromFile: " + e.getMessage());
         }
     }
     private void writeUserDateToFile() {
@@ -63,7 +69,7 @@ public class Controller {
             pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
             pw.flush();
         } catch (Exception e) {
-            System.out.println(e);
+            System.err.println("ERROR/Controller/writeUserDateToFile: " + e.getMessage());
         } finally {
             pw.close();
         }
@@ -94,6 +100,7 @@ public class Controller {
 
         JSONObject userDataFromFile;
         try{
+            // TODO: Better file handling, and search for files if exists, cause it can cause errors when directory does not exists
             userDataFromFile = (JSONObject) new JSONParser().parse(new FileReader("users/" + username + ".json"));
         } catch (Exception e){
             throw new Exception("Nem található ilyen nevű felhasználó!\nKérem regisztráljon, vagy lépjen be más felhasználóval."); // Throw exception if the user does not exists
@@ -162,13 +169,15 @@ public class Controller {
     }
 
     // == Item's fields ==
-    public void addNewField(JSONObject fieldData, int selectedItemIndex) {
-        items.get(selectedItemIndex).getFields().add(new Field().fromJSON(fieldData));
-    }
+//    public void addNewField(JSONObject fieldData, int selectedItemIndex) {
+//        items.get(selectedItemIndex).getFields().add(new Field().fromJSON(fieldData));
+//    }
 
-    public int addNewItem() {
-        items.add(new Item());
-        return items.size() - 1;
+    public Item newTemporalItem() {
+//        items.add(new Item());
+        tempItem = new Item();
+        return tempItem;
+//        return items.size() - 1;
     }
 
     public Item getTemporalItem() {
@@ -176,18 +185,23 @@ public class Controller {
     }
 
     public Item setTemporalItem(Item itemReference) {
-        tempItem = new Item().fromJSON(itemReference.toJSON());
+//        tempItem = new Item().fromJSON(itemReference.toJSON());
+        tempItem = itemReference;
         return tempItem;
     }
 
     public boolean saveTemporalItem() {
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).ID == tempItem.ID) {
-                items.set(i, tempItem);
-                return true; // Old item modified
+        if (tempItem.getTitle().isBlank() || tempItem.getCategoryIdx() == -1) {
+            return false; // Blank fields
+        } else {
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).ID == tempItem.ID) {
+                    items.set(i, tempItem);
+                    return true; // Old item modified
+                }
             }
+            items.add(tempItem); // New item added
+            return true;
         }
-        items.add(tempItem);
-        return false; // New item added
     }
 }

@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -44,6 +43,7 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
      */
     @Override
     public JSONObject toJSON() {
+        if (getSelectedIndex() == -1) return null; // Not selected any item
         JSONObject json = new JSONObject();
         json.put(API.TYPE_KEY, API.COMBO_TYPE);
         json.put(API.VALUE_KEY, getSelectedItem().toString());
@@ -56,12 +56,12 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
      */
     @Override
     public Object fromJSON(JSONObject json) {
-        String fieldName = "";
-        String[] values = new String[0];
-        if (json.containsKey(API.VALUE_KEY)) setSelectedItem(json.get(API.VALUE_KEY).toString());
+        // String fieldName = "";
+        // String[] values; // = new String[0];
+        // if (json.containsKey(API.VALUE_KEY)) setSelectedItem(json.get(API.VALUE_KEY).toString());
         // TODO: Write Dark combo to set values
-        if(json.containsKey(API.VALUES_KEY)) values = (String[]) json.get(API.VALUES_KEY);
-        if (json.containsKey(API.FIELD_NAME_KEY)) fieldName = json.get(API.FIELD_NAME_KEY).toString();
+        // if(json.containsKey(API.VALUES_KEY)) values = (String[]) json.get(API.VALUES_KEY);
+        // if (json.containsKey(API.FIELD_NAME_KEY)) fieldName = json.get(API.FIELD_NAME_KEY).toString();
         return this;
     }
 }

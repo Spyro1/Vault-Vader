@@ -1,7 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.ui;
 
 import com.github.spyro1.vaultvader.api.API;
-import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
 import com.github.spyro1.vaultvader.frontend.customComponents.*;
@@ -188,18 +187,19 @@ public class MainUI extends JFrame {
                 itemListScrollPane.setBorder(BorderFactory.createEmptyBorder());
                 itemListScrollPane.getViewport().setOpaque(false);
             }
-            refreshItemList(); // Create Item JList and refresh
             sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
             JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
                 itemToolPanel.setOpaque(false);
                 IconButton addNewItemButton = new IconButton("Új bejegyzés","plus.png"); {
                     addNewItemButton.setToolTipText("Új bejegyzés");
-                    addNewItemButton.addActionListener(this::newItem);
+                    addNewItemButton.addActionListener(this::newItemButtonClicked);
                 }
                 itemToolPanel.add(addNewItemButton);
             }
             sliderPanel.add(itemToolPanel, BorderLayout.SOUTH);
         }
+        // REFRESH ITEM LIST
+        refreshItemList(); // Create Item JList and refresh
         // EDITOR PANEL for editing items
         contentBackPanel = new JPanel(new BorderLayout()); {
             contentBackPanel.setBackground(UI.bgLightColor);
@@ -270,11 +270,6 @@ public class MainUI extends JFrame {
         setVisible(true);
     }
 
-    private void saveItemButtonClicked(ActionEvent actionEvent) {
-        API.saveItem(editorPanel.toJSON());
-        refreshItemList();
-    }
-
 
     // == Category ==
     private void addCategoryClicked(ActionEvent actionEvent) {
@@ -285,13 +280,13 @@ public class MainUI extends JFrame {
                 JSONObject json = new JSONObject();
                 json.put(API.CATEGORY_KEY, categoryName); // Add data to json object
                 if (API.addNewCategory(json)) { // Call API to create the new category
-                    System.out.println("Sikeres kategória hozzáadás");
+                    System.out.println("DEBUG/addCategoryClicked: Sikeres kategória hozzáadás");
                 } else {
-                    System.out.println("Nem sikerült a kategória hozzáadás");
+                    System.out.println("DEBUG/addCategoryClicked: Nem sikerült a kategória hozzáadás");
                 }
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.err.println("ERROR/addCategoryClicked: " + e);
         }
         refreshCategoryTree();
     }
@@ -305,14 +300,14 @@ public class MainUI extends JFrame {
                 json.put(API.NEW_CATEGORY_KEY, categoryName);
                 json.put(API.OLD_CATEGORY_KEY, oldCategory);
                 if (categoryName != null && oldCategory != null && API.modifyCategory(json)) {
-                    System.out.println("Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
+                    System.out.println("DEBUG/editCategoryClicked: Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
                     refreshCategoryTree();
                 } else {
-                    System.out.println("Nem sikerült a kategóriát szerkeszteni"); // JUST FOR DEBUG
+                    System.out.println("DEBUG/editCategoryClicked: Nem sikerült a kategóriát szerkeszteni"); // JUST FOR DEBUG
                 }
             }
-        } catch (Exception ex){
-            System.out.println(ex);
+        } catch (Exception e){
+            System.err.println("ERROR/editCategoryClicked: " + e);
         }
     }
     private void removeCategoryClicked(ActionEvent actionEvent) {
@@ -323,27 +318,34 @@ public class MainUI extends JFrame {
                 JSONObject json = new JSONObject();
                 json.put(API.CATEGORY_KEY, oldCategory);
                 if (API.removeCategory(json))
-                    System.out.println("Sikeres törlés");
+                    System.out.println("DEBUG/removeCategoryClicked: Sikeres törlés");
                 else
-                    System.out.println("Nem sikerült a törlés");
+                    System.out.println("DEBUG/removeCategoryClicked: Nem sikerült a törlés");
                 refreshCategoryTree();
             }
         } catch (Exception e){
-            System.out.println(e);
+            System.err.println("ERROR/removeCategoryClicked: " + e.getMessage());
         }
     }
     private void categorySelected(TreeSelectionEvent treeSelectionEvent) {
         // TODO: Write category tree selection litener
     }
+
     // == Search ==
     private void searchButtonClicked(ActionEvent actionEvent) {
         // TODO: Write search button action
     }
+
     // == Item ==
-    private void newItem(ActionEvent actionEvent) {
-        // TODO: Show an empty editor field in content panel
-        API.getTemporalItem().reset();
-        editorPanel.displayItem(API.getTemporalItem());
+    private void newItemButtonClicked(ActionEvent actionEvent) {
+        editorPanel.displayItem(API.newTemporalItem());
+    }
+    private void saveItemButtonClicked(ActionEvent actionEvent) {
+        if (API.saveItem(editorPanel.toJSON())){
+            refreshItemList();
+        } else {
+            JOptionPane.showMessageDialog(this, "Nincs minden szükséges mező kitöltve!\nKötelező mezők: Cím, Kategória", "Kötelező mezők", JOptionPane.WARNING_MESSAGE);
+        }
     }
     private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
         try {

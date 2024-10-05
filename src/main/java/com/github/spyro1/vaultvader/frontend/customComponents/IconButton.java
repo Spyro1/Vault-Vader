@@ -8,6 +8,7 @@ import java.awt.*;
 public class IconButton extends JButton {
 
     public static final String defaultIconPath = "picture.png";
+    private String iconPath;
 
     public IconButton() {
         super();
@@ -27,15 +28,26 @@ public class IconButton extends JButton {
     }
     public IconButton(String text, String resourcePath) {
         super(text);
+        setIcon(resourcePath);
+        setup();
+    }
+    public void setIcon(String path) {
         ImageIcon icon;
+        iconPath = path;
         try {
-            icon = new ImageIcon(this.getClass().getClassLoader().getResource(resourcePath));
+            icon = new ImageIcon(this.getClass().getClassLoader().getResource(path));
         } catch (Exception ex) {
-            System.err.println("ERROR/IconButton: resources/" + resourcePath + " file is not found at location");
-            icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath));
+            try {
+                icon = new ImageIcon(path);
+            } catch (Exception ex2) {
+                System.err.println("ERROR/IconButton: resources/" + path + " file is not found at location");
+                icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath));
+            }
         }
         setIcon(icon);
-        setup();
+    }
+    public String getIconPath() {
+        return iconPath;
     }
     private void setup(){
 //        setOpaque(false);
@@ -57,4 +69,6 @@ public class IconButton extends JButton {
         g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
     }
+
+
 }

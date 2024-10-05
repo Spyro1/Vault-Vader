@@ -10,7 +10,7 @@ public interface JSONSerializable {
 
     /**
      * Serializes the current instance to a JSON object.
-     * @return A {@link JSONObject} representing the current object's state in JSON format.
+     * @return A {@link JSONObject} representing the current object's state in JSON format. null if the field is empty
      */
     JSONObject toJSON();
 

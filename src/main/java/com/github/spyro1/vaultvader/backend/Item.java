@@ -9,7 +9,7 @@ import org.json.simple.*;
 public class Item implements JSONSerializable {
     private static int idCounter = 0;
 
-    public int ID;
+    public int ID = idCounter++;;
     private String icon;
     private String title;
     private Field category;
@@ -26,10 +26,9 @@ public class Item implements JSONSerializable {
     }
 
     private void setupItem(){
-        ID = idCounter++;
         title = null;
-        categoryIdx = 0;
-        category = new Field("Kategoria", "", FieldType.CATEGORY);
+        categoryIdx = -1;
+        category = new Field("Kategória", "", FieldType.CATEGORY);
         final String defaultIconPath = "picture.png";
         icon = defaultIconPath; //new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath), defaultIconPath);
         fields.clear();
@@ -57,7 +56,7 @@ public class Item implements JSONSerializable {
 
     @Override
     public String toString() {
-        return String.format("%s [%s]", title, categoryIdx);
+        return String.format("%s [%s (%d)]", title, category.getValue(), categoryIdx);
     }
 
     /**
@@ -66,7 +65,7 @@ public class Item implements JSONSerializable {
     @Override
     public JSONObject toJSON() {
         JSONObject obj = new JSONObject();
-        obj.put(API.ID_KEY, ID);
+//        obj.put(API.ID_KEY, ID);
         obj.put(API.ICON_KEY, icon);
         obj.put(API.TITLE_KEY, title);
         obj.put(API.CATEGORY_KEY, categoryIdx);
@@ -84,10 +83,10 @@ public class Item implements JSONSerializable {
     @Override
     public Item fromJSON(JSONObject json) {
         if (json != null){
-            if (json.containsKey(API.ID_KEY)) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
+//            if (json.containsKey(API.ID_KEY)) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
             if (json.containsKey(API.ICON_KEY)) icon = json.get(API.ICON_KEY).toString(); //new ImageIcon(this.getClass().getClassLoader().getResource(json.get(API.ICON_KEY).toString()), json.get(API.ICON_KEY).toString());
             if (json.containsKey(API.TITLE_KEY)) title = json.get(API.TITLE_KEY).toString();
-            if (json.containsKey(API.CATEGORY_KEY)) categoryIdx = (int) json.get(API.CATEGORY_KEY);
+            if (json.containsKey(API.CATEGORY_KEY)) categoryIdx = Integer.parseInt(json.get(API.CATEGORY_KEY).toString());
             fields.clear();
             if (json.containsKey(API.FIELDS_KEY)) {
                 JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);

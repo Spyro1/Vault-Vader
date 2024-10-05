@@ -35,8 +35,12 @@ public class DarkTextField extends JTextField implements JSONSerializable {
             setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
     }
 
+    /**
+     * @JSONkeys "fieldName", "type", "vale"
+     */
     @Override
     public JSONObject toJSON() {
+        if (getText().isBlank()) return null; // Empty field
         JSONObject json = new JSONObject();
         json.put(API.TYPE_KEY, API.TEXT_TYPE);
         json.put(API.VALUE_KEY, getText());

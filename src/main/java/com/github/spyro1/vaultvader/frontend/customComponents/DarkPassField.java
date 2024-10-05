@@ -45,6 +45,7 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
 
     @Override
     public JSONObject toJSON() {
+        if (getText().isBlank()) return null; // Empty field
         JSONObject json = new JSONObject();
         json.put(API.TYPE_KEY, API.PASS_TYPE);
         json.put(API.VALUE_KEY, getText());

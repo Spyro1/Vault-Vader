@@ -83,6 +83,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     public void displayItem(Item displayedItem) {
         this.displayedItem = displayedItem;
         removeAll(); // clears panel
+        fieldsList.clear();
         gbc.weighty = 0.01;
         // Add Title
         gbc.gridy = gridY++;
@@ -94,18 +95,12 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         // Add fields
         try {
             if (displayedItem != null) {
-                iconButton.setIcon(new ImageIcon("", displayedItem.getIcon()));
+                iconButton.setIcon(displayedItem.getIcon());
                 titleField.setText(displayedItem.getTitle());
                 for (int i = 0; i < displayedItem.getFields().size(); i++) {
                     String fieldName = displayedItem.getFields().get(i).getFieldName();
                     String text = displayedItem.getFields().get(i).getValue();
                     FieldPanel fp = new FieldPanel(fieldName, text, displayedItem.getFields().get(i).getType());
-//                    FieldPanel fp = switch (displayedItem.getFields().get(i).getType()) {
-//                        case TEXT -> new FieldPanel(new DarkTextField(text, displayedItem.getFields().get(i).getFieldName(), true));
-//                        case PASS -> new FieldPanel(new DarkPassField(text, fieldName, true));
-//                        case CATEGORY -> new FieldPanel(new DarkComboField(API.getCategoryList(), displayedItem.getCategoryIdx(), fieldName, true));
-//                        case null, default -> null;
-//                    };
                     if (fp != null) {
                         fieldsList.add(fp);
                         gbc.gridy = gridY++;
@@ -128,9 +123,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         validate();
         setVisible(true);
     }
-    private void addRow(JComponent component){
-
-    }
 
     // == Getters ==
 
@@ -152,13 +144,15 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         fd.setDirectory("C:\\");
         fd.setFile("*.png|*.jpg|*.jpeg|*.gif");
         fd.setVisible(true);
-        iconFilePath = fd.getFile();
+        iconFilePath = fd.getDirectory() + fd.getFile();
+//        iconFilePath = fd.getFile();
         if (iconFilePath == null)
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You cancelled the choice"); // Dor
         else{
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You chose " + iconFilePath);
-            displayedItem.setIcon(iconFilePath);
-            displayItem(displayedItem); // refresh
+           iconButton.setIcon(iconFilePath);
+//            API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
+//            displayItem(API.getTemporalItem()); // Re-display
         }
     }
 
@@ -172,6 +166,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     private void addNewFieldPopupClicked(FieldType chosenType) {
         String fieldName = JOptionPane.showInputDialog(this,"Írja be az új mező nevét!", "Új mező", JOptionPane.QUESTION_MESSAGE);
         if (fieldName != null && !fieldName.isBlank()) {
+            API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
             displayItem(API.getTemporalItem().addField(new Field(fieldName, "", chosenType)));
         }
     }
@@ -191,14 +186,15 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     @Override
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
-        json.put(API.ICON_KEY, ((ImageIcon)iconButton.getIcon()).getDescription());
+        json.put(API.ICON_KEY, iconButton.getIconPath());
         json.put(API.TITLE_KEY, titleField.getText());
         json.put(API.CATEGORY_KEY, ((DarkComboField)categoryBox.component).getSelectedIndex());
         JSONArray fieldsJSON = new JSONArray();
         for (FieldPanel fp : fieldsList) {
-            fieldsJSON.add(fp.toJSON());
+            JSONObject readFieldJSON = fp.toJSON();
+            if (readFieldJSON != null) fieldsJSON.add(readFieldJSON);
         }
-        json.put(API.FIELDS_KEY, fieldsList);
+        json.put(API.FIELDS_KEY, fieldsJSON);
         return json;
     }
 

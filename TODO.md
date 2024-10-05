@@ -13,7 +13,8 @@
 
 - Category editor panel
   - [ ] (Create right click popup menu for tool buttons also)
-  - [ ] Set selection listener to filter the displayed items in `slider panel` according to selected category 
+  - [ ] Set selection listener to filter the displayed items in `slider panel` according to selected category
+  - [ ] Refresh editor panels category chooser when new category added or modified or deleted
 - Item List Slider panel
   - [ ] Create right click popup menu for adding new item
   - [x] Add new item button functionality
@@ -25,6 +26,7 @@
     - [x] Base fields added upon item setup
     - [ ] Remove field functionality
     - [x] Icon selector button
+    - [x] Icon not shows
 - Header Panel
   - [ ] Search Button functionality
   - [ ] Search Button works for Enter

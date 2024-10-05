@@ -1,9 +1,7 @@
 package com.github.spyro1.vaultvader.api;
 
 import com.github.spyro1.vaultvader.backend.Controller;
-import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.Item;
-import com.github.spyro1.vaultvader.frontend.customComponents.FieldPanel;
 import com.github.spyro1.vaultvader.frontend.ui.LoginUI;
 import com.github.spyro1.vaultvader.frontend.ui.MainUI;
 
@@ -76,9 +74,8 @@ public class API {
      *
      * @return
      */
-    static public int addNewItem(/*JSONObject itemData*/) {
-        // TODO: Write add new item api function == DO NOT USE
-        return Controller.INSTANCE.addNewItem();
+    static public Item newTemporalItem(/*JSONObject itemData*/) {
+        return Controller.INSTANCE.newTemporalItem();
     }
 
     /**

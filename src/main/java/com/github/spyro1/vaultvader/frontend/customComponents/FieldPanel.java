@@ -73,7 +73,7 @@ public class FieldPanel extends JPanel implements JSONSerializable {
 
     @Override
     public JSONObject toJSON() {
-        return data.toJSON();
+        return ((JSONSerializable)component).toJSON();
     }
 
     @Override
