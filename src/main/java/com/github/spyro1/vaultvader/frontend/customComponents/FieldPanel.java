@@ -41,14 +41,16 @@ public class FieldPanel extends JPanel implements JSONSerializable {
         };
     }
     private void setup() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(UI.margin, UI.margin));
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
 
         optionsButton = new IconButton("", "ui-dots.png");
+        optionsButton.setToolTipText("Mező opciók");
+        optionsButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
         optionsButton.addActionListener(this::moreOptionsButtonClicked);
 
-        JPanel panel = new JPanel(new BorderLayout()); {
+        JPanel panel = new JPanel(new BorderLayout(UI.margin, UI.margin)); {
             panel.setOpaque(false);
             panel.add(component, BorderLayout.CENTER);
             panel.add(optionsButton, BorderLayout.EAST);

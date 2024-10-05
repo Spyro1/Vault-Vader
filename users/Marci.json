@@ -31,11 +31,7 @@
 {
 "fieldName":"Jelszó",
 "type":"pass",
-"value":"Jelszó"},
-{
-"fieldName":"Megjegyzés",
-"type":"text",
-"value":"Mégvalami"}]},
+"value":"Jelszó"}]},
 {
 "icon":"picture.png",
 "title":"Gép belépés",

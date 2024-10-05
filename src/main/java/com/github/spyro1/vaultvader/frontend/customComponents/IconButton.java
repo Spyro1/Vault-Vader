@@ -44,7 +44,8 @@ public class IconButton extends JButton {
                 icon = new ImageIcon(this.getClass().getClassLoader().getResource(defaultIconPath));
             }
         }
-        setIcon(icon);
+        Image resized = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+        setIcon(new ImageIcon(resized));
     }
     public String getIconPath() {
         return iconPath;

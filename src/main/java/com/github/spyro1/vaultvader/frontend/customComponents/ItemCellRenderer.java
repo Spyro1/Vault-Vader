@@ -16,7 +16,7 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
     public ItemCellRenderer() {
         setLayout(new BorderLayout(5, 5));
         setBackground(UI.bgLightColor);
-        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
         /* inner panel: */
         JPanel innerPanel = new JPanel();
         {
@@ -33,7 +33,7 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
                 textPanel.add(titleLabel, BorderLayout.CENTER);
                 textPanel.add(categoryLabel, BorderLayout.SOUTH);
             }
-//            icon.setBackground(UI.bgDarkColor);
+            icon.setBackground(UI.bgDarkColor);
             icon.setBorder(BorderFactory.createLineBorder(UI.bgDarkColor, UI.margin));
 //            icon.addActionListener(_ -> System.out.println("Megnyomtak"));
             innerPanel.add(icon, BorderLayout.WEST);

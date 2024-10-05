@@ -11,6 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
@@ -46,19 +47,21 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         gbc.weighty = 0.01;
         gbc.weightx = 1;
         setBackground(UI.bgLightColor);
-        titleRow = new JPanel(new BorderLayout()); {
+        titleRow = new JPanel(new BorderLayout(UI.margin, UI.margin)); {
             titleRow.setOpaque(false);
             titleRow.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
             iconButton = new IconButton("", iconFilePath); {
                 iconButton.setToolTipText("Ikon hozzáadása");
                 iconButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
                 iconButton.addActionListener(this::iconSelectorButtonClicked);
+//                iconButton.setBackground(UI.bgDarkColor);
+//                iconButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(0,0,0, UI.margin), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
             }
             titleRow.add(iconButton, BorderLayout.WEST);
             titleField = new DarkTextField("", "Bejegyzés címe", true);
             titleRow.add(titleField, BorderLayout.CENTER);
             moreOptionsButton = new IconButton("", "ui-dots.png"); {
-                moreOptionsButton.setToolTipText("Egyéb lehetőségek");
+                moreOptionsButton.setToolTipText("Bejegyzés opciók");
                 moreOptionsButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
                 moreOptionsButton.addActionListener(this::moreOptionsButtonClicked);
             }
@@ -146,7 +149,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         fd.setVisible(true);
         iconFilePath = fd.getDirectory() + fd.getFile();
 //        iconFilePath = fd.getFile();
-        if (iconFilePath == null)
+        if (fd.getFile() == null)
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You cancelled the choice"); // Dor
         else{
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You chose " + iconFilePath);
