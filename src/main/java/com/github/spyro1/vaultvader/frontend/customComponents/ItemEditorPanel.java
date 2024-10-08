@@ -186,6 +186,17 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     private void renameThisFieldMenuItemClicked(ActionEvent actionEvent, Field f) {
         // TODO: Write rename field
+        String renamedFieldName = (String) JOptionPane.showInputDialog(this,"Nevezze át a mező nevét!", "Mező átnevezls", JOptionPane.QUESTION_MESSAGE, null, null, f.getFieldName());
+        if (renamedFieldName != null && !renamedFieldName.isBlank()) {
+            try {
+                API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
+            } catch (Exception e) {
+                System.err.println("ERROR/ItemEditorPanel/addNewField: " + e);
+            }
+            Field found = API.getTemporalItem().getFields().stream().filter(x -> x.getFieldName().equals(f.getFieldName())).findFirst().orElse(null); //.setFieldName(renamedFieldName); // Rename field
+            if (found != null) found.setFieldName(renamedFieldName);
+            displayItem(API.getTemporalItem());
+        }
     }
 
     private void deleteThisFieldMenuItemClicked(ActionEvent actionEvent, Field f) {

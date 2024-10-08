@@ -19,12 +19,13 @@
   - [ ] Create right click popup menu for adding new item
   - [x] Add new item button functionality
 - Content Panel
-  - [ ] Save button functionality
+  - [x] Save button functionality
   - Editor Panel
     - [x] Add field button functionality
     - [x] Popup menu field type chooser
     - [x] Base fields added upon item setup
-    - [ ] Remove field functionality
+    - [x] Remove field functionality
+    - [ ] Rename field functionality
     - [x] Icon selector button
     - [x] Icon not shows
 - Header Panel
@@ -36,5 +37,5 @@
   
 # Backend
 
-- [ ] Category reference with index: 0: all, 1..*: index of specific category
+- --[ ] Category reference with index: 0: all, 1..*: index of specific category--
 

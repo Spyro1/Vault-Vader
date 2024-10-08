@@ -30,6 +30,7 @@ public class Field implements JSONSerializable {
     public FieldType getType() { return type; }
 
     public void setValue(String value) { this.value = value; }
+    public void setFieldName(String fieldName) { this.fieldName = fieldName; }
 
     public String toString() {
         return fieldName + ": " + value + " [" + type + "]";

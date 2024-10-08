@@ -303,7 +303,7 @@ public class MainUI extends JFrame {
                 json.put(API.NEW_CATEGORY_KEY, categoryName);
                 json.put(API.OLD_CATEGORY_KEY, oldCategory);
                 if (categoryName != null && oldCategory != null && API.modifyCategory(json)) {
-                    System.out.println("DEBUG/editCategoryClicked: Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
+                    System.out.println("DEBUG/feditCategoryClicked: Sikeresk kategória szerkesztés"); // JUST FOR DEBUG
                     refreshCategoryTree();
                     refreshEditorPanel();
                 } else {
