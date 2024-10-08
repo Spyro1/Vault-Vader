@@ -225,7 +225,7 @@ public class Controller {
             return false; // Blank fields -> not saved
         } else {
             for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).ID == tempItem.ID) {
+                if (items.get(i).getID() == tempItem.getID()) {
                     items.set(i, tempItem);
                     return true; // Old item modified
                 }

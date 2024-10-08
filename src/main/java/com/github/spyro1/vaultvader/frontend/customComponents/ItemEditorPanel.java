@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class ItemEditorPanel extends JPanel implements JSONSerializable {
@@ -28,7 +29,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     // Referenced variables
     MainUI window;
-    Item displayedItem;
+//    Item displayedItem;
 
 
     public LinkedList<FieldPanel> fieldsList = new LinkedList<>();
@@ -39,6 +40,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     String iconFilePath = "picture.png";
 
     public ItemEditorPanel(MainUI window) {
+        this.window = window;
         setLayout(gbl);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
@@ -78,7 +80,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     }
 
     public void displayItem(Item displayedItem) {
-        this.displayedItem = displayedItem;
+//        this.displayedItem = displayedItem;
         removeAll(); // clears panel
         fieldsList.clear();
         gbc.weighty = 0.01;
@@ -125,15 +127,15 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     // == Getters ==
 
-    public String getTitle(){
-        return titleField.getText();
-    }
-    public ImageIcon getIcon(){
-        return (ImageIcon) iconButton.getIcon();
-    }
-    public int getCategoryIdx() {
-        return displayedItem.getCategoryIdx();
-    }
+//    public String getTitle(){
+//        return titleField.getText();
+//    }
+//    public ImageIcon getIcon(){
+//        return (ImageIcon) iconButton.getIcon();
+//    }
+//    public int getCategoryIdx() {
+//        return displayedItem.getCategoryIdx();
+//    }
 
     // == Click events ==
 
@@ -185,7 +187,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     }
 
     private void renameThisFieldMenuItemClicked(ActionEvent actionEvent, Field f) {
-        // TODO: Write rename field
         String renamedFieldName = (String) JOptionPane.showInputDialog(this,"Nevezze át a mező nevét!", "Mező átnevezls", JOptionPane.QUESTION_MESSAGE, null, null, f.getFieldName());
         if (renamedFieldName != null && !renamedFieldName.isBlank()) {
             try {
@@ -207,11 +208,15 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         }
         API.getTemporalItem().getFields().removeIf(x-> x.getFieldName().equals(f.getFieldName()));
         displayItem(API.getTemporalItem());
-        // TODO: Write delete field
     }
 
     private void deleteThisItem(ActionEvent actionEvent) {
-        // TODO: Write delete this item function
+        if (JOptionPane.showConfirmDialog(this,"Biztosan törli a bejegyzést?", "Bejegyzés törlése", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            ArrayList<Item> itemListRef = API.getItemList(null);
+            itemListRef.removeIf(x -> x.getID() == API.getTemporalItem().getID());
+            hidePanel();
+            window.refreshItemList();
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ import com.github.spyro1.vaultvader.frontend.ui.MainUI;
 
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -130,7 +131,7 @@ public class API {
     }
 
     // == get methods ==
-    static public Collection<Item> getItemList(JSONObject filter){
+    static public ArrayList<Item> getItemList(JSONObject filter){
         // Show all items = no filter
         if (filter == null){
             return Controller.INSTANCE.getItemList();

@@ -9,7 +9,7 @@ import org.json.simple.*;
 public class Item implements JSONSerializable {
     private static int idCounter = 0;
 
-    public int ID = idCounter++;
+    private int ID = idCounter++;
     private String icon;
     private String title;
     private Field category;
@@ -36,6 +36,7 @@ public class Item implements JSONSerializable {
         fields.add(new Field("Jelszó", "", FieldType.PASS));
     }
 
+    public int getID() { return ID;}
     public String getIcon() { return icon; }
     public String getTitle() { return title; }
     public Field getCategory() { return category; }
