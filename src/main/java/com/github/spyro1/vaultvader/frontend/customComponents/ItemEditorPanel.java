@@ -59,7 +59,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
             moreOptionsButton = new IconButton("", "ui-dots.png"); {
                 moreOptionsButton.setToolTipText("Bejegyzés opciók");
                 moreOptionsButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
-                moreOptionsButton.addActionListener(this::moreOptionsButtonClicked);
+                moreOptionsButton.addActionListener(this::optionsButtonClicked);
             }
             titleRow.add(moreOptionsButton, BorderLayout.EAST);
         }
@@ -98,6 +98,8 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
                     String fieldName = displayedItem.getFields().get(i).getFieldName();
                     String text = displayedItem.getFields().get(i).getValue();
                     FieldPanel fp = new FieldPanel(fieldName, text, displayedItem.getFields().get(i).getType());
+                    final int I = i;
+                    fp.optionsButton.addActionListener(e -> fieldOptionsButtonClicked(e, displayedItem.getFields().get(I)));
                     if (fp != null) {
                         fieldsList.add(fp);
                         gbc.gridy = gridY++;
@@ -132,6 +134,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     public int getCategoryIdx() {
         return displayedItem.getCategoryIdx();
     }
+
     // == Click events ==
 
     private void iconSelectorButtonClicked(ActionEvent actionEvent) {
@@ -159,15 +162,41 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     private void addNewFieldPopupClicked(FieldType chosenType) {
         String fieldName = JOptionPane.showInputDialog(this,"Írja be az új mező nevét!", "Új mező", JOptionPane.QUESTION_MESSAGE);
         if (fieldName != null && !fieldName.isBlank()) {
-            API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
+            try {
+                API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
+            } catch (Exception e) {
+                System.err.println("ERROR/ItemEditorPanel/addNewField: " + e);
+            }
             displayItem(API.getTemporalItem().addField(new Field(fieldName, "", chosenType)));
         }
     }
 
-    private void moreOptionsButtonClicked(ActionEvent actionEvent) {
+    private void optionsButtonClicked(ActionEvent actionEvent) {
         DarkPopupMenuItem deleteItem = new DarkPopupMenuItem("Bejegyzés törlése", this::deleteThisItem);
         DarkPopupMenu more = new DarkPopupMenu(deleteItem);
         more.show(actionEvent);
+    }
+
+    private void fieldOptionsButtonClicked(ActionEvent actionEvent, Field f) {
+        DarkPopupMenuItem deleteFieldMenuItem = new DarkPopupMenuItem("Mező törlése", e -> deleteThisFieldMenuItemClicked(e, f));
+        DarkPopupMenuItem renameFieldMenuItem = new DarkPopupMenuItem("Mező átnevezése", e-> renameThisFieldMenuItemClicked(e, f));
+        DarkPopupMenu moreOptions = new DarkPopupMenu(deleteFieldMenuItem, renameFieldMenuItem);
+        moreOptions.show(actionEvent);
+    }
+
+    private void renameThisFieldMenuItemClicked(ActionEvent actionEvent, Field f) {
+        // TODO: Write rename field
+    }
+
+    private void deleteThisFieldMenuItemClicked(ActionEvent actionEvent, Field f) {
+        try {
+            API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
+        } catch (Exception e) {
+            System.err.println("ERROR/ItemEditorPanel/addNewField: " + e);
+        }
+        API.getTemporalItem().getFields().removeIf(x-> x.getFieldName().equals(f.getFieldName()));
+        displayItem(API.getTemporalItem());
+        // TODO: Write delete field
     }
 
     private void deleteThisItem(ActionEvent actionEvent) {

@@ -36,7 +36,8 @@ public class DarkTextField extends JTextField implements JSONSerializable {
     }
 
     /**
-     * @JSONkeys "fieldName", "type", "vale"
+     * @JSONkeys "fieldName", "type", "value"
+     * @return A {@link JSONObject} representing the current object's state in JSON format, null if the field is empty.
      */
     @Override
     public JSONObject toJSON() {

@@ -43,6 +43,9 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
         }
     }
 
+    /**
+     * @return A {@link JSONObject} representing the current object's state in JSON format, null if the field is empty.
+     */
     @Override
     public JSONObject toJSON() {
         if (getText().isBlank()) return null; // Empty field
@@ -54,7 +57,7 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
     }
 
     @Override
-    public Object fromJSON(JSONObject json) {
+    public DarkPassField fromJSON(JSONObject json) {
         // TODO: Write Dark pass fromJSON
         if (json.containsKey(API.VALUE_KEY)) {
             setText(json.get(API.VALUE_KEY).toString());

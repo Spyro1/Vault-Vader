@@ -348,10 +348,14 @@ public class MainUI extends JFrame {
         refreshCategoryTree();
     }
     private void saveItemButtonClicked(ActionEvent actionEvent) {
-        if (API.saveItem(editorPanel.toJSON())){
-            refreshItemList();
-        } else {
-            JOptionPane.showMessageDialog(this, "Nincs minden szükséges mező kitöltve!\nKötelező mezők: Cím, Kategória", "Kötelező mezők", JOptionPane.WARNING_MESSAGE);
+        try {
+            if (API.saveItem(editorPanel.toJSON())){
+                refreshItemList();
+            } else {
+                JOptionPane.showMessageDialog(this, "Nincs minden szükséges mező kitöltve!\nKötelező mezők: Cím, Kategória", "Kötelező mezők", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception e){
+            System.err.println("ERROR/saveItem: " + e.getMessage());
         }
     }
     private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
@@ -389,7 +393,7 @@ public class MainUI extends JFrame {
         return new JList<Item>(model);
     }
 
-    private void refreshCategoryTree(){
+    public void refreshCategoryTree(){
         // Refresh category tree data
         allItemCategory.removeAllChildren();
         HashSet<String> categories = API.getCategoryList(); // GET data from API
@@ -402,7 +406,7 @@ public class MainUI extends JFrame {
         DefaultTreeModel model = (DefaultTreeModel) categoryTree.getModel();
         model.reload();
     }
-    private void refreshItemList(){
+    public void refreshItemList(){
         itemJList = createItemJList(API.getItemList(null)); {
             itemJList.setCellRenderer(new ItemCellRenderer());
             itemJList.setBackground(UI.bgLightColor);
@@ -410,8 +414,12 @@ public class MainUI extends JFrame {
         }
         itemListScrollPane.setViewportView(itemJList);
     }
-    private void refreshEditorPanel() {
-        editorPanel.displayItem(API.getTemporalItem().fromJSON(editorPanel.toJSON()));
+    public void refreshEditorPanel() {
+        try {
+            editorPanel.displayItem(API.getTemporalItem().fromJSON(editorPanel.toJSON()));
+        } catch (Exception e){
+            System.err.println("ERROR/refreshEditorPanel: " + e);
+        }
     }
 
 }

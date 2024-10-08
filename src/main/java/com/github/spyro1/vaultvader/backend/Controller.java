@@ -9,6 +9,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Controller {
 
@@ -27,32 +29,52 @@ public class Controller {
     /** Temporal item for displaying the item data on screen and then saving the changes*/
     private Item tempItem = null;// = new Item();
 
+    private final String usersFolderPath = "users/";
+
     /** Not accessible constructor */
     private Controller() {}
 
     // === Read / Write user data functions ===
     private void readUsersDataFromFile() {
+        // Check for users folder
+        File folder = new File(usersFolderPath);
+        if (!folder.exists()) {
+            // If the folder does not exist, create it
+            if (folder.mkdirs()) {
+                System.out.println("DEBUG/Controller/readUsersData: \""+ usersFolderPath +"\" folder created successfully.");
+            } else {
+                System.out.println("DEBUG/Controller/readUsersData: Failed to create \""+ usersFolderPath +"\" the folder.");
+            }
+        } else {
+            System.out.println("DEBUG/Controller/readUsersData: \""+ usersFolderPath +"\" folder already exists.");
+        }
+        // Initialize arrays
         categories.clear();
         items.clear();
-        try {
-            // TODO: read user data better file handling!! (Error when "users" directory does not exists)
-            JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader("users/" + loggedInUser.getName() + ".json"));
-            if (usersData.containsKey(API.CATEGORY_KEY)) {
-                JSONArray categoryArray = (JSONArray) usersData.get(API.CATEGORY_KEY);
-                for (Object categoryObj : categoryArray) {
-                    categories.add(categoryObj.toString());
+        // try to read user data
+        File userFile = new File(getLoggedInUserFilePath());
+        if (userFile.exists()) {
+            try {
+                JSONObject usersData = (JSONObject) new JSONParser().parse(new FileReader(getLoggedInUserFilePath())); // Character files
+//                JSONObject usersData = (JSONObject) new JSONParser().parse(new InputStreamReader(new GZIPInputStream(new FileInputStream(getLoggedInUserFilePath())))); // zipped binary files
+                if (usersData.containsKey(API.CATEGORY_KEY)) {
+                    JSONArray categoryArray = (JSONArray) usersData.get(API.CATEGORY_KEY);
+                    for (Object categoryObj : categoryArray) {
+                        categories.add(categoryObj.toString());
+                    }
                 }
-            }
-            if (usersData.containsKey(API.ITEMS_KEY)) {
-                JSONArray itemArray = (JSONArray) usersData.get(API.ITEMS_KEY);
-                for (Object itemObj : itemArray) {
-                    Item item = new Item().fromJSON((JSONObject) itemObj);
-//                    item.setCategoryIdx(categories.indexOf(item.getCategory().getValue())); // Set index for easy access
-                    items.add(item);
+                if (usersData.containsKey(API.ITEMS_KEY)) {
+                    JSONArray itemArray = (JSONArray) usersData.get(API.ITEMS_KEY);
+                    for (Object itemObj : itemArray) {
+                        Item item = new Item().fromJSON((JSONObject) itemObj);
+                        items.add(item);
+                    }
                 }
+            } catch (Exception e) {
+                System.err.println("ERROR/Controller/readUsersDataFromFile: " + e);
             }
-        } catch (Exception e) {
-            System.err.println("ERROR/Controller/readUsersDataFromFile: " + e.getMessage());
+        } else {
+            System.err.println("ERROR/Controller/readUsersDataFromFile: \""+ getLoggedInUserFilePath()+ "\" file does not exist");
         }
     }
     private void writeUserDateToFile() {
@@ -65,9 +87,11 @@ public class Controller {
         json.put(API.CATEGORY_KEY, categoryArray);
         json.put(API.ITEMS_KEY, items.stream().map(Item::toJSON).collect(Collectors.toList()));
         // Write out to file
-        try (PrintWriter pw = new PrintWriter(new FileWriter("users/" + loggedInUser.getName() + ".json"))) {
-            // Formatting
-            pw.write(json.toJSONString().replace(",", ",\n").replace("{", "{\n").replace("[", "[\n"));
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(getLoggedInUserFilePath())); // Character files
+//            PrintWriter pw = new PrintWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(getLoggedInUserFilePath())))); // Zipped binary files
+            // Print to stream
+            pw.write(json.toJSONString()); //.replace(",", ",\n").replace("{", "{\n").replace("}", "\n}").replace("[", "[\n").replace("]", "\n]")); // Formatting
             pw.flush();
         } catch (Exception e) {
             System.err.println("ERROR/Controller/writeUserDateToFile: " + e.getMessage());
@@ -88,49 +112,62 @@ public class Controller {
     // === API called public functions ===
 
     // == User ==
+    private String getUserFilePath(String username){
+        return usersFolderPath + username + ".json";
+    }
+    private String getLoggedInUserFilePath(){
+        return getUserFilePath(loggedInUser.getName());
+    }
     public void loadUser() {
         if (loggedInUser != null) {
             readUsersDataFromFile();
         }
     }
     public boolean checkUser(JSONObject userData) throws Exception {
-        String username = userData.get("username").toString();
-        String password = userData.get("password").toString(); // Encrypted password
+        String username = userData.get(API.USERNAME_KEY).toString();
+        String password = userData.get(API.PASSWORD_KEY).toString(); // Encrypted password
 
-        JSONObject userDataFromFile;
-        try{
-            // TODO: Better file handling, and search for files if exists, cause it can cause errors when directory does not exists
-            userDataFromFile = (JSONObject) new JSONParser().parse(new FileReader("users/" + username + ".json"));
-        } catch (Exception e){
+        File userFile = new File(getUserFilePath(username)); // Create a temporal file for user
+        // Check if user exists
+        if (userFile.exists()) {
+            // Read data from the user file
+//            BufferedReader userReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(getUserFilePath(username)))));
+            BufferedReader userReader = new BufferedReader(new FileReader(getUserFilePath(username)));
+            JSONObject userDataFromFile = (JSONObject) new JSONParser().parse(userReader);
+            userReader.close();
+            // Check if the encrypted password is correct
+            String encryptedPassword = userDataFromFile.get(API.PASSWORD_KEY).toString();
+            if (encryptedPassword.equals(password)) {
+                loggedInUser = new User(username, encryptedPassword);
+                return true; // True, if the user exits and the password is correct
+            } else {
+                loggedInUser = null;
+                return false; // False, if the user exists, but the password is incorrect
+            }
+        } else {
             throw new Exception("Nem található ilyen nevű felhasználó!\nKérem regisztráljon, vagy lépjen be más felhasználóval."); // Throw exception if the user does not exists
         }
-        String encryptedPassword = userDataFromFile.get("password").toString();
-        if (encryptedPassword.equals(password)) {
-            loggedInUser = new User(username, encryptedPassword);
-            return true; // True, if the user exits and the password is correct
-        }
-        return false; // False, if the user exists, but the password is incorrect
     }
     public boolean createUser(JSONObject userData) {
-        try {
-            // Try to search for username.json --> if it does not exist, then an exception is thrown.
-            FileReader fr = new FileReader("users/" + userData.get("username").toString() + ".json");
-            fr.close();
-            return false; // If the username.json file exists, then return false, meaning the username already exists
-        } catch (Exception e) {
+        String username = userData.get(API.USERNAME_KEY).toString();
+        String password = userData.get(API.PASSWORD_KEY).toString(); // Encrypted password
+
+        File userFile = new File(getUserFilePath(username)); // Create a temporal file for user
+        // Check if user exists
+        if (!userFile.exists()) {
             // Create new user
-            loggedInUser = new User(userData.get("username").toString(), userData.get("password").toString());
+            loggedInUser = new User(username, password);
             // Setup default values
             categories.clear();
             items.clear();
             // Create default categories
-//            categories.add("Minden bejegyzés");
-            categories.add("Email");
-            categories.add("Pénzügyek");
-            categories.add("Egyéb");
+            categories.add("Email"); categories.add("Pénzügyek"); categories.add("Egyéb");
+            // Create a file for the new user
             writeUserDateToFile();
+            return true;
+        } else {
+            return false; // If the username.json file exists, then return false, meaning the username already exists
         }
-        return true;
     }
     public void saveAll() {
         writeUserDateToFile();
@@ -140,9 +177,9 @@ public class Controller {
     // == Category ==
     public HashSet<String> getCategoryList() {
 //        categories.clear();
-        for (Item item : items) {
-            categories.add(item.getCategory().getValue());
-        }
+//        for (Item item : items) {
+//            categories.add(item.getCategory().getValue());
+//        }
         return categories;
     }
     public boolean addNewCategory(String newCategory) {
@@ -153,12 +190,11 @@ public class Controller {
         return false;
     }
     public boolean modifyCategory(String oldCategory, String newCategory) {
-//        if (!categories.contains(newCategory)) {
-//            return categories.set(categories.indexOf(oldCategory), newCategory).equals(oldCategory);
-//        }
-//        return false;
-        if (categories.remove(oldCategory)) return categories.add(newCategory);
-        else return false;
+        if (categories.remove(oldCategory)) {
+            return categories.add(newCategory); // Successful category replacement
+        } else {
+            return false; // Old category not found (This is not a likely branch, but can happen)
+        }
     }
     public boolean removeCategory(String categoryToRemove) {
         return categories.remove(categoryToRemove);
@@ -173,25 +209,20 @@ public class Controller {
         return items;
     }
 
-    // == Item's fields ==
-
+    // == Temporal item ==
     public Item newTemporalItem() {
         tempItem = new Item();
         return tempItem;
     }
-
     public Item getTemporalItem() {
         return tempItem;
     }
-
     public Item setTemporalItem(Item itemReference) {
-        tempItem = itemReference;
-        return tempItem;
+        return tempItem = itemReference;
     }
-
     public boolean saveTemporalItem() {
         if (tempItem.getTitle().isBlank() || tempItem.getCategory().getValue().isBlank()) {
-            return false; // Blank fields
+            return false; // Blank fields -> not saved
         } else {
             for (int i = 0; i < items.size(); i++) {
                 if (items.get(i).ID == tempItem.ID) {
@@ -199,17 +230,7 @@ public class Controller {
                     return true; // Old item modified
                 }
             }
-            items.add(tempItem); // New item added
-            return true;
+            return items.add(tempItem); // New item added -> return if it is successfully added to the list
         }
     }
-
-//    public String getCategory(int categoryIndex) {
-//        if (categoryIndex >= 0 && categoryIndex < categories.size()){
-//            return categories.get(categoryIndex);
-//        }
-//        else {
-//            return "";
-//        }
-//    }
 }

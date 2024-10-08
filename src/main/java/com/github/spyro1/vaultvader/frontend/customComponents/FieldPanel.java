@@ -1,5 +1,6 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
+import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.api.JSONSerializable;
 import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.FieldType;
@@ -48,7 +49,6 @@ public class FieldPanel extends JPanel implements JSONSerializable {
         optionsButton = new IconButton("", "ui-dots.png");
         optionsButton.setToolTipText("Mező opciók");
         optionsButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
-        optionsButton.addActionListener(this::moreOptionsButtonClicked);
 
         JPanel panel = new JPanel(new BorderLayout(UI.margin, UI.margin)); {
             panel.setOpaque(false);
@@ -56,21 +56,6 @@ public class FieldPanel extends JPanel implements JSONSerializable {
             panel.add(optionsButton, BorderLayout.EAST);
         }
         add(panel);
-    }
-
-    private void moreOptionsButtonClicked(ActionEvent actionEvent) {
-        DarkPopupMenuItem deleteFieldMenuItem = new DarkPopupMenuItem("Mező törlése", this::deleteThisFieldMenuItemClicked);
-        DarkPopupMenuItem renameFieldMenuItem = new DarkPopupMenuItem("Mező átnevezése", this::renameThisFieldMenuItemClicked);
-        DarkPopupMenu moreOptions = new DarkPopupMenu(deleteFieldMenuItem, renameFieldMenuItem);
-        moreOptions.show(actionEvent);
-    }
-
-    private void renameThisFieldMenuItemClicked(ActionEvent e) {
-        // TODO: Write rename field
-    }
-
-    private void deleteThisFieldMenuItemClicked(ActionEvent e) {
-        // TODO: Write delete field
     }
 
     @Override

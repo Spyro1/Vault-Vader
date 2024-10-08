@@ -41,6 +41,7 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
 
     /**
      * @JSONkeys "fieldName", "type", "value"
+     * @return A {@link JSONObject} representing the current object's state in JSON format, null if the field is empty.
      */
     @Override
     public JSONObject toJSON() {
@@ -56,7 +57,7 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
      * @JSONkeys "fieldName", "value", "values"
      */
     @Override
-    public Object fromJSON(JSONObject json) {
+    public DarkComboField fromJSON(JSONObject json) {
         // String fieldName = "";
         // String[] values; // = new String[0];
         // if (json.containsKey(API.VALUE_KEY)) setSelectedItem(json.get(API.VALUE_KEY).toString());

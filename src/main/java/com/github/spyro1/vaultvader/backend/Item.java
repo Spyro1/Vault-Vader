@@ -80,25 +80,23 @@ public class Item implements JSONSerializable {
      * @JSONkeys "icon", "title", "category", "fields"
      */
     @Override
-    public Item fromJSON(JSONObject json) {
-        if (json != null){
-//            if (json.containsKey(API.ID_KEY)) ID = Integer.parseInt(json.get(API.ID_KEY).toString());
-            if (json.containsKey(API.ICON_KEY)) icon = json.get(API.ICON_KEY).toString(); //new ImageIcon(this.getClass().getClassLoader().getResource(json.get(API.ICON_KEY).toString()), json.get(API.ICON_KEY).toString());
-            if (json.containsKey(API.TITLE_KEY)) title = json.get(API.TITLE_KEY).toString();
-//            if (json.containsKey(API.CATEGORY_KEY)) categoryIdx = Integer.parseInt(json.get(API.CATEGORY_KEY).toString());
-            if (json.containsKey(API.CATEGORY_KEY)) category.setValue(json.get(API.CATEGORY_KEY).toString());
+    public Item fromJSON(JSONObject json) throws Exception {
+        if (json != null && json.containsKey(API.ICON_KEY) && json.containsKey(API.TITLE_KEY) && json.containsKey(API.CATEGORY_KEY) && json.containsKey(API.FIELDS_KEY)){
+//          ID = Integer.parseInt(json.get(API.ID_KEY).toString());
+            icon = json.get(API.ICON_KEY).toString(); //new ImageIcon(this.getClass().getClassLoader().getResource(json.get(API.ICON_KEY).toString()), json.get(API.ICON_KEY).toString());
+            title = json.get(API.TITLE_KEY).toString();
+//          categoryIdx = Integer.parseInt(json.get(API.CATEGORY_KEY).toString());
+            category.setValue(json.get(API.CATEGORY_KEY).toString());
             fields.clear();
-            if (json.containsKey(API.FIELDS_KEY)) {
-                JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
-                for (Object fieldObj : fieldsArray) {
-                    JSONObject jsonFieldData = (JSONObject) fieldObj;
-                    fields.add(new Field().fromJSON(jsonFieldData));
-                }
+            JSONArray fieldsArray = (JSONArray) json.get(API.FIELDS_KEY);
+            for (Object fieldObj : fieldsArray) {
+                JSONObject jsonFieldData = (JSONObject) fieldObj;
+                fields.add(new Field().fromJSON(jsonFieldData));
             }
             return this;
         }
         else {
-            return null;
+            throw new Exception("Not enough key-value pairs give in " + getClass().toString() + ".fromJSON() argument.");
         }
     }
 

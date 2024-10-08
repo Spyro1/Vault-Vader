@@ -31,6 +31,7 @@ public class API {
             VALUES_KEY = "values",
             TEXT_TYPE = "text", PASS_TYPE = "pass", COMBO_TYPE = "combo";
 
+    public static MainUI mainUI;
     // == Login / Register Methods ==
 
     /**
@@ -43,7 +44,7 @@ public class API {
     static public boolean loginRequest(JSONObject userData) throws Exception {
         if(userData.containsKey(USERNAME_KEY) && userData.containsKey(PASSWORD_KEY) && Controller.INSTANCE.checkUser(userData)){
             Controller.INSTANCE.loadUser(); // loads the logged-in user's data from file
-            new MainUI();
+            mainUI = new MainUI();
             return true;
         }
         return false;
@@ -74,7 +75,7 @@ public class API {
         return Controller.INSTANCE.newTemporalItem();
     }
 
-    static public boolean saveItem(JSONObject itemData) {
+    static public boolean saveItem(JSONObject itemData) throws Exception {
         API.getTemporalItem().fromJSON(itemData); // Set temporal item with the given item data
         return Controller.INSTANCE.saveTemporalItem();
     }
@@ -129,16 +130,6 @@ public class API {
         }
         return  false;
     }
-    // == Item Field Methods ==
-//    static public boolean addItemField(int itemId, int fieldId, int fieldType){
-//        return false;
-//    }
-//    static public boolean modifyItemField(int itemId, int fieldId, String name){
-//        return false;
-//    }
-//    static public boolean removeItemField(int itemId, int fieldId){+
-//        return false;
-//    }
 
     // == get methods ==
     static public Collection<Item> getItemList(JSONObject filter){

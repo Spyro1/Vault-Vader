@@ -10,7 +10,7 @@ public interface JSONSerializable {
 
     /**
      * Serializes the current instance to a JSON object.
-     * @return A {@link JSONObject} representing the current object's state in JSON format. null if the field is empty
+     * @return A {@link JSONObject} representing the current object's state in JSON format.
      */
     JSONObject toJSON();
 
@@ -19,8 +19,9 @@ public interface JSONSerializable {
      * @param json A {@link JSONObject} containing the data to populate the object's state.
      * @return The object itself after populating its state from the JSON object.
      *         This allows for method chaining.
+     * @throws Exception if the given argument does not contain all needed key-value paris.
      */
-    Object fromJSON(JSONObject json);
+    Object fromJSON(JSONObject json) throws Exception;
 
 }
 
