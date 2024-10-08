@@ -98,14 +98,15 @@ public class MainUI extends JFrame {
         // HEADER PANEL for the tool buttons
         headerPanel = new JPanel(new BorderLayout()); {
             headerPanel.setBackground(UI.bgDarkColor);
+//            headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
             JPanel centerPanel = new JPanel(); {
-                centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+//                centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+                centerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
                 centerPanel.setBackground(UI.bgLightColor);
-                centerPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
-                centerPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, UI.margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(0, UI.margin,0, UI.margin)));
+                centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, UI.margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
                 IconButton logOutButton = new IconButton("Kijelentkezés", "logout.png"); {
                     logOutButton.setToolTipText("Kijelentkezés");
+                    logOutButton.setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
                     logOutButton.addActionListener(_ -> {
                         try {
                             API.logoutRequest(); // Send a request to the API to log out the user

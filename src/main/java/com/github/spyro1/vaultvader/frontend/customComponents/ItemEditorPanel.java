@@ -56,7 +56,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
             titleRow.add(iconButton, BorderLayout.WEST);
             titleField = new DarkTextField("", "Bejegyzés címe", true);
             titleRow.add(titleField, BorderLayout.CENTER);
-            moreOptionsButton = new IconButton("", "ui-dots.png"); {
+            moreOptionsButton = new IconButton("", "setting.png"); {
                 moreOptionsButton.setToolTipText("Bejegyzés opciók");
                 moreOptionsButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
                 moreOptionsButton.addActionListener(this::optionsButtonClicked);
