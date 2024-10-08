@@ -70,25 +70,66 @@ public class API {
 
     // == Item Methods ==
 
-    static public Item newTemporalItem(/*JSONObject itemData*/) {
-        return Controller.INSTANCE.newTemporalItem();
-    }
-
     static public boolean saveItem(JSONObject itemData) throws Exception {
         API.getTemporalItem().fromJSON(itemData); // Set temporal item with the given item data
         return Controller.INSTANCE.saveTemporalItem();
     }
 
     /**
-     *
-     * @JSONkeys
+     * Removes the searched title given in the itemData parameter. If the parameter is null, then it removes the temporal item from the list.
+     * @JSONkeys "title"
      * @param itemData JSON object containing the necessary fields given in JSONkeys section
      * @return
      */
-    static public boolean removeItem(JSONObject itemData) {
-        // TODO: Write remove item api function
+    public static boolean removeItem(JSONObject itemData) {
+        if (itemData == null){ // Remove temporal item
+            return getItemList(null).removeIf(x -> x.getID() == API.getTemporalItem().getID());
+        }
         return false;
     }
+
+    static public ArrayList<Item> getItemList(JSONObject filter){
+        // Show all items = no filter
+        if (filter == null){
+            return Controller.INSTANCE.getItemList();
+        }
+//        else {
+        // TODO: Write filter for get Item list
+//        }
+        return null;
+    }
+
+    public static Item getItemData(int itemIndex) {
+        return Controller.INSTANCE.getItem(itemIndex);
+    }
+
+    // == Temporal item's methods ==
+
+    /**
+     *
+     * @return
+     */
+    static public Item newTemporalItem(/*JSONObject itemData*/) {
+        return Controller.INSTANCE.newTemporalItem();
+    }
+
+    /**
+     * Retrieves the current temporal item managed by the Controller.
+     * @return the current temporal item of type {@link Item}.
+     */
+    public static Item getTemporalItem() {
+        return Controller.INSTANCE.getTemporalItem();
+    }
+
+    /**
+     * Sets the temporal item to a specified reference managed by the Controller.
+     * @param itemReference the {@link Item} instance to be set as the temporal item.
+     * @return the given item reference of type {@link Item} so the function can be chained.
+     */
+    public static Item setTemporalItem(Item itemReference) {
+        return Controller.INSTANCE.setTemporalItem(itemReference);
+    }
+
     // == Category Methods ==
 
     /**
@@ -130,28 +171,11 @@ public class API {
         return  false;
     }
 
-    // == get methods ==
-    static public ArrayList<Item> getItemList(JSONObject filter){
-        // Show all items = no filter
-        if (filter == null){
-            return Controller.INSTANCE.getItemList();
-        }
-//        else {
-        // TODO: Write filter fir get Item list
-//        }
-        return null;
-    }
-
-    public static Item getItemData(int itemIndex) {
-        return Controller.INSTANCE.getItem(itemIndex);
-    }
-
-//    public static String getCategory(int categoryIndex){
-//        return Controller.INSTANCE.getCategory(categoryIndex);
-//    }
     public static HashSet<String> getCategoryList(){
         return Controller.INSTANCE.getCategoryList();
     }
+
+    // == Other methods ==
 
     public static String encryptData(String data, String key){
         return Controller.encryptText(data, key);
@@ -161,20 +185,5 @@ public class API {
         Controller.INSTANCE.saveAll();
     }
 
-    /**
-     * Retrieves the current temporal item managed by the Controller.
-     * @return the current temporal item of type {@link Item}.
-     */
-    public static Item getTemporalItem() {
-        return Controller.INSTANCE.getTemporalItem();
-    }
 
-    /**
-     * Sets the temporal item to a specified reference managed by the Controller.
-     * @param itemReference the {@link Item} instance to be set as the temporal item.
-     * @return the given item reference of type {@link Item} so the function can be chained.
-     */
-    public static Item setTemporalItem(Item itemReference) {
-        return Controller.INSTANCE.setTemporalItem(itemReference);
-    }
 }

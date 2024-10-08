@@ -212,8 +212,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     private void deleteThisItem(ActionEvent actionEvent) {
         if (JOptionPane.showConfirmDialog(this,"Biztosan törli a bejegyzést?", "Bejegyzés törlése", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            ArrayList<Item> itemListRef = API.getItemList(null);
-            itemListRef.removeIf(x -> x.getID() == API.getTemporalItem().getID());
+            API.removeItem(null);
             hidePanel();
             window.refreshItemList();
         }
