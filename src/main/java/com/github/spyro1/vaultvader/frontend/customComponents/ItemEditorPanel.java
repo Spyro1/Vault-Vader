@@ -175,7 +175,8 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     private void optionsButtonClicked(ActionEvent actionEvent) {
         DarkPopupMenuItem deleteItem = new DarkPopupMenuItem("Bejegyzés törlése", this::deleteThisItem);
-        DarkPopupMenu more = new DarkPopupMenu(deleteItem);
+        DarkPopupMenuItem closeItem = new DarkPopupMenuItem("Bezárás", this::closeThisItem);
+        DarkPopupMenu more = new DarkPopupMenu(deleteItem, closeItem);
         more.show(actionEvent);
     }
 
@@ -216,6 +217,11 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
             hidePanel();
             window.refreshItemList();
         }
+    }
+
+    private void closeThisItem(ActionEvent actionEvent) {
+        hidePanel();
+        window.refreshItemList();
     }
 
     /**
