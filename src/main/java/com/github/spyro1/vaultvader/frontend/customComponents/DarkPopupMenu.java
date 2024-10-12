@@ -22,8 +22,8 @@ public class DarkPopupMenu extends JPopupMenu {
         // Show popupmenu at buttons position
         Component source = (Component)actionEvent.getSource();
         Dimension size = source.getSize();
-        int xPos = ((size.width /*- moreOptions.getPreferredSize().width) / 2*/));
-        int yPos = 0; //size.height / 2;
+        int xPos = ((size.width));
+        int yPos = 0;
         show(source, xPos, yPos);
     }
 }

@@ -9,8 +9,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 public class Controller {
 
@@ -176,10 +174,6 @@ public class Controller {
 
     // == Category ==
     public HashSet<String> getCategoryList() {
-//        categories.clear();
-//        for (Item item : items) {
-//            categories.add(item.getCategory().getValue());
-//        }
         return categories;
     }
     public boolean addNewCategory(String newCategory) {

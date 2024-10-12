@@ -1,6 +1,5 @@
 package com.github.spyro1.vaultvader.frontend.customComponents;
 
-import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.api.JSONSerializable;
 import com.github.spyro1.vaultvader.backend.Field;
 import com.github.spyro1.vaultvader.backend.FieldType;
@@ -9,7 +8,6 @@ import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class FieldPanel extends JPanel implements JSONSerializable {
 

@@ -13,7 +13,6 @@ import org.json.simple.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class ItemEditorPanel extends JPanel implements JSONSerializable {
@@ -29,8 +28,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     // Referenced variables
     MainUI window;
-//    Item displayedItem;
-
 
     public LinkedList<FieldPanel> fieldsList = new LinkedList<>();
 
@@ -80,7 +77,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     }
 
     public void displayItem(Item displayedItem) {
-//        this.displayedItem = displayedItem;
         removeAll(); // clears panel
         fieldsList.clear();
         gbc.weighty = 0.01;
@@ -125,18 +121,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         setVisible(true);
     }
 
-    // == Getters ==
-
-//    public String getTitle(){
-//        return titleField.getText();
-//    }
-//    public ImageIcon getIcon(){
-//        return (ImageIcon) iconButton.getIcon();
-//    }
-//    public int getCategoryIdx() {
-//        return displayedItem.getCategoryIdx();
-//    }
-
     // == Click events ==
 
     private void iconSelectorButtonClicked(ActionEvent actionEvent) {
@@ -145,7 +129,6 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         fd.setFile("*.png|*.jpg|*.jpeg|*.gif");
         fd.setVisible(true);
         iconFilePath = fd.getDirectory() + fd.getFile();
-//        iconFilePath = fd.getFile();
         if (fd.getFile() == null)
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You cancelled the choice"); // Dor
         else{
@@ -248,6 +231,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
      */
     @Override
     public Object fromJSON(JSONObject json) {
-        return null; // TODO: Write Item editor panel fromJSON this later
+        // TODO: Write Item editor panel fromJSON this later
+        return this;
     }
 }

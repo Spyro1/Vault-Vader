@@ -8,8 +8,7 @@ public class Main {
 
     static public void main(String[] args){
         try{
-            new LoginUI(); // TO RUN
-//            new MainUI(); // TESTING
+            new LoginUI(); // RUN LOGIN
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, e, "Fatal error", JOptionPane.ERROR_MESSAGE);
         }

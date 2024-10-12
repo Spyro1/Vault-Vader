@@ -16,7 +16,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -34,8 +33,7 @@ public class MainUI extends JFrame {
     JList<Item> itemJList;
     // Functioning variables
     int selectedItemIndex = -1;
-    public boolean itemIsModifyed = false;
-    JSONObject filter = new JSONObject();
+    // JSONObject filter = new JSONObject();
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
     int singlifyer = 0;
 
@@ -58,7 +56,7 @@ public class MainUI extends JFrame {
                 try{
                     API.saveAllChanges(); // Call API to save changes to the user data
                 } catch (Exception ex) {
-                    System.out.println(ex.toString());
+                    System.out.println(ex.getMessage());
                 }
                 e.getWindow().dispose(); // Close the window
             }
@@ -80,27 +78,27 @@ public class MainUI extends JFrame {
          }
         // SEARCH PANEL for the search bar
         searchPanel = new JPanel(new BorderLayout()); {
-            searchPanel.setBackground(UI.bgDarkColor);
+            searchPanel.setBackground(UI.bgLightColor);
             JPanel centerPanel = new JPanel(new BorderLayout()); {
                 centerPanel.setBackground(UI.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, 0, UI.bgDarkColor), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
-                DarkTextField searchField = new DarkTextField("","Keresés", true);
-                IconButton searchButton = new IconButton("", "search.png"); {
-                    searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor), BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2)));
-                    searchButton.setToolTipText("Keresés");
-                    searchButton.addActionListener(this::searchButtonClicked);
-                }
-                centerPanel.add(searchField, BorderLayout.CENTER);
-                centerPanel.add(searchButton, BorderLayout.EAST);
+                // === REMOVED FOR BETA RELEASE ===
+                // TODO: Search field implementation
+//                DarkTextField searchField = new DarkTextField("","Keresés", true);
+//                IconButton searchButton = new IconButton("", "search.png"); {
+//                    searchButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor), BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2)));
+//                    searchButton.setToolTipText("Keresés");
+//                    searchButton.addActionListener(this::searchButtonClicked);
+//                }
+//                centerPanel.add(searchField, BorderLayout.CENTER);
+//                centerPanel.add(searchButton, BorderLayout.EAST);
             }
             searchPanel.add(centerPanel);
         }
         // HEADER PANEL for the tool buttons
         headerPanel = new JPanel(new BorderLayout()); {
             headerPanel.setBackground(UI.bgDarkColor);
-//            headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
             JPanel centerPanel = new JPanel(); {
-//                centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
                 centerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
                 centerPanel.setBackground(UI.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, UI.margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
@@ -111,7 +109,7 @@ public class MainUI extends JFrame {
                         try {
                             API.logoutRequest(); // Send a request to the API to log out the user
                         } catch (Exception ex) {
-                            System.out.println(ex.toString());
+                            System.out.println(ex.getMessage());
                         }
                         this.dispose();
                     });
@@ -141,7 +139,6 @@ public class MainUI extends JFrame {
             categoryTree = new JTree(allItemCategory); {
                 categoryTree.setOpaque(false);
                 categoryTree.setFont(new Font("Arial", Font.PLAIN, 15));
-//                categoryTree.setForeground(VV.mainTextColor);
                 categoryTree.setCellRenderer(new CategoryTreeRenderer());
                 categoryTree.addTreeSelectionListener(this::categorySelected);
             }
@@ -179,11 +176,6 @@ public class MainUI extends JFrame {
         sliderPanel = new JPanel(new BorderLayout()); {
             sliderPanel.setBackground(UI.bgLightColor);
             sliderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, UI.margin, 0, UI.bgDarkColor));
-//            itemJList = createItemJList(API.getItemList(null)); {
-//                itemJList.setCellRenderer(new ItemCellRenderer());
-//                itemJList.setBackground(UI.bgLightColor);
-//                itemJList.addListSelectionListener(this::itemSelectedFromList);
-//            }
             itemListScrollPane = new JScrollPane(); {
                 itemListScrollPane.setBackground(UI.bgLightColor);
                 itemListScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -272,7 +264,6 @@ public class MainUI extends JFrame {
         setVisible(true);
     }
 
-
     // == Category ==
     private void addCategoryClicked(ActionEvent actionEvent) {
         try {
@@ -334,13 +325,13 @@ public class MainUI extends JFrame {
         }
     }
     private void categorySelected(TreeSelectionEvent treeSelectionEvent) {
-        // TODO: Write category tree selection litener
+        // TODO: Write category tree selection listener
     }
 
     // == Search ==
-    private void searchButtonClicked(ActionEvent actionEvent) {
+//    private void searchButtonClicked(ActionEvent actionEvent) {
         // TODO: Write search button action
-    }
+//    }
 
     // == Item ==
     private void newItemButtonClicked(ActionEvent actionEvent) {
@@ -351,6 +342,7 @@ public class MainUI extends JFrame {
     private void saveItemButtonClicked(ActionEvent actionEvent) {
         try {
             if (API.saveItem(editorPanel.toJSON())){
+                System.out.println("DEBUG/saveItem: " + API.getTemporalItem().toString());
                 refreshItemList();
             } else {
                 JOptionPane.showMessageDialog(this, "Nincs minden szükséges mező kitöltve!\nKötelező mezők: Cím, Kategória", "Kötelező mezők", JOptionPane.WARNING_MESSAGE);
@@ -366,17 +358,10 @@ public class MainUI extends JFrame {
                 Item selectedItem = API.getItemData(selectedItemIndex);
                 editorPanel.displayItem(API.setTemporalItem(selectedItem));
                 editorContentScroller.validate();
-                System.out.println("DEBUG/Item displayed: " + selectedItemIndex);
+                System.out.println("DEBUG/Item displayed: " + selectedItemIndex + " - " + selectedItem.toString());
                 singlifyer = 1;
             }
             else singlifyer = 0;
-//            if (itemIsModifyed && selectedItem.ID != API.getTemporalItem().ID) {
-//                if (JOptionPane.showConfirmDialog(this, "Szeretnéd menteni a változásokat?", "Mentés", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-//                    API.saveItem();
-//                    itemIsModifyed = false;
-//                    System.out.println("DEBUG/Item saved");
-//                }
-//            }
         } catch (Exception e) {
             System.out.println("ERROR/ItemSelector/ " + e);
         }
@@ -391,7 +376,7 @@ public class MainUI extends JFrame {
             for (Item i : itemList)
                 model.addElement(i);
         }
-        return new JList<Item>(model);
+        return new JList<>(model);
     }
 
     public void refreshCategoryTree(){
@@ -422,5 +407,4 @@ public class MainUI extends JFrame {
             System.err.println("ERROR/refreshEditorPanel: " + e);
         }
     }
-
 }

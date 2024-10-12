@@ -9,16 +9,13 @@ import com.github.spyro1.vaultvader.frontend.customComponents.IconButton;
 import org.json.simple.JSONObject;
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.util.Objects;
 
 public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     private DarkTextField usernameField;
     private DarkPassField passwordField;
-    private JToggleButton passwordShowToggler;
 
     public LoginUI() {
         // === Essential frame setup ===
@@ -34,7 +31,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 
     private void initMinimalistLoginUI(){
         setLayout(new BorderLayout());
-        setSize(400, 300);
+        setSize(400, 400);
         setLocationRelativeTo(null);
         setBackground(UI.bgDarkColor);
 
@@ -56,27 +53,27 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             usernameField.setToolTipText("Írja be a felhasználónevét!");
         }
         centerPanel.add(usernameField);
-        JPanel passwordPanel = new JPanel(new BorderLayout()); {
-            passwordField = new DarkPassField("","Jelszó"); {
-                passwordField.setToolTipText("Írja be a jelszavát!");
-            }
-            passwordPanel.add(passwordField, BorderLayout.CENTER);
-            passwordShowToggler = new JToggleButton(); {
-                passwordShowToggler.setBackground(UI.bgLightColor);
-                passwordShowToggler.setUI(new MetalToggleButtonUI(){
-                    @Override
-                    protected Color getSelectColor() {
-                        return UI.secondaryTextColor;
-                    }
-                });
-                passwordShowToggler.setToolTipText("Jelszó megjelenítése");
-                passwordShowToggler.setIcon(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("eye-closed.png"))));
-                passwordShowToggler.setBorder(null);
-                passwordShowToggler.addItemListener(this::togglePasswordButtonClcicked);
-            }
-            passwordPanel.add(passwordShowToggler, BorderLayout.EAST);
+//        JPanel passwordPanel = new JPanel(new BorderLayout()); {
+        passwordField = new DarkPassField("","Jelszó"); {
+            passwordField.setToolTipText("Írja be a jelszavát!");
         }
-        centerPanel.add(passwordPanel);
+//            passwordPanel.add(passwordField, BorderLayout.CENTER);
+//            passwordShowToggler = new JToggleButton(); {
+//                passwordShowToggler.setBackground(UI.bgLightColor);
+//                passwordShowToggler.setUI(new MetalToggleButtonUI(){
+//                    @Override
+//                    protected Color getSelectColor() {
+//                        return UI.secondaryTextColor;
+//                    }
+//                });
+//                passwordShowToggler.setToolTipText("Jelszó megjelenítése");
+//                passwordShowToggler.setIcon(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("eye-closed.png"))));
+//                passwordShowToggler.setBorder(null);
+//                passwordShowToggler.addItemListener(this::togglePasswordButtonClcicked);
+//            }
+//            passwordPanel.add(passwordShowToggler, BorderLayout.EAST);
+//        }
+        centerPanel.add(passwordField);
         // Login Button
         IconButton loginButton = new IconButton("Bejelentkezés"); {
             loginButton.setIcon("login.png");
@@ -107,7 +104,7 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         JSONObject userData = new JSONObject();
         userData.put(API.USERNAME_KEY,  usernameField.getText());
         userData.put(API.PASSWORD_KEY, API.encryptData(passwordField.getText(), usernameField.getText()));
-        if (usernameField.getText().isEmpty() || passwordField.getPassword().length == 0) {
+        if (usernameField.getText().isBlank() || passwordField.getPassword().length == 0) {
             throw new Exception("Nincs minden szükséges mező kitöltve!");
         }
         return userData;
@@ -145,16 +142,4 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    private void togglePasswordButtonClcicked(ItemEvent e) {
-        passwordField.showPassword(e.getStateChange() == ItemEvent.SELECTED);
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-            passwordShowToggler.setIcon(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("eye.png"))));
-            passwordShowToggler.setToolTipText("Jelszó elrejtése");
-        } else {
-            passwordShowToggler.setIcon(new ImageIcon(Objects.requireNonNull(this.getClass().getClassLoader().getResource("eye-closed.png"))));
-            passwordShowToggler.setToolTipText("Jelszó megjelenítése");
-        }
-    }
-
 }

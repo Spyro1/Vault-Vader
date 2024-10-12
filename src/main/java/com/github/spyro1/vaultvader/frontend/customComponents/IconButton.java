@@ -52,7 +52,6 @@ public class IconButton extends JButton {
         return iconPath;
     }
     private void setup(){
-//        setOpaque(false);
         setBackground(UI.bgLightColor);
         setForeground(UI.mainTextColor);
         setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
@@ -71,6 +70,4 @@ public class IconButton extends JButton {
         g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
     }
-
-
 }
