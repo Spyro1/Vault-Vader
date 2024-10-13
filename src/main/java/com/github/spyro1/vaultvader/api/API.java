@@ -68,6 +68,10 @@ public class API {
         new LoginUI(); // Go back to log in ui
     }
 
+    public static JSONObject getLoggedInUser() {
+        return Controller.INSTANCE.getLoggedInUser().toJSON();
+    }
+
     // == Item Methods ==
 
     static public boolean saveItem(JSONObject itemData) throws Exception {
@@ -179,6 +183,9 @@ public class API {
 
     public static String encryptData(String data, String key){
         return Controller.encryptText(data, key);
+    }
+    public static String dencryptData(String data, String key){
+        return Controller.decryptText(data, key);
     }
 
     public static void saveAllChanges() {

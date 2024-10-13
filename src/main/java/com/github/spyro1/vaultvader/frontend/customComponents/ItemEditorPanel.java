@@ -179,7 +179,10 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
                 System.err.println("ERROR/ItemEditorPanel/addNewField: " + e);
             }
             Field found = API.getTemporalItem().getFields().stream().filter(x -> x.getFieldName().equals(f.getFieldName())).findFirst().orElse(null); //.setFieldName(renamedFieldName); // Rename field
-            if (found != null) found.setFieldName(renamedFieldName);
+            if (found != null){
+                found.setValue(API.encryptData(API.dencryptData(found.getValue(), f.getFieldName()) ,renamedFieldName));
+                found.setFieldName(renamedFieldName);
+            }
             displayItem(API.getTemporalItem());
         }
     }

@@ -106,6 +106,9 @@ public class Controller {
         }
         return result.toString();
     }
+    public static String decryptText(String text, String key) {
+        return encryptText(text, key);
+    }
 
     // === API called public functions ===
 
@@ -115,6 +118,9 @@ public class Controller {
     }
     private String getLoggedInUserFilePath(){
         return getUserFilePath(loggedInUser.getName());
+    }
+    public User getLoggedInUser() {
+        return loggedInUser;
     }
     public void loadUser() {
         if (loggedInUser != null) {
@@ -227,4 +233,6 @@ public class Controller {
             return items.add(tempItem); // New item added -> return if it is successfully added to the list
         }
     }
+
+
 }

@@ -24,7 +24,8 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
         this(text, fieldName, false);
     }
     public DarkPassField(String text, String fieldName, boolean underline) {
-        super(text);
+        super(API.dencryptData(text, fieldName));
+//        super(text);
         this.fieldName = fieldName;
         setup();
         setUnderline(underline);
@@ -84,7 +85,7 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
         if (getText().isBlank()) return null; // Empty field
         JSONObject json = new JSONObject();
         json.put(API.TYPE_KEY, API.PASS_TYPE);
-        json.put(API.VALUE_KEY, getText());
+        json.put(API.VALUE_KEY, API.encryptData(getText(), fieldName));
         json.put(API.FIELD_NAME_KEY, fieldName);
         return json;
     }
