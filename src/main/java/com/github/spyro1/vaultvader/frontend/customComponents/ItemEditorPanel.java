@@ -19,9 +19,9 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     // Components
     JPanel titleRow;
-        IconButton iconButton;
-        DarkTextField titleField;
-        IconButton moreOptionsButton;
+    IconButton iconButton;
+    DarkTextField titleField;
+    IconButton moreOptionsButton;
     FieldPanel categoryBox;
     IconButton addNewFieldButton;
     JPanel bottomToolPanel;
@@ -29,7 +29,7 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     // Referenced variables
     MainUI window;
 
-    public LinkedList<FieldPanel> fieldsList = new LinkedList<>();
+    public LinkedList< FieldPanel > fieldsList = new LinkedList<>();
 
     GridBagLayout gbl = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
@@ -44,10 +44,12 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         gbc.weighty = 0.01;
         gbc.weightx = 1;
         setBackground(UI.bgLightColor);
-        titleRow = new JPanel(new BorderLayout(UI.margin, UI.margin)); {
+        titleRow = new JPanel(new BorderLayout(UI.margin, UI.margin));
+        {
             titleRow.setOpaque(false);
             titleRow.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
-            iconButton = new IconButton("", iconFilePath); {
+            iconButton = new IconButton("", iconFilePath);
+            {
                 iconButton.setToolTipText("Ikon hozzáadása");
                 iconButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
                 iconButton.addActionListener(this::iconSelectorButtonClicked);
@@ -55,16 +57,19 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
             titleRow.add(iconButton, BorderLayout.WEST);
             titleField = new DarkTextField("", "Bejegyzés címe", true);
             titleRow.add(titleField, BorderLayout.CENTER);
-            moreOptionsButton = new IconButton("", "setting.png"); {
+            moreOptionsButton = new IconButton("", "setting.png");
+            {
                 moreOptionsButton.setToolTipText("Bejegyzés opciók");
                 moreOptionsButton.setBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin));
                 moreOptionsButton.addActionListener(this::optionsButtonClicked);
             }
             titleRow.add(moreOptionsButton, BorderLayout.EAST);
         }
-        bottomToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
+        bottomToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        {
             bottomToolPanel.setOpaque(false);
-            addNewFieldButton = new IconButton("Mező hozzáadása", "plus.png"); {
+            addNewFieldButton = new IconButton("Mező hozzáadása", "plus.png");
+            {
                 addNewFieldButton.setToolTipText("Mező hozzáadása");
                 addNewFieldButton.addActionListener(this::addNewFieldButtonClicked);
             }
@@ -89,29 +94,30 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         add(categoryBox, gbc);
         // Add fields
         try {
-            if (displayedItem != null) {
+            if ( displayedItem != null ) {
                 iconButton.setIcon(displayedItem.getIcon());
                 titleField.setText(displayedItem.getTitle());
-                for (int i = 0; i < displayedItem.getFields().size(); i++) {
+                for ( int i = 0; i < displayedItem.getFields().size(); i++ ) {
                     String fieldName = displayedItem.getFields().get(i).getFieldName();
                     String text = displayedItem.getFields().get(i).getValue();
                     FieldPanel fp = new FieldPanel(fieldName, text, displayedItem.getFields().get(i).getType());
                     final int I = i;
                     fp.optionsButton.addActionListener(e -> fieldOptionsButtonClicked(e, displayedItem.getFields().get(I)));
-                    if (fp != null) {
+                    if ( fp != null ) {
                         fieldsList.add(fp);
                         gbc.gridy = gridY++;
                         add(fp, gbc);
                     }
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("ERROR/ItemEditorPanel/ " + e);
         }
 
         gbc.gridy = gridY++;
         add(bottomToolPanel, gbc);
-        JPanel fillerPanel = new JPanel(); {
+        JPanel fillerPanel = new JPanel();
+        {
             fillerPanel.setOpaque(false);
         }
         gbc.weighty = 0.9;
@@ -129,11 +135,11 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         fd.setFile("*.png|*.jpg|*.jpeg|*.gif");
         fd.setVisible(true);
         iconFilePath = fd.getDirectory() + fd.getFile();
-        if (fd.getFile() == null)
+        if ( fd.getFile() == null )
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You cancelled the choice"); // Dor
-        else{
+        else {
             System.out.println("DEBUG/ItemEditorPanel/iconButton: You chose " + iconFilePath);
-           iconButton.setIcon(iconFilePath);
+            iconButton.setIcon(iconFilePath);
         }
     }
 
@@ -145,8 +151,8 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     }
 
     private void addNewFieldPopupClicked(FieldType chosenType) {
-        String fieldName = JOptionPane.showInputDialog(this,"Írja be az új mező nevét!", "Új mező", JOptionPane.QUESTION_MESSAGE);
-        if (fieldName != null && !fieldName.isBlank()) {
+        String fieldName = JOptionPane.showInputDialog(this, "Írja be az új mező nevét!", "Új mező", JOptionPane.QUESTION_MESSAGE);
+        if ( fieldName != null && !fieldName.isBlank() ) {
             try {
                 API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
             } catch (Exception e) {
@@ -165,22 +171,22 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
 
     private void fieldOptionsButtonClicked(ActionEvent actionEvent, Field f) {
         DarkPopupMenuItem deleteFieldMenuItem = new DarkPopupMenuItem("Mező törlése", e -> deleteThisFieldMenuItemClicked(e, f));
-        DarkPopupMenuItem renameFieldMenuItem = new DarkPopupMenuItem("Mező átnevezése", e-> renameThisFieldMenuItemClicked(e, f));
+        DarkPopupMenuItem renameFieldMenuItem = new DarkPopupMenuItem("Mező átnevezése", e -> renameThisFieldMenuItemClicked(e, f));
         DarkPopupMenu moreOptions = new DarkPopupMenu(deleteFieldMenuItem, renameFieldMenuItem);
         moreOptions.show(actionEvent);
     }
 
     private void renameThisFieldMenuItemClicked(ActionEvent actionEvent, Field f) {
-        String renamedFieldName = (String) JOptionPane.showInputDialog(this,"Nevezze át a mező nevét!", "Mező átnevezls", JOptionPane.QUESTION_MESSAGE, null, null, f.getFieldName());
-        if (renamedFieldName != null && !renamedFieldName.isBlank()) {
+        String renamedFieldName = (String) JOptionPane.showInputDialog(this, "Nevezze át a mező nevét!", "Mező átnevezls", JOptionPane.QUESTION_MESSAGE, null, null, f.getFieldName());
+        if ( renamedFieldName != null && !renamedFieldName.isBlank() ) {
             try {
                 API.getTemporalItem().fromJSON(this.toJSON()); // Refresh temporal item current state
             } catch (Exception e) {
                 System.err.println("ERROR/ItemEditorPanel/addNewField: " + e);
             }
             Field found = API.getTemporalItem().getFields().stream().filter(x -> x.getFieldName().equals(f.getFieldName())).findFirst().orElse(null); //.setFieldName(renamedFieldName); // Rename field
-            if (found != null){
-                found.setValue(API.encryptData(API.dencryptData(found.getValue(), f.getFieldName()) ,renamedFieldName));
+            if ( found != null ) {
+                found.setValue(API.encryptData(API.dencryptData(found.getValue(), f.getFieldName()), renamedFieldName));
                 found.setFieldName(renamedFieldName);
             }
             displayItem(API.getTemporalItem());
@@ -193,12 +199,12 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         } catch (Exception e) {
             System.err.println("ERROR/ItemEditorPanel/addNewField: " + e);
         }
-        API.getTemporalItem().getFields().removeIf(x-> x.getFieldName().equals(f.getFieldName()));
+        API.getTemporalItem().getFields().removeIf(x -> x.getFieldName().equals(f.getFieldName()));
         displayItem(API.getTemporalItem());
     }
 
     private void deleteThisItem(ActionEvent actionEvent) {
-        if (JOptionPane.showConfirmDialog(this,"Biztosan törli a bejegyzést?", "Bejegyzés törlése", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if ( JOptionPane.showConfirmDialog(this, "Biztosan törli a bejegyzést?", "Bejegyzés törlése", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION ) {
             API.removeItem(null);
             hidePanel();
             window.refreshItemList();
@@ -218,12 +224,12 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
         JSONObject json = new JSONObject();
         json.put(API.ICON_KEY, iconButton.getIconPath());
         json.put(API.TITLE_KEY, titleField.getText());
-        Object category = ((DarkComboField)categoryBox.component).getSelectedItem();
+        Object category = ((DarkComboField) categoryBox.component).getSelectedItem();
         json.put(API.CATEGORY_KEY, category == null ? "" : category.toString());
         JSONArray fieldsJSON = new JSONArray();
-        for (FieldPanel fp : fieldsList) {
+        for ( FieldPanel fp : fieldsList ) {
             JSONObject readFieldJSON = fp.toJSON();
-            if (readFieldJSON != null) fieldsJSON.add(readFieldJSON);
+            if ( readFieldJSON != null ) fieldsJSON.add(readFieldJSON);
         }
         json.put(API.FIELDS_KEY, fieldsJSON);
         return json;
