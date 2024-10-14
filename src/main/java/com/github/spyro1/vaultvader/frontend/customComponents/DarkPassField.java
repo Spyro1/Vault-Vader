@@ -24,7 +24,7 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
         this(text, fieldName, false);
     }
     public DarkPassField(String text, String fieldName, boolean underline) {
-        super(API.dencryptData(text, fieldName));
+        super(API.decryptData(text, fieldName));
 //        super(text);
         this.fieldName = fieldName;
         setup();
