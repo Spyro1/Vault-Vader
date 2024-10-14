@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a central hub for the application, handling user management, data persistence, categories, and items.
+ */
 public class Controller {
 
     /**
@@ -35,17 +38,32 @@ public class Controller {
     /**
      * Temporal item for displaying the item data on screen and then saving the changes
      */
-    private Item tempItem = null;// = new Item();
+    private Item tempItem = null;
 
     private final String usersFolderPath = "users/";
 
     /**
      * Not accessible constructor
      */
-    private Controller() {
-    }
+    private Controller() { }
 
     // === Read / Write user data functions ===
+
+    /**
+     * Reads user data from a file for the currently logged-in user.
+     *
+     * <p>This method performs the following operations:
+     * <ul>
+     *   <li>Checks whether the user data folder exists. If it does not, attempts to create it.</li>
+     *   <li>Clears the `categories` and `items` lists before reading new data.</li>
+     *   <li>Attempts to read the user data file located at the path corresponding to the logged-in user.</li>
+     *   <li>If the file exists and contains user data, it populates the `categories` and `items` lists using the file's content.</li>
+     *   <li>If any exception occurs during file reading or parsing, logs the error message to the console.</li>
+     *   <li>If the user file does not exist, logs an error indicating the missing file.</li>
+     * </ul>
+     *
+     * <p>Debug and error messages are printed to the console throughout the process.
+     */
     private void readUsersDataFromFile() {
         // Check for users folder
         File folder = new File(usersFolderPath);
@@ -89,14 +107,30 @@ public class Controller {
         }
     }
 
+
+    /**
+     * Writes the current user's data (username, password, categories, and items) to a file in JSON format.
+     *
+     * <p>This method performs the following operations:
+     * <ul>
+     *   <li>Constructs a JSON object containing the logged-in user's username, password, categories, and items.</li>
+     *   <li>Converts the `items` list to JSON format and adds it to the JSON object.</li>
+     *   <li>Attempts to write the JSON object to a file located at the path corresponding to the logged-in user.</li>
+     *   <li>If any exception occurs during file writing, logs the error message to the console.</li>
+     * </ul>
+     *
+     * <p>Error messages are printed to the console if any issues arise during the writing process.
+     */
     private void writeUserDateToFile() {
         JSONObject json = new JSONObject();
         // Build json
         json.put(API.USERNAME_KEY, loggedInUser.getName());
         json.put(API.PASSWORD_KEY, loggedInUser.getPassword());
+        // Create category array
         JSONArray categoryArray = new JSONArray();
-        categoryArray.addAll(categories);
+        categoryArray.addAll(categories); // Add all categories to JSONArray
         json.put(API.CATEGORY_KEY, categoryArray);
+        // Add all items projected to JSON format in an array to the JSON object
         json.put(API.ITEMS_KEY, items.stream().map(Item::toJSON).collect(Collectors.toList()));
         // Write out to file
         try {
@@ -110,7 +144,17 @@ public class Controller {
         }
     }
 
-    // == Encryption function ==
+    // === API called public functions bellow ===
+
+    // == Encryption / Decryption functions ==
+
+    /**
+     * Encrypts the given text using the provided key with a simple XOR cipher.
+     *
+     * @param text the plain text to be encrypted
+     * @param key the key used for the encryption
+     * @return the encrypted string
+     */
     public static String encryptText(String text, String key) {
         StringBuilder result = new StringBuilder(); // init string builder object
         // Encrypt every character one by one
@@ -121,27 +165,53 @@ public class Controller {
         return result.toString();
     }
 
+    /**
+     * Decrypts the given text using the provided key.
+     *
+     * @param text the encrypted text to be decrypted
+     * @param key the key used for decryption (same key used for encryption)
+     * @return the decrypted string (original plain text)
+     */
     public static String decryptText(String text, String key) {
-        return encryptText(text, key);
+        return encryptText(text, key); // Symmetric encryption - decryption
     }
 
-    // === API called public functions ===
-
-    // == User ==
+    // == User Data Management ==
+    /**
+     * Gets the file path for a given username.
+     *
+     * @param username the username of the user
+     * @return the file path for the user's data
+     */
     private String getUserFilePath(String username) {
         return usersFolderPath + username + ".json";
     }
 
+    /**
+     * Gets the file path for the currently logged-in user's data.
+     *
+     * @return the file path for the logged-in user's data
+     */
     private String getLoggedInUserFilePath() {
         return getUserFilePath(loggedInUser.getName());
     }
 
+    /**
+     * Loads the data of the currently logged-in user, if any.
+     */
     public void loadUser() {
         if ( loggedInUser != null ) {
-            readUsersDataFromFile();
+            readUsersDataFromFile(); // Reads logged in user's data from file
         }
     }
 
+    /**
+     * Checks if a user exists and verifies the password from the provided JSON data.
+     *
+     * @param userData the JSON object containing username and encrypted password
+     * @return true if the user exists and the password is correct, false otherwise
+     * @throws Exception if the user does not exist
+     */
     public boolean checkUser(JSONObject userData) throws Exception {
         String username = userData.get(API.USERNAME_KEY).toString();
         String password = userData.get(API.PASSWORD_KEY).toString(); // Encrypted password
@@ -168,6 +238,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Creates a new user if the username does not already exist, initializes default categories, and writes data to file.
+     *
+     * @param userData the JSON object containing username and encrypted password
+     * @return true if the user is successfully created, false if the user already exists
+     */
     public boolean createUser(JSONObject userData) {
         String username = userData.get(API.USERNAME_KEY).toString();
         String password = userData.get(API.PASSWORD_KEY).toString(); // Encrypted password
@@ -192,16 +268,31 @@ public class Controller {
         }
     }
 
+    /**
+     * Saves all data of the logged-in user to a file.
+     */
     public void saveAll() {
         writeUserDateToFile();
     }
 
 
-    // == Category ==
+    // == Category Management ==
+
+    /**
+     * Retrieves the list of user-defined categories.
+     *
+     * @return a HashSet containing all categories
+     */
     public HashSet<String> getCategoryList() {
         return categories;
     }
 
+    /**
+     * Adds a new category to the category list if it doesn't already exist.
+     *
+     * @param newCategory the name of the new category
+     * @return true if the category is successfully added, false if it already exists
+     */
     public boolean addNewCategory(String newCategory) {
         if ( !categories.contains(newCategory) ) {
             categories.add(newCategory);
@@ -210,6 +301,13 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Modifies an existing category by replacing it with a new category.
+     *
+     * @param oldCategory the current category name
+     * @param newCategory the new category name to replace the old one
+     * @return true if the category is successfully replaced, false if the old category was not found
+     */
     public boolean modifyCategory(String oldCategory, String newCategory) {
         if ( categories.remove(oldCategory) ) {
             return categories.add(newCategory); // Successful category replacement
@@ -218,34 +316,77 @@ public class Controller {
         }
     }
 
+    /**
+     * Removes a category from the category list.
+     *
+     * @param categoryToRemove the name of the category to remove
+     * @return true if the category is successfully removed, false if the category was not found
+     */
     public boolean removeCategory(String categoryToRemove) {
         return categories.remove(categoryToRemove);
     }
 
 
-    // == Item ==
+    // == Item Management ==
+
+    /**
+     * Retrieves an item by its index in the item list.
+     *
+     * @param index the index of the item in the list
+     * @return the item at the specified index
+     */
     public Item getItem(int index) {
         return items.get(index);
     }
 
+    /**
+     * Retrieves the list of all items.
+     *
+     * @return an ArrayList containing all items
+     */
     public ArrayList<Item> getItemList() {
         return items;
     }
 
-    // == Temporal item ==
+    // == Temporal Item Management ==
+
+    /**
+     * Creates a new temporary item and returns it.
+     *
+     * @return the newly created temporary item
+     */
     public Item newTemporalItem() {
         tempItem = new Item();
         return tempItem;
     }
 
+    /**
+     * Retrieves the current temporary item.
+     *
+     * @return the current temporary item
+     */
     public Item getTemporalItem() {
         return tempItem;
     }
 
+    /**
+     * Sets a reference to the current temporary item.
+     *
+     * @param itemReference the item to be set as the temporary item
+     * @return the updated temporary item
+     */
     public Item setTemporalItem(Item itemReference) {
         return tempItem = itemReference;
     }
 
+    /**
+     * Saves the current temporary item.
+     *
+     * <p>If the item has blank fields (title or category), it is not saved.
+     * If the item already exists in the item list, it is modified. Otherwise, it is added to the list.
+     *
+     * @return true if the item is successfully saved or added, false if it has blank fields
+     */
     public boolean saveTemporalItem() {
         if ( tempItem.getTitle().isBlank() || tempItem.getCategory().getValue().isBlank() ) {
             return false; // Blank fields -> not saved
@@ -259,6 +400,4 @@ public class Controller {
             return items.add(tempItem); // New item added -> return if it is successfully added to the list
         }
     }
-
-
 }
