@@ -14,15 +14,16 @@ import java.awt.event.ItemEvent;
 import java.util.Objects;
 
 public class DarkPassField extends JPasswordField implements JSONSerializable {
-
+    
     private final String fieldName;
     private final char defChar = getEchoChar();
-
+    
     private JToggleButton passwordShowToggler;
-
+    
     public DarkPassField(String text, String fieldName) {
         this(text, fieldName, false);
     }
+    
     public DarkPassField(String text, String fieldName, boolean underline) {
         super(API.decryptData(text, fieldName));
 //        super(text);
@@ -30,15 +31,17 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
         setup();
         setUnderline(underline);
     }
-    private void setup(){
+    
+    private void setup() {
         setLayout(new BorderLayout());
         setForeground(UI.mainTextColor);
         setBackground(UI.bgLightColor);
         setFont(new Font("Arial", Font.PLAIN, 20));
         setCaretColor(UI.mainTextColor);
-        passwordShowToggler = new JToggleButton(); {
+        passwordShowToggler = new JToggleButton();
+        {
             passwordShowToggler.setBackground(UI.bgLightColor);
-            passwordShowToggler.setUI(new MetalToggleButtonUI(){
+            passwordShowToggler.setUI(new MetalToggleButtonUI() {
                 @Override
                 protected Color getSelectColor() {
                     return UI.secondaryTextColor;
@@ -51,21 +54,24 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
         }
         add(passwordShowToggler, BorderLayout.EAST);
     }
+    
     public void setUnderline(boolean underline) {
-        TitledBorder tb = BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor);
-        MatteBorder mb = BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor);
+        TitledBorder tb = BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0, 0, new Font("Arial", Font.BOLD, 12), UI.mainTextColor);
+        MatteBorder mb = BorderFactory.createMatteBorder(0, 0, 2, 0, UI.mainTextColor);
         if (underline)
             setBorder(BorderFactory.createCompoundBorder(tb, mb));
         else
             setBorder(BorderFactory.createCompoundBorder(tb, null));
     }
-    public void showPassword(boolean shown){
+    
+    public void showPassword(boolean shown) {
         if (shown) {
             setEchoChar((char) 0);
         } else {
             setEchoChar(defChar);
         }
     }
+    
     private void togglePasswordButtonClcicked(ItemEvent e) {
         showPassword(e.getStateChange() == ItemEvent.SELECTED);
         if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -76,7 +82,7 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
             passwordShowToggler.setToolTipText("Jelszó megjelenítése");
         }
     }
-
+    
     /**
      * @return A {@link JSONObject} representing the current object's state in JSON format, null if the field is empty.
      */
@@ -89,7 +95,7 @@ public class DarkPassField extends JPasswordField implements JSONSerializable {
         json.put(API.FIELD_NAME_KEY, fieldName);
         return json;
     }
-
+    
     @Override
     public DarkPassField fromJSON(JSONObject json) {
         // TODO: Write Dark pass fromJSON

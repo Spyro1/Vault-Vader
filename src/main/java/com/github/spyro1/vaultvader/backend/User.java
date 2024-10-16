@@ -10,10 +10,10 @@ import org.json.simple.JSONObject;
 public class User implements JSONSerializable {
     /** The user's name. */
     private String name;
-
+    
     /** The user's password. */
     private String password;
-
+    
     /**
      * Creates a new User object with the provided name and encrypted password.
      * @param name the user's name
@@ -23,7 +23,7 @@ public class User implements JSONSerializable {
         this.name = name;
         this.password = password;
     }
-
+    
     /**
      * Returns the user's encrypted password.
      * @return the user's encrypted password
@@ -31,7 +31,7 @@ public class User implements JSONSerializable {
     public String getPassword() {
         return password;
     }
-
+    
     /**
      * Returns the user's name.
      * @return the user's name
@@ -39,11 +39,11 @@ public class User implements JSONSerializable {
     public String getName() {
         return name;
     }
-
+    
     /**
      * Converts the User object into a JSONObject containing the user's name and password.
-     * @JSONkeys "username", "password"
      * @return the JSONObject representation of the User object
+     * @JSONkeys "username", "password"
      */
     @Override
     public JSONObject toJSON() {
@@ -52,12 +52,12 @@ public class User implements JSONSerializable {
         json.put(API.PASSWORD_KEY, password);
         return json;
     }
-
+    
     /**
      * Attempts to create a User object from a provided JSONObject.
      * @param json the JSONObject to convert
-     * @JSONkeys "username", "password"
      * @return a new User object if the JSON contains both API.USERNAME_KEY and API.PASSWORD_KEY, otherwise null
+     * @JSONkeys "username", "password"
      */
     @Override
     public User fromJSON(JSONObject json) {

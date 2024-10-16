@@ -7,22 +7,23 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
-
-    private final JLabel  titleLabel = new JLabel();
+    
+    private final JLabel titleLabel = new JLabel();
     private final JLabel categoryLabel = new JLabel();
     private final IconButton icon = new IconButton();
-
+    
     public ItemCellRenderer() {
         setLayout(new BorderLayout(5, 5));
         setBackground(UI.bgLightColor);
-        setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
+        setBorder(BorderFactory.createEmptyBorder(UI.margin / 2, UI.margin / 2, UI.margin / 2, UI.margin / 2));
         /* inner panel: */
         JPanel innerPanel = new JPanel();
         {
             innerPanel.setLayout(new BorderLayout());
             innerPanel.setOpaque(false);
-            JPanel textPanel = new JPanel(new BorderLayout()); {
-                textPanel.setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
+            JPanel textPanel = new JPanel(new BorderLayout());
+            {
+                textPanel.setBorder(BorderFactory.createEmptyBorder(UI.margin / 2, UI.margin / 2, UI.margin / 2, UI.margin / 2));
                 textPanel.setOpaque(false);
                 titleLabel.setFont(new Font("Arial", Font.BOLD, 15));
                 categoryLabel.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -38,7 +39,7 @@ public class ItemCellRenderer extends JPanel implements ListCellRenderer<Item> {
         }
         add(innerPanel, BorderLayout.CENTER);
     }
-
+    
     @Override
     public Component getListCellRendererComponent(JList<? extends Item> list, Item value, int index, boolean isSelected, boolean cellHasFocus) {
         titleLabel.setText(value.getTitle());

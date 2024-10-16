@@ -12,12 +12,13 @@ import java.util.Objects;
 import java.util.Vector;
 
 public class DarkComboField extends JComboBox<String> implements JSONSerializable {
-
+    
     private final String fieldName;
-
+    
     public DarkComboField(Collection<String> values, String selectedValue, String fieldName) {
         this(values, selectedValue, fieldName, false);
     }
+    
     public DarkComboField(Collection<String> values, String selectedValue, String fieldName, boolean underline) {
         super(new Vector<>(values));
         this.fieldName = fieldName;
@@ -25,22 +26,24 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
         setUnderline(underline);
         setSelectedItem(selectedValue);
     }
-    private void setup(){
+    
+    private void setup() {
         setForeground(UI.mainTextColor);
         setBackground(UI.bgLightColor);
         setFont(new Font("Arial", Font.PLAIN, 20));
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0, 0, new Font("Arial", Font.BOLD, 12), UI.mainTextColor));
     }
+    
     public void setUnderline(boolean underline) {
         if (underline)
-            setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, UI.mainTextColor), BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor)));
+            setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, UI.mainTextColor), BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0, 0, new Font("Arial", Font.BOLD, 12), UI.mainTextColor)));
         else
-            setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0,0, new Font("Arial", Font.BOLD, 12),  UI.mainTextColor));
+            setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), fieldName, 0, 0, new Font("Arial", Font.BOLD, 12), UI.mainTextColor));
     }
-
+    
     /**
-     * @JSONkeys "fieldName", "type", "value"
      * @return A {@link JSONObject} representing the current object's state in JSON format, null if the field is empty.
+     * @JSONkeys "fieldName", "type", "value"
      */
     @Override
     public JSONObject toJSON() {
@@ -51,7 +54,7 @@ public class DarkComboField extends JComboBox<String> implements JSONSerializabl
         json.put(API.FIELD_NAME_KEY, fieldName);
         return json;
     }
-
+    
     /**
      * @JSONkeys "fieldName", "value", "values"
      */

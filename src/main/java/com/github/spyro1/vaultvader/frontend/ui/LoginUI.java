@@ -7,16 +7,17 @@ import com.github.spyro1.vaultvader.frontend.customComponents.DarkTextField;
 import com.github.spyro1.vaultvader.frontend.customComponents.IconButton;
 
 import org.json.simple.JSONObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class LoginUI extends JFrame /*implements ActionListener*/ {
-
+    
     private DarkTextField usernameField;
     private DarkPassField passwordField;
-
+    
     public LoginUI() {
         // === Essential frame setup ===
         setTitle("Vault Vader");
@@ -25,36 +26,40 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         setIconImage(lockIcon.getImage()); // Set status bar icon
         // === Component setup ===
         initMinimalistLoginUI();
-
+        
         setVisible(true);
     }
-
-    private void initMinimalistLoginUI(){
+    
+    private void initMinimalistLoginUI() {
         setLayout(new BorderLayout());
         setSize(400, 400);
         setLocationRelativeTo(null);
         setBackground(UI.bgDarkColor);
-
+        
         // Create Panel for Components
-        JPanel centerPanel = new JPanel(new GridLayout(5,  1, 15, 15)); {
+        JPanel centerPanel = new JPanel(new GridLayout(5, 1, 15, 15));
+        {
             centerPanel.setBackground(UI.bgDarkColor);
-            centerPanel.setBorder(BorderFactory.createEmptyBorder(0,15,15,15));
+            centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
         }
         // Title
-        JLabel titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER); {
+        JLabel titleLabel = new JLabel("Vault Vader", SwingConstants.CENTER);
+        {
             titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
             titleLabel.setBackground(Color.BLUE);
             titleLabel.setForeground(UI.mainTextColor);
-            titleLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
+            titleLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white));
         }
         centerPanel.add(titleLabel);
         // Input fields
-        usernameField = new DarkTextField("","Felhasználónév"); {
+        usernameField = new DarkTextField("", "Felhasználónév");
+        {
             usernameField.setToolTipText("Írja be a felhasználónevét!");
         }
         centerPanel.add(usernameField);
 //        JPanel passwordPanel = new JPanel(new BorderLayout()); {
-        passwordField = new DarkPassField("","Jelszó"); {
+        passwordField = new DarkPassField("", "Jelszó");
+        {
             passwordField.setToolTipText("Írja be a jelszavát!");
         }
 //            passwordPanel.add(passwordField, BorderLayout.CENTER);
@@ -75,7 +80,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
 //        }
         centerPanel.add(passwordField);
         // Login Button
-        IconButton loginButton = new IconButton("Bejelentkezés"); {
+        IconButton loginButton = new IconButton("Bejelentkezés");
+        {
             loginButton.setIcon("login.png");
             loginButton.setBackground(UI.mainColor);
             loginButton.setForeground(UI.mainTextColor);
@@ -84,7 +90,8 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
         }
         centerPanel.add(loginButton);
         // Register Button
-        IconButton registerButton = new IconButton("Regisztráció"); {
+        IconButton registerButton = new IconButton("Regisztráció");
+        {
             registerButton.setIcon("user.png");
             registerButton.setBackground(UI.secondaryColor);
             registerButton.setForeground(UI.mainTextColor);
@@ -93,48 +100,48 @@ public class LoginUI extends JFrame /*implements ActionListener*/ {
             registerButton.addActionListener(this::registerButtonClicked);
         }
         centerPanel.add(registerButton);
-
+        
         // Add Components to Frame
         add(centerPanel, BorderLayout.CENTER);
-
+        
         getRootPane().setDefaultButton(loginButton);
     }
-
+    
     private JSONObject userFiledsToJSON() throws Exception {
         JSONObject userData = new JSONObject();
-        userData.put(API.USERNAME_KEY,  usernameField.getText());
+        userData.put(API.USERNAME_KEY, usernameField.getText());
         userData.put(API.PASSWORD_KEY, API.encryptData(passwordField.getText(), usernameField.getText()));
         if (usernameField.getText().isBlank() || passwordField.getPassword().length == 0) {
             throw new Exception("Nincs minden szükséges mező kitöltve!");
         }
         return userData;
     }
-
+    
     private void loginButtonClicked(ActionEvent e) {
         try {
             // Create JSON object from username and password
             JSONObject userData = userFiledsToJSON();
             // Try login with user's date
-            if (API.loginRequest(userData)){
+            if (API.loginRequest(userData)) {
                 dispose(); // Successful login -> Close window
-            } else{
+            } else {
                 throw new Exception("Helytelen felhasználónév vagy jelszó!");
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private void registerButtonClicked(ActionEvent e) {
         try {
             // Create JSON object from username and password
             JSONObject userData = userFiledsToJSON();
             // Ask for clarification
-            if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+            if (JOptionPane.showConfirmDialog(null, "Biztosan regisztrálsz egy új felhasználót?", "Regisztráció", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 // Try register with user's date
-                if (API.registerRequest(userData)){
+                if (API.registerRequest(userData)) {
                     JOptionPane.showMessageDialog(null, "Felhasználó sikeresen létrehozva!", "Regisztráció", JOptionPane.INFORMATION_MESSAGE); // Successful register -> Show a success dialog box
-                } else{
+                } else {
                     throw new Exception("Nem sikerült létrehozni a felhasználót!");
                 }
             }

@@ -7,31 +7,36 @@ import java.awt.*;
 import java.util.Objects;
 
 public class IconButton extends JButton {
-
+    
     public static final String defaultIconPath = "picture.png";
     private String iconPath;
-
+    
     public IconButton() {
         super();
         setup();
     }
+    
     public IconButton(Icon icon) {
         super(icon);
         setup();
     }
+    
     public IconButton(String text) {
         super(text);
         setup();
     }
+    
     public IconButton(String text, Icon icon) {
         super(text, icon);
         setup();
     }
+    
     public IconButton(String text, String resourcePath) {
         super(text);
         setIcon(resourcePath);
         setup();
     }
+    
     public void setIcon(String path) {
         ImageIcon icon;
         iconPath = path;
@@ -48,16 +53,19 @@ public class IconButton extends JButton {
         Image resized = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
         setIcon(new ImageIcon(resized));
     }
+    
     public String getIconPath() {
         return iconPath;
     }
-    private void setup(){
+    
+    private void setup() {
         setBackground(UI.bgLightColor);
         setForeground(UI.mainTextColor);
-        setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
+        setBorder(BorderFactory.createEmptyBorder(UI.margin / 2, UI.margin / 2, UI.margin / 2, UI.margin / 2));
         setFont(new Font("Arial", Font.PLAIN, 20));
         setContentAreaFilled(false); // Sets to be able to paint enabled and hover background
     }
+    
     @Override
     protected void paintComponent(Graphics g) {
         if (getModel().isPressed()) {

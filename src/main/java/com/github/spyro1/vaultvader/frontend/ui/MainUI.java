@@ -11,7 +11,9 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
 import org.json.simple.JSONObject;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -20,11 +22,11 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class MainUI extends JFrame {
-
+    
     // Constants
     final int width = 1000, height = 600; // Default  size of the window
-    final double headerWeightY = 0.01, contentWeightY = 1- headerWeightY,
-                 firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
+    final double headerWeightY = 0.01, contentWeightY = 1 - headerWeightY,
+            firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
     // Objects
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel;
     ItemEditorPanel editorPanel;
@@ -36,7 +38,7 @@ public class MainUI extends JFrame {
     // JSONObject filter = new JSONObject();
     DefaultMutableTreeNode allItemCategory = new DefaultMutableTreeNode("Minden bejegyzés");
     int singlifyer = 0;
-
+    
     public MainUI() {
         // Create main frame
         setTitle("Vault Vader");
@@ -48,12 +50,12 @@ public class MainUI extends JFrame {
         setIconImage(lockIcon.getImage()); // Set status bar icon
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
+        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 // On closing actions
-                try{
+                try {
                     API.saveAllChanges(); // Call API to save changes to the user data
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -61,25 +63,30 @@ public class MainUI extends JFrame {
                 e.getWindow().dispose(); // Close the window
             }
         });
-
+        
         // TITLE PANEL for displaying the app name
-        titlePanel = new JPanel(new BorderLayout()); {
-            JPanel titleCenterPanel = new JPanel(new BorderLayout()); {
+        titlePanel = new JPanel(new BorderLayout());
+        {
+            JPanel titleCenterPanel = new JPanel(new BorderLayout());
+            {
                 titleCenterPanel.setBackground(UI.bgDarkColor);
                 titleCenterPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
-                JLabel VaultVaderLabel = new JLabel("Vault Vader", JLabel.CENTER); {
+                JLabel VaultVaderLabel = new JLabel("Vault Vader", JLabel.CENTER);
+                {
                     VaultVaderLabel.setForeground(UI.mainTextColor);
-                    VaultVaderLabel.setBorder(BorderFactory.createMatteBorder(0,0,2,0, Color.white));
+                    VaultVaderLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white));
                     VaultVaderLabel.setFont(new Font("Impact", Font.BOLD, 30));
                     titleCenterPanel.add(VaultVaderLabel);
                 }
             }
             titlePanel.add(titleCenterPanel);
-         }
+        }
         // SEARCH PANEL for the search bar
-        searchPanel = new JPanel(new BorderLayout()); {
+        searchPanel = new JPanel(new BorderLayout());
+        {
             searchPanel.setBackground(UI.bgLightColor);
-            JPanel centerPanel = new JPanel(new BorderLayout()); {
+            JPanel centerPanel = new JPanel(new BorderLayout());
+            {
                 centerPanel.setBackground(UI.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, 0, UI.bgDarkColor), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
                 // === REMOVED FOR BETA RELEASE ===
@@ -96,15 +103,18 @@ public class MainUI extends JFrame {
             searchPanel.add(centerPanel);
         }
         // HEADER PANEL for the tool buttons
-        headerPanel = new JPanel(new BorderLayout()); {
+        headerPanel = new JPanel(new BorderLayout());
+        {
             headerPanel.setBackground(UI.bgDarkColor);
-            JPanel centerPanel = new JPanel(); {
+            JPanel centerPanel = new JPanel();
+            {
                 centerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
                 centerPanel.setBackground(UI.bgLightColor);
                 centerPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(UI.margin, 0, UI.margin, UI.margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin)));
-                IconButton logOutButton = new IconButton("Kijelentkezés", "logout.png"); {
+                IconButton logOutButton = new IconButton("Kijelentkezés", "logout.png");
+                {
                     logOutButton.setToolTipText("Kijelentkezés");
-                    logOutButton.setBorder(BorderFactory.createEmptyBorder(UI.margin/2, UI.margin/2, UI.margin/2, UI.margin/2));
+                    logOutButton.setBorder(BorderFactory.createEmptyBorder(UI.margin / 2, UI.margin / 2, UI.margin / 2, UI.margin / 2));
                     logOutButton.addActionListener(_ -> {
                         try {
                             API.logoutRequest(); // Send a request to the API to log out the user
@@ -119,50 +129,59 @@ public class MainUI extends JFrame {
             headerPanel.add(centerPanel);
         }
         // SIDE PANEL for filtering for categories
-        sidePanel = new JPanel(new BorderLayout()); {
+        sidePanel = new JPanel(new BorderLayout());
+        {
             sidePanel.setBackground(UI.bgLightColor);
-            JPanel categoryLabelPanel = new JPanel(new BorderLayout()); {
-                categoryLabelPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin,0, UI.margin, UI.bgDarkColor));
+            JPanel categoryLabelPanel = new JPanel(new BorderLayout());
+            {
+                categoryLabelPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin, 0, UI.margin, UI.bgDarkColor));
                 categoryLabelPanel.setOpaque(false);
-                JLabel categoryLabel = new JLabel("Kategóriák"); {
+                JLabel categoryLabel = new JLabel("Kategóriák");
+                {
                     categoryLabel.setForeground(UI.mainTextColor);
                     categoryLabel.setForeground(UI.mainTextColor);
                     categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
                     categoryLabel.setForeground(UI.mainTextColor);
                     categoryLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-                    categoryLabel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin), BorderFactory.createMatteBorder(0,0,2,0, Color.white)));
+                    categoryLabel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(UI.margin, UI.margin, UI.margin, UI.margin), BorderFactory.createMatteBorder(0, 0, 2, 0, Color.white)));
                 }
                 categoryLabelPanel.add(categoryLabel);
             }
             sidePanel.add(categoryLabelPanel, BorderLayout.NORTH);
-
-            categoryTree = new JTree(allItemCategory); {
+            
+            categoryTree = new JTree(allItemCategory);
+            {
                 categoryTree.setOpaque(false);
                 categoryTree.setFont(new Font("Arial", Font.PLAIN, 15));
                 categoryTree.setCellRenderer(new CategoryTreeRenderer());
                 categoryTree.addTreeSelectionListener(this::categorySelected);
             }
             refreshCategoryTree(); // Refresh added category tree
-            JScrollPane scrollPane = new JScrollPane(categoryTree); {
-                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, UI.margin, 0, UI. margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(0, UI.margin, UI.margin, UI.margin)));
+            JScrollPane scrollPane = new JScrollPane(categoryTree);
+            {
+                scrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, UI.margin, 0, UI.margin, UI.bgDarkColor), BorderFactory.createEmptyBorder(0, UI.margin, UI.margin, UI.margin)));
                 scrollPane.setOpaque(false);
                 scrollPane.setBackground(UI.bgLightColor);
                 scrollPane.getViewport().setOpaque(false);
             }
             sidePanel.add(scrollPane, BorderLayout.CENTER);
-
-            JPanel categoryEditorToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
+            
+            JPanel categoryEditorToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            {
                 categoryEditorToolPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin, UI.margin, UI.margin, UI.bgDarkColor));
                 categoryEditorToolPanel.setOpaque(false);
-                IconButton addCategoryButton = new IconButton("", "plus.png"); {
+                IconButton addCategoryButton = new IconButton("", "plus.png");
+                {
                     addCategoryButton.setToolTipText("Új kategória");
                     addCategoryButton.addActionListener(this::addCategoryClicked);
                 }
-                IconButton editCategoryButton = new IconButton("", "setting.png"); {
+                IconButton editCategoryButton = new IconButton("", "setting.png");
+                {
                     editCategoryButton.setToolTipText("Kategoria szerkesztése");
                     editCategoryButton.addActionListener(this::editCategoryClicked);
                 }
-                IconButton removeCategoryButton = new IconButton("", "trash.png"); {
+                IconButton removeCategoryButton = new IconButton("", "trash.png");
+                {
                     removeCategoryButton.setToolTipText("Kategória törlése");
                     removeCategoryButton.addActionListener(this::removeCategoryClicked);
                 }
@@ -173,18 +192,22 @@ public class MainUI extends JFrame {
             sidePanel.add(categoryEditorToolPanel, BorderLayout.SOUTH);
         }
         // SLIDER PANEL for displaying every
-        sliderPanel = new JPanel(new BorderLayout()); {
+        sliderPanel = new JPanel(new BorderLayout());
+        {
             sliderPanel.setBackground(UI.bgLightColor);
             sliderPanel.setBorder(BorderFactory.createMatteBorder(0, 0, UI.margin, 0, UI.bgDarkColor));
-            itemListScrollPane = new JScrollPane(); {
+            itemListScrollPane = new JScrollPane();
+            {
                 itemListScrollPane.setBackground(UI.bgLightColor);
                 itemListScrollPane.setBorder(BorderFactory.createEmptyBorder());
                 itemListScrollPane.getViewport().setOpaque(false);
             }
             sliderPanel.add(itemListScrollPane, BorderLayout.CENTER);
-            JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
+            JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            {
                 itemToolPanel.setOpaque(false);
-                IconButton addNewItemButton = new IconButton("Új bejegyzés","plus.png"); {
+                IconButton addNewItemButton = new IconButton("Új bejegyzés", "plus.png");
+                {
                     addNewItemButton.setToolTipText("Új bejegyzés");
                     addNewItemButton.addActionListener(this::newItemButtonClicked);
                 }
@@ -195,22 +218,27 @@ public class MainUI extends JFrame {
         // REFRESH ITEM LIST
         refreshItemList(); // Create Item JList and refresh
         // EDITOR PANEL for editing items
-        contentBackPanel = new JPanel(new BorderLayout()); {
+        contentBackPanel = new JPanel(new BorderLayout());
+        {
             contentBackPanel.setBackground(UI.bgLightColor);
             contentBackPanel.setBorder(BorderFactory.createMatteBorder(0, UI.margin, UI.margin, UI.margin, UI.bgDarkColor));
-            editorPanel = new ItemEditorPanel(this); {
+            editorPanel = new ItemEditorPanel(this);
+            {
                 editorPanel.setVisible(false);
             }
-            editorContentScroller = new JScrollPane(editorPanel); {
+            editorContentScroller = new JScrollPane(editorPanel);
+            {
                 editorContentScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 editorContentScroller.setBackground(UI.bgLightColor);
                 editorContentScroller.setBorder(BorderFactory.createEmptyBorder());
                 editorContentScroller.getViewport().setOpaque(false);
             }
             contentBackPanel.add(editorContentScroller, BorderLayout.CENTER);
-            JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); {
+            JPanel itemToolPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            {
                 itemToolPanel.setOpaque(false);
-                IconButton saveItemChanges = new IconButton("Mentés", "save.png"); {
+                IconButton saveItemChanges = new IconButton("Mentés", "save.png");
+                {
                     saveItemChanges.setToolTipText("Mentés");
                     saveItemChanges.addActionListener(this::saveItemButtonClicked);
                 }
@@ -218,57 +246,58 @@ public class MainUI extends JFrame {
             }
             contentBackPanel.add(itemToolPanel, BorderLayout.SOUTH);
         }
-
-        /* Setup GridBagLayout properties and add panels */ {
-
+        
+        /* Setup GridBagLayout properties and add panels */
+        {
+            
             // title panel: Top-right corner
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.weightx = firsColWeight;
             gbc.weighty = headerWeightY;
             add(titlePanel, gbc);
-
+            
             // search panel: second top cell
             gbc.gridx = 1;
             gbc.gridy = 0;
             gbc.weightx = secondColWeight;
             add(searchPanel, gbc);
-
+            
             // header panel: third top cell
             gbc.gridx = 2;
             gbc.gridy = 0;
             gbc.weightx = thirdColWeight;
             add(headerPanel, gbc);
-
+            
             // side panel: Side panel below the first two (left side)
             gbc.gridx = 0;
             gbc.gridy = 1;
             gbc.weightx = firsColWeight;
             gbc.weighty = contentWeightY;
             add(sidePanel, gbc);
-
+            
             // slider panel: Between panel 3 and panel 5 (middle)
             gbc.gridx = 1;
             gbc.gridy = 1;
             gbc.weightx = secondColWeight;
             add(sliderPanel, gbc);
-
+            
             // content panel: Below the first two panels (right side)
             gbc.gridx = 2;
             gbc.gridy = 1;
             gbc.weightx = thirdColWeight;
             add(contentBackPanel, gbc);
         }
-
+        
         // Set window visible
         setVisible(true);
     }
-
+    
     // == Category ==
     private void addCategoryClicked(ActionEvent actionEvent) {
         try {
             // Get selected category name
-            String categoryName = JOptionPane.showInputDialog(this,"Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
+            String categoryName = JOptionPane.showInputDialog(this, "Írja be az új kategória nevét!", "Új kategória", JOptionPane.QUESTION_MESSAGE);
             if (categoryName != null) { // Test if any is selected
                 JSONObject json = new JSONObject();
                 json.put(API.CATEGORY_KEY, categoryName); // Add data to json object
@@ -284,6 +313,7 @@ public class MainUI extends JFrame {
             System.err.println("ERROR/addCategoryClicked: " + e);
         }
     }
+    
     private void editCategoryClicked(ActionEvent actionEvent) {
         try {
             TreePath tp = categoryTree.getSelectionPath();
@@ -301,10 +331,11 @@ public class MainUI extends JFrame {
                     System.out.println("DEBUG/editCategoryClicked: Nem sikerült a kategóriát szerkeszteni"); // JUST FOR DEBUG
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("ERROR/editCategoryClicked: " + e);
         }
     }
+    
     private void removeCategoryClicked(ActionEvent actionEvent) {
         try {
             TreePath tp = categoryTree.getSelectionPath();
@@ -320,53 +351,55 @@ public class MainUI extends JFrame {
                     System.out.println("DEBUG/removeCategoryClicked: Nem sikerült a törlés");
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("ERROR/removeCategoryClicked: " + e.getMessage());
         }
     }
+    
     private void categorySelected(TreeSelectionEvent treeSelectionEvent) {
         // TODO: Write category tree selection listener
     }
-
+    
     // == Search ==
 //    private void searchButtonClicked(ActionEvent actionEvent) {
-        // TODO: Write search button action
+    // TODO: Write search button action
 //    }
-
+    
     // == Item ==
     private void newItemButtonClicked(ActionEvent actionEvent) {
         editorPanel.displayItem(API.newTemporalItem());
         itemJList.setSelectedIndex(-1);
         refreshCategoryTree();
     }
+    
     private void saveItemButtonClicked(ActionEvent actionEvent) {
         try {
-            if (API.saveItem(editorPanel.toJSON())){
+            if (API.saveItem(editorPanel.toJSON())) {
                 System.out.println("DEBUG/saveItem: " + API.getTemporalItem().toString());
                 refreshItemList();
             } else {
                 JOptionPane.showMessageDialog(this, "Nincs minden szükséges mező kitöltve!\nKötelező mezők: Cím, Kategória", "Kötelező mezők", JOptionPane.WARNING_MESSAGE);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("ERROR/saveItem: " + e.getMessage());
         }
     }
+    
     private void itemSelectedFromList(ListSelectionEvent listSelectionEvent) {
         try {
-            if (singlifyer == 0){
+            if (singlifyer == 0) {
                 selectedItemIndex = itemJList.getSelectedIndex();
                 Item selectedItem = API.getItemData(selectedItemIndex);
                 editorPanel.displayItem(API.setTemporalItem(selectedItem));
                 editorContentScroller.validate();
                 System.out.println("DEBUG/Item displayed: " + selectedItemIndex + " - " + selectedItem.toString());
                 singlifyer = 1;
-            }
-            else singlifyer = 0;
+            } else singlifyer = 0;
         } catch (Exception e) {
             System.out.println("ERROR/ItemSelector/ " + e);
         }
     }
-
+    
     // Helper functions
     private JList<Item> createItemJList(Collection<Item> itemList) {
         // Create list model
@@ -378,8 +411,8 @@ public class MainUI extends JFrame {
         }
         return new JList<>(model);
     }
-
-    public void refreshCategoryTree(){
+    
+    public void refreshCategoryTree() {
         // Refresh category tree data
         allItemCategory.removeAllChildren();
         HashSet<String> categories = API.getCategoryList(); // GET data from API
@@ -392,18 +425,21 @@ public class MainUI extends JFrame {
         DefaultTreeModel model = (DefaultTreeModel) categoryTree.getModel();
         model.reload();
     }
-    public void refreshItemList(){
-        itemJList = createItemJList(API.getItemList(null)); {
+    
+    public void refreshItemList() {
+        itemJList = createItemJList(API.getItemList(null));
+        {
             itemJList.setCellRenderer(new ItemCellRenderer());
             itemJList.setBackground(UI.bgLightColor);
             itemJList.addListSelectionListener(this::itemSelectedFromList);
         }
         itemListScrollPane.setViewportView(itemJList);
     }
+    
     public void refreshEditorPanel() {
         try {
             editorPanel.displayItem(API.getTemporalItem().fromJSON(editorPanel.toJSON()));
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("ERROR/refreshEditorPanel: " + e);
         }
     }

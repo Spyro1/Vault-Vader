@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 
 public class DarkPopupMenuItem extends JMenuItem {
-
+    
     public DarkPopupMenuItem(String text, ActionListener actionListener) {
         super(text);
         setForeground(UI.mainTextColor);

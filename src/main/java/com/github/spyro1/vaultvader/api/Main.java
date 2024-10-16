@@ -5,7 +5,7 @@ import com.github.spyro1.vaultvader.frontend.ui.LoginUI;
 import javax.swing.*;
 
 public class Main {
-
+    
     /**
      * The main method serves as the entry point of the application.
      * @param args Command-line arguments (not used in this application).

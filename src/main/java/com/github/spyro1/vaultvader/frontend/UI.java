@@ -10,8 +10,8 @@ public interface UI {
     Color secondaryColor = new Color(239, 35, 60);
     Color bgLightColor = new Color(33, 37, 54);
     Color bgDarkColor = new Color(16, 17, 28);
-    Color mainTextColor = new Color(230,230,230);
-    Color secondaryTextColor = new Color(170,170,170);
-
+    Color mainTextColor = new Color(230, 230, 230);
+    Color secondaryTextColor = new Color(170, 170, 170);
+    
     int margin = 10;
 }
