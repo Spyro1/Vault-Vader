@@ -7,14 +7,14 @@
 
 - [x] Write Tooltips for buttons
 - [x] Button click events organized into functions
-- [ ] Function documentation
+- [x] Function documentation
   
 ## MainUI
 
 - Category editor panel
   - [ ] (Create right click popup menu for tool buttons also)
   - [ ] Set selection listener to filter the displayed items in `slider panel` according to selected category
-  - [ ] Refresh editor panels category chooser when new category added or modified or deleted
+  - [x] Refresh editor panels category chooser when new category added or modified or deleted
 - Item List Slider panel
   - [ ] Create right click popup menu for adding new item
   - [x] Add new item button functionality
@@ -28,7 +28,7 @@
     - [x] Rename field functionality
     - [x] Icon selector button
     - [x] Icon not shows
-    - [ ] Remove item
+    - [x] Remove item
 - Header Panel
   - [ ] Search Button functionality
   - [ ] Search Button works for Enter
@@ -38,5 +38,7 @@
   
 # Backend
 
-- --[ ] Category reference with index: 0: all, 1..*: index of specific category--
+- [ ] Search by typeing
+- [ ] Filter by category
+- [ ] 
 

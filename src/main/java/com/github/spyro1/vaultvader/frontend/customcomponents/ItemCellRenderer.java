@@ -1,4 +1,4 @@
-package com.github.spyro1.vaultvader.frontend.customComponents;
+package com.github.spyro1.vaultvader.frontend.customcomponents;
 
 import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;

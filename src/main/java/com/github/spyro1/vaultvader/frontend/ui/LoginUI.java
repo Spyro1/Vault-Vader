@@ -2,9 +2,9 @@ package com.github.spyro1.vaultvader.frontend.ui;
 
 import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.frontend.UI;
-import com.github.spyro1.vaultvader.frontend.customComponents.DarkPassField;
-import com.github.spyro1.vaultvader.frontend.customComponents.DarkTextField;
-import com.github.spyro1.vaultvader.frontend.customComponents.IconButton;
+import com.github.spyro1.vaultvader.frontend.customcomponents.DarkPassField;
+import com.github.spyro1.vaultvader.frontend.customcomponents.DarkTextField;
+import com.github.spyro1.vaultvader.frontend.customcomponents.IconButton;
 
 import org.json.simple.JSONObject;
 

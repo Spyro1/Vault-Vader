@@ -3,7 +3,7 @@ package com.github.spyro1.vaultvader.frontend.ui;
 import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.frontend.UI;
-import com.github.spyro1.vaultvader.frontend.customComponents.*;
+import com.github.spyro1.vaultvader.frontend.customcomponents.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -19,14 +19,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Set;
 
 public class MainUI extends JFrame {
     
-    // Constants
-    final int width = 1000, height = 600; // Default  size of the window
-    final double headerWeightY = 0.01, contentWeightY = 1 - headerWeightY,
-            firsColWeight = 0.1, secondColWeight = 0.4, thirdColWeight = 0.5;
+    // Default size of the window
+    static final int WIDTH = 1000;
+    static final int HEIGHT = 600; 
+    // GridBagView constant modifiers
+    static final double HEADER_WEIGHT_Y = 0.01;
+    static final double CONTENT_WEIGHT_Y = 1 - HEADER_WEIGHT_Y;
+    static final double FIRST_COL_WEIGHT = 0.1;
+    static final double SECOND_COL_WIGHT = 0.4;
+    static final double THIRD_COL_WEIGHT = 0.5;
     // Objects
     JPanel titlePanel, searchPanel, headerPanel, sidePanel, sliderPanel, contentBackPanel;
     ItemEditorPanel editorPanel;
@@ -42,7 +47,7 @@ public class MainUI extends JFrame {
     public MainUI() {
         // Create main frame
         setTitle("Vault Vader");
-        setSize(width, height);
+        setSize(WIDTH, HEIGHT);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
@@ -253,39 +258,39 @@ public class MainUI extends JFrame {
             // title panel: Top-right corner
             gbc.gridx = 0;
             gbc.gridy = 0;
-            gbc.weightx = firsColWeight;
-            gbc.weighty = headerWeightY;
+            gbc.weightx = FIRST_COL_WEIGHT;
+            gbc.weighty = HEADER_WEIGHT_Y;
             add(titlePanel, gbc);
             
             // search panel: second top cell
             gbc.gridx = 1;
             gbc.gridy = 0;
-            gbc.weightx = secondColWeight;
+            gbc.weightx = SECOND_COL_WIGHT;
             add(searchPanel, gbc);
             
             // header panel: third top cell
             gbc.gridx = 2;
             gbc.gridy = 0;
-            gbc.weightx = thirdColWeight;
+            gbc.weightx = THIRD_COL_WEIGHT;
             add(headerPanel, gbc);
             
             // side panel: Side panel below the first two (left side)
             gbc.gridx = 0;
             gbc.gridy = 1;
-            gbc.weightx = firsColWeight;
-            gbc.weighty = contentWeightY;
+            gbc.weightx = FIRST_COL_WEIGHT;
+            gbc.weighty = CONTENT_WEIGHT_Y;
             add(sidePanel, gbc);
             
             // slider panel: Between panel 3 and panel 5 (middle)
             gbc.gridx = 1;
             gbc.gridy = 1;
-            gbc.weightx = secondColWeight;
+            gbc.weightx = SECOND_COL_WIGHT;
             add(sliderPanel, gbc);
             
             // content panel: Below the first two panels (right side)
             gbc.gridx = 2;
             gbc.gridy = 1;
-            gbc.weightx = thirdColWeight;
+            gbc.weightx = THIRD_COL_WEIGHT;
             add(contentBackPanel, gbc);
         }
         
@@ -415,7 +420,7 @@ public class MainUI extends JFrame {
     public void refreshCategoryTree() {
         // Refresh category tree data
         allItemCategory.removeAllChildren();
-        HashSet<String> categories = API.getCategoryList(); // GET data from API
+        Set<String> categories = API.getCategoryList(); // GET data from API
         for (String category : categories) {
             allItemCategory.add(new DefaultMutableTreeNode(category));
         }

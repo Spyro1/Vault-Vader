@@ -1,4 +1,4 @@
-package com.github.spyro1.vaultvader.frontend.customComponents;
+package com.github.spyro1.vaultvader.frontend.customcomponents;
 
 import com.github.spyro1.vaultvader.api.API;
 import com.github.spyro1.vaultvader.api.JSONSerializable;

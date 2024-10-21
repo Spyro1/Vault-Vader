@@ -1,14 +1,19 @@
-package com.github.spyro1.vaultvader;
+package backend;
 
 import com.github.spyro1.vaultvader.backend.Item;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestClasses {
+public class ItemTest {
     
     Item i = new Item();
+    
+    @BeforeAll
+    public static void setup(){
+    
+    }
     
     @Test
     public void test() {

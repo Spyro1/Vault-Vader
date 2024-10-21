@@ -28,7 +28,7 @@ public class Controller {
     /**
      * Stores the current user's categories
      */
-    private final HashSet<String> categories = new HashSet<>(); // new HashSet<>();
+    private final HashSet<String> categories = new HashSet<>(); 
     
     /**
      * The name of the user currently logged in to the app
@@ -140,6 +140,7 @@ public class Controller {
             // Print to stream
             pw.write(json.toJSONString()); //.replace(",", ",\n").replace("{", "{\n").replace("}", "\n}").replace("[", "[\n").replace("]", "\n]")); // Formatting
             pw.flush();
+            pw.close();
         } catch (Exception e) {
             System.err.println("ERROR/Controller/writeUserDateToFile: " + e.getMessage());
         }
@@ -279,7 +280,7 @@ public class Controller {
      * Retrieves the list of user-defined categories.
      * @return a HashSet containing all categories
      */
-    public HashSet<String> getCategoryList() {
+    public Set<String> getCategoryList() {
         return categories;
     }
     

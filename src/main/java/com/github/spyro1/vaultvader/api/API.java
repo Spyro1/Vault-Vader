@@ -7,8 +7,8 @@ import com.github.spyro1.vaultvader.frontend.ui.MainUI;
 
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * The API class provides a centralized interface for interacting with various aspects of the application, including
@@ -17,6 +17,11 @@ import java.util.HashSet;
  * @version 1.0
  */
 public class API {
+
+    /**
+     * Private constructor to hide the public one
+     */
+    private API() {}
     
     /**
      * Constant strings representing various data keys used in the application.
@@ -115,7 +120,7 @@ public class API {
      * @return A list of items matching the filter.
      * @JSONkeys "filter"
      */
-    static public ArrayList<Item> getItemList(JSONObject filter) {
+    static public List<Item> getItemList(JSONObject filter) {
         // Show all items = no filter
         if (filter == null) {
             return Controller.INSTANCE.getItemList();
@@ -205,7 +210,7 @@ public class API {
      * Retrieves a list of all categories.
      * @return A set of category names.
      */
-    public static HashSet<String> getCategoryList() {
+    public static Set<String> getCategoryList() {
         return Controller.INSTANCE.getCategoryList();
     }
     
