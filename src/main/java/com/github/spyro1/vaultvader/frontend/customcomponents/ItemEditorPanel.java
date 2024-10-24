@@ -144,8 +144,8 @@ public class ItemEditorPanel extends JPanel implements JSONSerializable {
     }
     
     private void addNewFieldButtonClicked(ActionEvent actionEvent) {
-        DarkPopupMenuItem newStringField = new DarkPopupMenuItem("Új szöveg mező", _ -> addNewFieldPopupClicked(FieldType.TEXT));
-        DarkPopupMenuItem newPassField = new DarkPopupMenuItem("Új jelszó mező", _ -> addNewFieldPopupClicked(FieldType.PASS));
+        DarkPopupMenuItem newStringField = new DarkPopupMenuItem("Új szöveg mező", e -> addNewFieldPopupClicked(FieldType.TEXT));
+        DarkPopupMenuItem newPassField = new DarkPopupMenuItem("Új jelszó mező", e -> addNewFieldPopupClicked(FieldType.PASS));
         DarkPopupMenu popup = new DarkPopupMenu(newStringField, newPassField);
         popup.show(actionEvent);
     }

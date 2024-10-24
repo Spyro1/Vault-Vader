@@ -5,12 +5,10 @@ import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.backend.User;
 import com.github.spyro1.vaultvader.api.API;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -62,6 +60,7 @@ public class ControllerTest {
     @Test
     @Order(3)
     public void testAddNewCategory_Success() throws Exception {
+        Controller.INSTANCE.getCategoryList().clear();
         assertTrue(Controller.INSTANCE.addNewCategory("NewCategory"));
         
         // Check if the category list contains the new category

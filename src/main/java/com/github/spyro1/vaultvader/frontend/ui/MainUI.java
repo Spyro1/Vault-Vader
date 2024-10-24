@@ -120,7 +120,7 @@ public class MainUI extends JFrame {
                 {
                     logOutButton.setToolTipText("Kijelentkezés");
                     logOutButton.setBorder(BorderFactory.createEmptyBorder(UI.margin / 2, UI.margin / 2, UI.margin / 2, UI.margin / 2));
-                    logOutButton.addActionListener(_ -> {
+                    logOutButton.addActionListener(e -> {
                         try {
                             API.logoutRequest(); // Send a request to the API to log out the user
                         } catch (Exception ex) {
