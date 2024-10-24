@@ -180,6 +180,20 @@ public class Controller {
     // == User Data Management ==
     
     /**
+     * Retrieves the currently logged-in user.
+     *
+     * <p>This method returns the {@link User} object that represents the user
+     * currently logged into the application. The object contains details such as
+     * the user's username and password (encrypted).
+     *
+     * @return the {@link User} object representing the logged-in user, or
+     * {@code null} if no user is currently logged in.
+     */
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+    
+    /**
      * Gets the file path for a given username.
      * @param username the username of the user
      * @return the file path for the user's data
@@ -195,6 +209,7 @@ public class Controller {
     private String getLoggedInUserFilePath() {
         return getUserFilePath(loggedInUser.getName());
     }
+    
     
     /**
      * Loads the data of the currently logged-in user, if any.
@@ -377,7 +392,7 @@ public class Controller {
      * @return true if the item is successfully saved or added, false if it has blank fields
      */
     public boolean saveTemporalItem() {
-        if (tempItem.getTitle().isBlank() || tempItem.getCategory().getValue().isBlank()) {
+        if (tempItem.getTitle() != null && tempItem.getCategory() != null && tempItem.getTitle().isBlank() || tempItem.getCategory().getValue().isBlank()) {
             return false; // Blank fields -> not saved
         } else {
             for (int i = 0; i < items.size(); i++) {
