@@ -267,7 +267,7 @@ public class Controller {
         if (!userFile.exists()) {
             // Create new user
             loggedInUser = new User(username, password);
-            // Setup default values
+            // Setup default values //
             categories.clear();
             items.clear();
             // Create default categories
