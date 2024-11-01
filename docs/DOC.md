@@ -41,7 +41,7 @@ A **Vault-Vader** egy jelszókezelő alkalmazás, amelyet Java nyelven, Swing GU
       mvn clean install
       ```
       ```bash
-      java -jar target/vaultvader-1.0-SNAPSHOT.jar
+      java -jar .\target\Vault-Vader-1.0-SNAPSHOT.jar
       ```
 3. Ha nem működne a 2. pont, akkor az előre buildelt projektet tartalmazó jar file futtatása: 
       ```bash

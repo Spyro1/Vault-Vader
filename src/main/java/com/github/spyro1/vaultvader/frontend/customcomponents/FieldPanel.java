@@ -38,7 +38,7 @@ public class FieldPanel extends JPanel implements JSONSerializable {
             case TEXT -> new DarkTextField(data.getValue(), data.getFieldName(), true);
             case PASS -> new DarkPassField(data.getValue(), data.getFieldName(), true);
 //            case CATEGORY -> new DarkComboField(API.getCategoryList(), displayedItem.getCategoryIdx(), fieldName, true);
-            case null, default -> null; // throw new Exception("ERROR/FieldPanel: Incorrect type");
+            default -> null; // throw new Exception("ERROR/FieldPanel: Incorrect type");
         };
     }
     
