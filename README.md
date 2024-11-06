@@ -12,9 +12,9 @@ This is a Password Manager application which is written in Java with Swing.
 > ![Main window](docs/imgs/main.png)  
 > *Main screen*
 
-# UML - diagram
+# Diagrams
 
-## Overview
+## Overvirew
 
 ```mermaid
 classDiagram
@@ -30,8 +30,85 @@ classDiagram
     }
     API --> Controller
     API <-- LoginUI
-    API <-- MainUI
+    API <-- MainUI    
+```
+
+## Frontend UML diagram
+
+```mermaid
+classDiagram
+    class JSONSerializable
+    class MainUI
+    class LoginUI
+    class ItemEditorPanel
+    class ItemCellRenderer
+    class CategoryTreeRenderer
+    class FieldPanel
+    class DarkComboField
+    class DarkTextField
+    class DarkPassField
+    class DarkPopupMenu
+    class DarkPopupMenuItem
+    class IconButton
+
+    DarkTextField ..|> JSONSerializable
+    FieldPanel ..|> JSONSerializable
+    DarkPassField ..|> JSONSerializable
+    ItemEditorPanel ..|> JSONSerializable
+    IconButton ..|> JSONSerializable
+    DarkComboField ..|> JSONSerializable
     
+    MainUI --> IconButton
+    LoginUI --> IconButton
+    ItemEditorPanel --> IconButton
+    ItemCellRenderer --> IconButton
+
+    ItemEditorPanel --> DarkPopupMenu
+    ItemEditorPanel --> DarkPopupMenuItem
+    ItemEditorPanel --> DarkComboField
+    ItemEditorPanel --> DarkTextField
+    ItemEditorPanel --> FieldPanel
+
+    MainUI --> CategoryTreeRenderer
+    MainUI --> ItemCellRenderer
+    MainUI --> ItemEditorPanel
+    
+    FieldPanel --> DarkTextField
+    FieldPanel --> DarkPassField
+    
+    LoginUI --> DarkTextField
+    LoginUI --> DarkPassField
+```
+
+## Backend UML diagram 
+
+```mermaid
+classDiagram
+    direction LR
+class JSONSerializable
+class Controller{
+    <<singleton>>
+}
+class User
+class Item
+class Field
+class FieldType{
+    <<enumeration>>
+}
+
+JSONSerializable <|.. User
+JSONSerializable <|.. Item
+JSONSerializable <|.. Field
+
+
+Controller o-- User
+Controller *-- Item
+
+Item *-- Field
+
+Field o-- FieldType
+
+
 ```
 
 ## Detailed UML diagram

@@ -10,16 +10,51 @@
 - [Felhasználói dokumentáció](#felhasználói-dokumentáció)
   - [Futtatási útmutató](#futtatási-útmutató)
   - [Használat](#használat)
+    - [Főbb Funkciók](#főbb-funkciók)
     - [Bejelentkezés](#bejelentkezés)
     - [Főképernyő](#főképernyő)
 - [Programozói dokumentáció](#programozói-dokumentáció)
-  - [Főbb Funkciók](#főbb-funkciók)
-  - [Főbb Osztályok](#főbb-osztályok)
-    - [`Controller`](#controller)
-    - [`User`](#user)
-    - [`Item`](#item)
-    - [`FieldType`](#fieldtype)
-    - [`Field`](#field)
+  - [Controller osztály](#controller-osztály)
+    - [Fő funkciók](#fő-funkciók)
+    - [Adattagok](#adattagok)
+    - [Publikus interfészek](#publikus-interfészek)
+      - [Felhasználókezelés](#felhasználókezelés)
+      - [Titkosítás](#titkosítás)
+      - [Kategóriakezelés](#kategóriakezelés)
+      - [Bejegyzés kezelés](#bejegyzés-kezelés)
+      - [Ideiglenes bejegyzés kezelés](#ideiglenes-bejegyzés-kezelés)
+  - [JSONSerializable interfész](#jsonserializable-interfész)
+    - [Publikus interfészek](#publikus-interfészek-1)
+  - [User osztály](#user-osztály)
+    - [Főbb funkciók](#főbb-funkciók-1)
+    - [Adattagok](#adattagok-1)
+    - [Publikus interfészek](#publikus-interfészek-2)
+  - [Item osztály](#item-osztály)
+    - [Adattagok](#adattagok-2)
+    - [Konstruktorok](#konstruktorok)
+    - [Publikus interfészek](#publikus-interfészek-3)
+  - [FieldType enum](#fieldtype-enum)
+    - [Mezők](#mezők)
+    - [Publikus interfészek](#publikus-interfészek-4)
+  - [Field osztály](#field-osztály)
+    - [Mezők](#mezők-1)
+    - [Publikus interfészek](#publikus-interfészek-5)
+  - [API osztály](#api-osztály)
+    - [Konstans adattagok](#konstans-adattagok)
+    - [Objektum referencia](#objektum-referencia)
+    - [Publikus interfészek](#publikus-interfészek-6)
+  - [LoginUI osztály](#loginui-osztály)
+    - [Publikus interfész](#publikus-interfész)
+  - [MainUI osztály](#mainui-osztály)
+    - [Publikus interfész](#publikus-interfész-1)
+    - [Megvalósított funkcionalitások](#megvalósított-funkcionalitások)
+- [Diagrammok](#diagrammok)
+  - [Program UML diagram áttekintés](#program-uml-diagram-áttekintés)
+  - [Frontend UML diagram áttekintés](#frontend-uml-diagram-áttekintés)
+  - [Backend UML diagram áttekintés](#backend-uml-diagram-áttekintés)
+  - [Részletes UML diagram](#részletes-uml-diagram)
+  - [Fájlkezelés](#fájlkezelés)
+    - [A fájl felépítése](#a-fájl-felépítése)
 
 ## Specifikáció
 
@@ -49,6 +84,15 @@ A **Vault-Vader** egy jelszókezelő alkalmazás, amelyet Java nyelven, Swing GU
       ```
 
 ## Használat
+
+### Főbb Funkciók
+
+- **Felhasználókezelés**: Bejelentkezés és regisztráció, felhasználói adatmentés fájlba.
+- **Adatmentés és visszatöltés**: A felhasználók adatai JSON formátumban kerülnek mentésre a fájlrendszerben.
+- **Kategóriakezelés**: Új kategóriák hozzáadása, meglévők módosítása vagy törlése.
+- **Titkosítás**: A jelszavak titkosított formában kerülnek tárolásra.
+- **Bejegyzések kezelése**: Felhasználók jelszavaikat és egyéb információikat bejegyzések formájában tárolhatják a különböző fiókjaikhoz.
+
 
 ### Bejelentkezés
 
@@ -84,16 +128,6 @@ A jelszó mezők jobb szélén található szem ikonnal pedig megtekinthető/elr
 ---
 
 # Programozói dokumentáció
-
-## Főbb Funkciók
-
-- **Felhasználókezelés**: Bejelentkezés és regisztráció, felhasználói adatmentés fájlba.
-- **Adatmentés és visszatöltés**: A felhasználók adatai JSON formátumban kerülnek mentésre a fájlrendszerben.
-- **Kategóriakezelés**: Új kategóriák hozzáadása, meglévők módosítása vagy törlése.
-- **Titkosítás**: A jelszavak titkosított formában kerülnek tárolásra.
-- **Bejegyzések kezelése**: Felhasználók jelszavaikat és egyéb információikat bejegyzések formájában tárolhatják a különböző fiókjaikhoz.
-
----
 
 ## Controller osztály
 
@@ -152,7 +186,7 @@ A `Controller` osztály az alkalmazás központi elemeként működik, amely fel
 
 Az `JSONSerializable` interfész lehetővé teszi egy objektum JSON-formátumú sorosítását és deszerializálását.
 
-### Publikus interfész
+### Publikus interfészek
 
 - `toJSON()`: Az objektum állapotának JSON formátumba történő sorosítása.
 - `fromJSON(JSONObject json)`: Az objektum állapotának feltöltése egy JSON objektumból. Kivételt dobhat hiányzó kulcsok esetén.
@@ -161,7 +195,7 @@ Az `JSONSerializable` interfész lehetővé teszi egy objektum JSON-formátumú 
 
 A `User` osztály egy felhasználót reprezentál a rendszerben, amely a felhasználó nevét és titkosított jelszavát tartalmazza.
 
-### Főbb funkciók:
+### Főbb funkciók
 - Létrehozza és tárolja a felhasználó nevét és titkosított jelszavát.
 - Képes visszaadni ezeket az értékeket.
 - JSON formátumba konvertálható és JSON-ból visszaállítható.
@@ -170,7 +204,7 @@ A `User` osztály egy felhasználót reprezentál a rendszerben, amely a felhasz
 - `name`: String típusú, a felhasználó nevét tárolja.
 - `password`: String típusú, a felhasználó titkosított jelszavát tárolja.
 
-### Publikus interfészek:
+### Publikus interfészek
 - `User(String name, String password)`: Konstruktor, amely beállítja a felhasználó nevét és jelszavát.
 - `String getName()`: Visszaadja a felhasználó nevét.
 - `String getPassword()`: Visszaadja a felhasználó titkosított jelszavát.
@@ -194,7 +228,7 @@ Az `Item` osztály egy bejegyzést reprezentál. Az osztály implementálja a `J
 
 - **Item()**: Alapértelmezett konstruktor, amely alapértelmezett értékekkel inicializálja az elemet.
 
-### Publikus interfész
+### Publikus interfészek
 
 - `getID()`: Visszaadja a bejegyzés egyedi azonosítóját.
 - `getIcon()`: Visszaadja a bejegyzés ikonját.
@@ -221,7 +255,7 @@ A `FieldType` enum az `Item` osztály mezőinek típusát definiálja. Három me
 - `PASS`: Jelszó típusú mező, amely érzékeny adatokat kezel.
 - `CATEGORY`: Kategória mező, amely egy adott kategóriát vagy választási lehetőséget képvisel.
 
-### Publikus interfész
+### Publikus interfészek
 
 - `fromString(String t)`: A megadott string alapján visszatér a megfelelő `FieldType` értékkel (`TEXT`, `PASS`, `CATEGORY`). Ha a string nem egyezik egyik típussal sem, `null`-t ad vissza.
 - `toString()`: A `FieldType` megfelelő szöveges ábrázolását adja vissza az `API` osztályban definiált string konstansok alapján (pl. `TEXT` esetén `API.TEXT_TYPE`).
@@ -237,7 +271,7 @@ A `Field` osztály egy adatmezőt reprezentál, amely egy nevet (`fieldName`), e
 - **`value`**: A mező értéke.
 - **`type`**: A mező típusa, amelyet a `FieldType` enum határoz meg.
 
-### Publikus interfész
+### Publikus interfészek
 
 - `Field()`: Alapértelmezett konstruktora, ami beállítja az alapértelmezett értékekeket., amely üres `fieldName`-t, üres `value`-t és `FieldType.TEXT` típust állít be.
 - `Field(String fieldName)`: Konstruktor, amely beállítja a `fieldName` mezőt és alapértelmezésként üres `value`-t és `FieldType.TEXT` típust használ.
@@ -280,7 +314,7 @@ Az `API` osztály egy központosított interfészt biztosít a `LoginUI` és a `
 
 - `mainUI`: A fő `MainUI` objektum referenciája a bejelentkezés után.
 
-### Publikus interfész
+### Publikus interfészek
 
 - `loginRequest(JSONObject userData)`: Bejelentkezési kérelmet küld a megadott felhasználói adatokkal.
 - `registerRequest(JSONObject userData)`: Regisztrációs kérelmet küld a megadott felhasználói adatokkal.
@@ -334,5 +368,328 @@ A `MainUI` osztály a **Vault Vader** alkalmazás fő felhasználói felületét
 
 ---
 
-## UML osztálydiagram
+# Diagrammok
+
+## Program UML diagram áttekintés
+
+```mermaid
+classDiagram
+    namespace frontend {
+        class LoginUI
+        class MainUI
+    }
+    namespace backend {
+        class Controller
+    }
+    class API {
+        
+    }
+    API --> Controller
+    API <-- LoginUI
+    API <-- MainUI    
+```
+
+## Frontend UML diagram áttekintés
+
+```mermaid
+classDiagram
+    class JSONSerializable
+    class MainUI
+    class LoginUI
+    class ItemEditorPanel
+    class ItemCellRenderer
+    class CategoryTreeRenderer
+    class FieldPanel
+    class DarkComboField
+    class DarkTextField
+    class DarkPassField
+    class DarkPopupMenu
+    class DarkPopupMenuItem
+    class IconButton
+
+    DarkTextField ..|> JSONSerializable
+    FieldPanel ..|> JSONSerializable
+    DarkPassField ..|> JSONSerializable
+    ItemEditorPanel ..|> JSONSerializable
+    IconButton ..|> JSONSerializable
+    DarkComboField ..|> JSONSerializable
+    
+    MainUI --> IconButton
+    LoginUI --> IconButton
+    ItemEditorPanel --> IconButton
+    ItemCellRenderer --> IconButton
+
+    ItemEditorPanel --> DarkPopupMenu
+    ItemEditorPanel --> DarkPopupMenuItem
+    ItemEditorPanel --> DarkComboField
+    ItemEditorPanel --> DarkTextField
+    ItemEditorPanel --> FieldPanel
+
+    MainUI --> CategoryTreeRenderer
+    MainUI --> ItemCellRenderer
+    MainUI --> ItemEditorPanel
+    
+    FieldPanel --> DarkTextField
+    FieldPanel --> DarkPassField
+    
+    LoginUI --> DarkTextField
+    LoginUI --> DarkPassField
+```
+
+## Backend UML diagram áttekintés
+
+```mermaid
+classDiagram
+    direction LR
+class JSONSerializable
+class Controller{
+    <<singleton>>
+}
+class User
+class Item
+class Field
+class FieldType{
+    <<enumeration>>
+}
+
+%%JSONSerializable <|.. User
+%%JSONSerializable <|.. Item
+%%JSONSerializable <|.. Field
+
+User ..|> JSONSerializable
+Item ..|> JSONSerializable
+Field ..|> JSONSerializable
+
+
+Controller o-- User
+Controller *-- Item
+
+Item *-- Field
+
+Field o-- FieldType
+
+
+```
+
+## Részletes UML diagram
+```mermaid
+classDiagram
+    direction TB
+    namespace frontend {
+        
+        class LoginUI{
+            + main()
+            + LoginUI()
+            - initMinimalistLoginUI() void
+            - userFiledsToJSON() JSON 
+        }
+        class MainUI{
+            + MainUI()
+            - refresh() void
+            - createItemJList(itemList: List~Item~) List~JList~
+            - displayItem(index: int) void
+        }
+       
+        class CategoryTreeRenderer {
+            + CategoryTreeRenderer()
+            + getTreeCellRendererComponent(...) Component
+        }
+        class ItemCellRenderer {
+            - titleLabel : JLabel
+            - categoryLabel : JLabel
+            - icon : JButton
+            + ItemCellRenderer()
+            + getListCellRendererComponent(...) Component
+        }
+        class IconButton {
+            + IconButton()
+            + IconButton(icon: Icon)
+            + IconButton(text: String)
+            + IconButton(text: String, icon: Icon)
+            +IconButton(text: String, resourcePath: String)
+            - setup() void
+            # paintComponent(g: Graphics) void
+        }
+        class DarkComboField {
+            - placeholder : String
+            + DarkComboField(values: String[])
+            + DarkComboField(values: String[], placeholder: String)
+            + DarkComboField(values: String[], placeholder: String, underline: bool)
+            - setup() void
+            + setUnderline(underline: bool) void
+        }
+        class DarkPassField {
+            - placeholder : String
+            - defChar: char
+            + DarkPassField(text: String)
+            + DarkPassField(text: String, placeholder: String)
+            + DarkPassField(text: String, placeholder: String, underline: bool)
+            - setup() void
+            + setUnderline(underline: bool) void
+        }
+        class DarkTextField {
+            - placeholder : String
+            + DarkTextField(text: String)
+            + DarkTextField(text: String, placeholder: String)
+            + DarkTextField(text: String, placeholder: String, underline: bool)
+            - setup() void
+            + setUnderline(underline: bool) void
+        }
+        class FieldPanel {
+            + optionsButton: IconButton
+            + dataField: JComponent
+            + FieldPanel(dataField: JComponent)
+            - moreOptionsButtonClicked(Actionevent e) void
+        }
+        class ItemEditorPanel {
+            - titleRow: JPanel
+            - iconButton: IconButton
+            - titleField: DarkTextField
+            - addNewFieldButton: IconButton
+            - window: MainUI
+            - displayedItem: Item
+            + fieldList: List~FieldPanel~
+            + ItemEditorPanel(window: MainUI)
+            + hidePanel() void
+            + displayItem(displayedItem: Item) void
+            - iconSelectorButtonClicked(e: ActionEvent ) void
+            - addNewFieldButtonClicked(e: ActionEvent ) void
+            - popupMenuItemClicked(chosenType: FieldType) void
+        }
+
+    }
+    
+    MainUI --> CategoryTreeRenderer
+    MainUI --> ItemCellRenderer
+    MainUI --> DarkComboField
+    MainUI --> DarkPassField
+    MainUI --> DarkTextField
+    LoginUI --> DarkTextField
+    MainUI --> FieldPanel
+    MainUI --> ItemEditorPanel
+    LoginUI --> IconButton
+    MainUI --> IconButton
+    
+    CategoryTreeRenderer --|> DefaultTreeCellRenderer
+    ItemCellRenderer ..|> ListCellRenderer~Item~
+    ItemCellRenderer --|> JPanel
+    
+    IconButton --|> JButton
+    DarkComboField --|> JBComboField
+    DarkPassField --|> JPassField
+    DarkTextField --|> JTextField
+    FieldPanel --|> JPanel
+    ItemEditorPanel --|> JPanel
+    
+%%    FieldPanel --> IconButton
+    
+    
+    namespace backend {
+            
+        class Controller{
+             <<singleton>>
+             + INSTANCE : Controller$
+             - items : List~Item~
+             - categories : List~String~
+             - loggedInuser : User
+             - Controller()
+             + encryptText(text: String, key: String) String$
+             + loadUser() void
+             + checkUser(userData: JSON) boolean
+             + createUser(userData: JSON) boolean
+             + getCategoryList() List~String~
+             + addNewCategory(newCategory: String) bool
+             + modifyCategory(oldCategory: String, newCategory: String) bool
+             + removeCategory(categoryName: String) bool
+             + saveAll() void
+             + getItem(index: int) Item
+             + getItemList() List~Item~
+             - readUserDataFromFile() void
+             - writeUserDataToFile() void
+%%             - decryptText(text: String, key: String) String
+        }
+        class User{
+            - name : String
+            - password : String
+            + getName() String
+            + getPassword() : String
+        }
+        class Item{
+            - icon : ImageIcon
+            - title : String
+            - category : String
+            - fileds : List~Field~
+        }
+        class Field{
+            - fieldName : String
+            + getFieldName() String
+        }
+      
+    }
+
+    Controller o-- User
+    Controller o-- Item
+
+    Item *-- Field
+
+    class API{
+        + loginRequest(userData: JSON) bool$
+        + registerRequest(userData: JSON) bool$
+        + logoutRequest() void$
+        + addNewItem(itemData: JSON) bool$
+        + saveItem(itemDate: JOSN) bool$
+        + removeItem(itemData: JSON) bool$
+        + addNewCategory(categoryData: JSON) bool$
+        + modifyCategory(categoryData: JSON) bool$
+        + removeCategory(categoryData: JSON) bool$
+        + getItemData(intemIndex: int) Item$
+        + getItemList(filter: JSON) List~Item~$ 
+        + getCategoryList() List~String~ JSON$
+        + encryptData(data: String, key: String) String$
+        + saveAllChanges() void$
+    }
+    
+    API --> Controller
+    API <-- LoginUI
+    API <-- MainUI
+%%    LoginUI --> API
+%%    MainUI --> API
+ 
+   
+
+```
+
+
+## Fájlkezelés
+
+A felhasználó adatait a felhasználó nevével ellátott `.json` fájlban tárolja a program, amiben a jelszavak titkosítva szereplenek.
+
+### A fájl felépítése
+
+```json
+{
+  "username": "username",
+  "password": "*x&%645&",
+  "categories": [
+        "Example category 1", 
+        "Example category 2",
+        "Example category 3"    
+  ],
+  "items": [
+    {
+      "title": "Item Title",
+      "category": "Category name",
+      "fields": [
+        {
+          "type" : "TextField / IntField / PassField",
+          "fieldName": "Field Name",
+          "value": "Value of the field"
+        }
+      ]
+    }
+  ]
+}
+```
+
+
 
