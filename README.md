@@ -1,16 +1,13 @@
 # Vault-Vader
 > Created by Marton Szenes, alias Spyro  
-> Last update: 2024.09.18.
+> Last update: 2024.11.18.
 
 This is a Password Manager application which is written in Java with Swing.
 
 # How to run
 
-Run main class: [Main.java](src/main/java/com/github/spyro1/vaultvader/api/Main.java)
+**Read instructions in [Documentation](docs/DOC.md#futtatási-útmutató)**
 
-Source files folder: [vaultvader](src/main/java/com/github/spyro1/vaultvader)
-
-Test files folder: [tests](src/test/java/backend)
 # Images
 
 > ![Login form](docs/imgs/login.png)  

@@ -71,16 +71,16 @@ A **Vault-Vader** egy jelszókezelő alkalmazás, amelyet Java nyelven, Swing GU
      - **JDK 21**
      - **Maven** (opcionális, ha Maven alapú buildet használ)
 2. Fordítás és Futtatás:
-   - A projekt fordítása Maven segítségével:
+   - A projekt fordítása Maven segítségével a fő mappából kiadva:
       ```bash 
       mvn clean install
       ```
       ```bash
-      java -jar .\target\Vault-Vader-1.0-SNAPSHOT.jar
+      java -jar ../target/Vault-Vader-1.0.jar
       ```
 3. Ha nem működne a 2. pont, akkor az előre buildelt projektet tartalmazó jar file futtatása: 
       ```bash
-      java -jar out/artifacts/Vault_Vader_Maven_jar/Vault-Vader-Maven.jar 
+       java -jar ../out/artifacts/Vault_Vader_jar/Vault-Vader.jar
       ```
 
 ## Használat
