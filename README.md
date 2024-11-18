@@ -4,6 +4,13 @@
 
 This is a Password Manager application which is written in Java with Swing.
 
+# How to run
+
+Run main class: [Main.java](src/main/java/com/github/spyro1/vaultvader/api/Main.java)
+
+Source files folder: [vaultvader](src/main/java/com/github/spyro1/vaultvader)
+
+Test files folder: [tests](src/test/java/backend)
 # Images
 
 > ![Login form](docs/imgs/login.png)  
