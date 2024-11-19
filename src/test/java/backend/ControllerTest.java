@@ -5,20 +5,19 @@ import com.github.spyro1.vaultvader.backend.Item;
 import com.github.spyro1.vaultvader.backend.User;
 import com.github.spyro1.vaultvader.api.API;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ControllerTest {
     
     private static JSONObject validUserData = new JSONObject();
     
-    @BeforeEach
+    @Before
     public void setup() {
         validUserData = new JSONObject();
         // Set up valid user data for testing user-related functionalities
@@ -29,7 +28,7 @@ public class ControllerTest {
     // == User Management ==
     
     @Test
-    @Order (1)
+//    @Order (1)
     public void testCreateUser_Success() throws Exception {
         // Create a new user with valid data
         if (!Controller.INSTANCE.checkUser(validUserData)){
@@ -45,7 +44,7 @@ public class ControllerTest {
     }
     
     @Test
-    @Order(2)
+//    @Order(2)
     public void testCheckUser_InvalidPassword() throws Exception {
         Controller.INSTANCE.createUser(validUserData);
         
@@ -58,7 +57,7 @@ public class ControllerTest {
     // == Category Management ==
     
     @Test
-    @Order(3)
+//    @Order(3)
     public void testAddNewCategory_Success() throws Exception {
         Controller.INSTANCE.getCategoryList().clear();
         assertTrue(Controller.INSTANCE.addNewCategory("NewCategory"));
@@ -69,14 +68,14 @@ public class ControllerTest {
     }
     
     @Test
-    @Order(4)
+//    @Order(4)
     public void testAddNewCategory_AlreadyExists() {
         Controller.INSTANCE.addNewCategory("DuplicateCategory");
         assertFalse(Controller.INSTANCE.addNewCategory("DuplicateCategory"));
     }
     
     @Test
-    @Order(5)
+//    @Order(5)
     public void testModifyCategory_Success() {
         Controller.INSTANCE.addNewCategory("OldCategory");
         
@@ -90,13 +89,13 @@ public class ControllerTest {
     }
     
     @Test
-    @Order(6)
+//    @Order(6)
     public void testModifyCategory_NotFound() {
         assertFalse(Controller.INSTANCE.modifyCategory("NonExistentCategory", "NewCategory"));
     }
     
     @Test
-    @Order(7)
+//    @Order(7)
     public void testRemoveCategory_Success() {
         Controller.INSTANCE.addNewCategory("CategoryToRemove");
         
@@ -106,7 +105,7 @@ public class ControllerTest {
     }
     
     @Test
-    @Order(8)
+//    @Order(8)
     public void testRemoveCategory_NotFound() {
         assertFalse(Controller.INSTANCE.removeCategory("NonExistentCategory"));
     }
@@ -114,14 +113,14 @@ public class ControllerTest {
     // == Item Management ==
     
     @Test
-    @Order(9)
+//    @Order(9)
     public void testNewTemporalItem() {
         Item tempItem = Controller.INSTANCE.newTemporalItem();
         assertNotNull(tempItem);
     }
     
     @Test
-    @Order(10)
+//    @Order(10)
     public void testSaveTemporalItem_Success() {
         // Create a new temp item, set values, and save
         Item tempItem = Controller.INSTANCE.newTemporalItem();
@@ -138,7 +137,7 @@ public class ControllerTest {
     }
     
     @Test
-    @Order(11)
+//    @Order(11)
     public void testSaveTemporalItem_BlankFields() {
         Item tempItem = Controller.INSTANCE.newTemporalItem();
         
@@ -147,7 +146,7 @@ public class ControllerTest {
     }
     
     @Test
-    @Order(12)
+//    @Order(12)
     public void testGetItem() {
         // Add a temp item and save it
         Item tempItem = Controller.INSTANCE.newTemporalItem();
@@ -164,7 +163,7 @@ public class ControllerTest {
     // == Encryption/Decryption ==
     
     @Test
-    @Order(13)
+//    @Order(13)
     public void testEncryptDecrypt() {
         String text = "SensitiveData";
         String key = "encryptionKey";
@@ -181,7 +180,7 @@ public class ControllerTest {
     // == File I/O (Basic) ==
     
     @Test
-    @Order(14)
+//    @Order(14)
     public void testReadWriteUserDataToFile() throws Exception {
         // Create user and write data to file
         Controller.INSTANCE.createUser(validUserData);

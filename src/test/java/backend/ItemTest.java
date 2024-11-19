@@ -3,16 +3,16 @@ package backend;
 import com.github.spyro1.vaultvader.backend.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 public class ItemTest {
     
     private Item item;
     
-    @BeforeEach
+    @Before
     public void setup() {
         item = new Item();
     }

@@ -3,16 +3,16 @@ package backend;
 import com.github.spyro1.vaultvader.backend.User;
 import com.github.spyro1.vaultvader.api.API;
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 public class UserTest {
     
     private User user;
     
-    @BeforeEach
+    @Before
     public void setup() {
         user = new User("testUser", "encryptedPassword123");
     }

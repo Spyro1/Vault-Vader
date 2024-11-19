@@ -136,6 +136,18 @@ public class Controller {
         json.put(API.ITEMS_KEY, items.stream().map(Item::toJSON).collect(Collectors.toList()));
         // Write out to file
         try {
+            // Check for users folder
+            File folder = new File(usersFolderPath);
+            if (!folder.exists()) {
+                // If the folder does not exist, create it
+                if (folder.mkdirs()) {
+                    System.out.println("DEBUG/Controller/readUsersData: \"" + usersFolderPath + "\" folder created successfully.");
+                } else {
+                    System.out.println("DEBUG/Controller/readUsersData: Failed to create \"" + usersFolderPath + "\" the folder.");
+                }
+            } else {
+                System.out.println("DEBUG/Controller/readUsersData: \"" + usersFolderPath + "\" folder already exists.");
+            }
             PrintWriter pw = new PrintWriter(new FileWriter(getLoggedInUserFilePath())); // Character files
 //            PrintWriter pw = new PrintWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(getLoggedInUserFilePath())))); // Zipped binary files
             // Print to stream

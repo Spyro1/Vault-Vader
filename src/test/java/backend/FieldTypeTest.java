@@ -1,9 +1,10 @@
 package backend;
 
 import com.github.spyro1.vaultvader.backend.FieldType;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
+
 
 public class FieldTypeTest {
     
