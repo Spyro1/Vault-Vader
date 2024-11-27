@@ -624,13 +624,32 @@ classDiagram
             - fieldName : String
             + getFieldName() String
         }
+        class JSONSerializable
+        class Controller{
+            <<singleton>>
+        }
+        class FieldType{
+            <<enumeration>>
+        }
+
       
     }
 
+    %%JSONSerializable <|.. User
+    %%JSONSerializable <|.. Item
+    %%JSONSerializable <|.. Field
+
+    User ..|> JSONSerializable
+    Item ..|> JSONSerializable
+    Field ..|> JSONSerializable
+
+
     Controller o-- User
-    Controller o-- Item
+    Controller *-- Item
 
     Item *-- Field
+
+    Field o-- FieldType
 
     class API{
         + loginRequest(userData: JSON) bool$
